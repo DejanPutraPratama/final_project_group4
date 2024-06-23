@@ -1,11 +1,13 @@
 import 'dart:developer';
-
 import 'package:final_project_group4/page/login.dart';
+import 'package:final_project_group4/widget/radioButton.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:final_project_group4/auth/auth_service.dart';
 import 'package:final_project_group4/widget/button.dart';
 import 'package:final_project_group4/widget/textfield.dart';
+import 'package:flutter/widgets.dart';
 
 class Registrartion extends StatefulWidget {
   const Registrartion({super.key});
@@ -19,10 +21,10 @@ class _RegistrationState extends State<Registrartion> {
   final CollectionReference _users = FirebaseFirestore.instance.collection('users');
   final TextEditingController _fullNameController = TextEditingController();
   final TextEditingController _birthDateController = TextEditingController();
-  final TextEditingController _genderController = TextEditingController();
   final TextEditingController _addressController = TextEditingController();
   final TextEditingController _mobileNumberController = TextEditingController();
   final TextEditingController _cityController = TextEditingController();
+  String? selectedGender ;
   // String fullName = '';
   // String birthDate = '';
   // String gender = '';
@@ -33,78 +35,172 @@ class _RegistrationState extends State<Registrartion> {
   @override 
   Widget build(BuildContext context){
     return Scaffold(
-      appBar: AppBar(
-        elevation: 0,
-        leading: IconButton(
-          onPressed: () {
-            Navigator.pushReplacement(
-              context, 
-              MaterialPageRoute(builder: (context) => const LoginScreen()),
-            );
-          }, 
-          icon: const Icon(Icons.arrow_back, color: Colors.black),
-        ),
-        title: const Text(
-          "Let's fill your data first",
-          style: TextStyle(color: Colors.black),
-        ),
-      ),
       backgroundColor: Colors.lightGreen[50],
-      body: Padding(
-        padding: const EdgeInsets.all(16.0),
-        // child: Row(
-        //   children: [
-        //     Container(
-        //       width: 335,
-        //       height: 38,
-        //       color: Colors.white,
-        //       child: Center(
-        //         child: Text(
-        //           'Step 1/2',
-        //           style: TextStyle(
-        //             fontSize: 16,
-        //             fontWeight: FontWeight.bold,
-        //             color: Colors.black,
-        //           ),
-        //         ),
-        //       ),
-        //     )
-        //   ],
-        // ),
+      body: Container(
+        margin: EdgeInsets.all(10),
         child: Form(
           key: _formkey,
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
+              Row(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: <Widget> [
+                  const SizedBox(height: 20),
+                  Container(
+                    width: 30,
+                    height: 40,
+                    decoration: BoxDecoration(
+                      color: Colors.white,
+                      borderRadius: BorderRadius.circular(10),
+                    ),
+                    child: Center(
+                      child: IconButton(
+                      padding: EdgeInsets.zero,
+                        onPressed: () {
+                          Navigator.pushReplacement(
+                            context, 
+                            MaterialPageRoute(builder: (context) => const LoginScreen()),
+                          );
+                        },
+                        icon: const Icon(Icons.chevron_left, color: Colors.black),
+                      ),
+                    ),
+                  ),
+                  const SizedBox(width: 10),
+                  const Text(
+                    "Let’s fill your data first",
+                    style: TextStyle(
+                      fontSize: 18,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.black
+                    ),
+                  ),
+                ],
+              ),
+              const SizedBox(height: 20),
+              Container(
+                padding: const EdgeInsets.only(
+                  top: 10,
+                  left: 14,
+                  right: 15,
+                  bottom: 7
+                ),
+                width: double.infinity,
+                height: 38,
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.circular(10),
+                ),
+                child: Row(
+                  children: [
+                    const Text(
+                      'Step 1/2',
+                      style: TextStyle(
+                        fontSize: 16,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.black,
+                      ),
+                    ),
+                    const SizedBox(width: 10),
+                    Expanded(
+                      child: LinearProgressIndicator(
+                        value: 0.5,
+                        backgroundColor: Colors.green[100],
+                        valueColor: const AlwaysStoppedAnimation<Color>(Colors.green),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+              const SizedBox(height: 20),
+              Container(
+                width: double.infinity,
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.circular(10),
+                ),
+                child: Column(
+                  children: [
+                    const Text(
+                      'Full Name',
+                      style: TextStyle(
+                        fontSize: 14,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.black,
+                      ),
+                    ),
+                    const SizedBox(height: 20),
+  
+                    TextField(
+                      controller: _fullNameController,
+                      decoration: InputDecoration(
+                        labelText:  'Full Name',
+                        fillColor: Colors.white,
+                        filled: true,
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(10),
+                          borderSide: const BorderSide(
+                            color: Colors.green,
+                          ),
+                        ),
+                      ),
+                    ),
+              const SizedBox(height: 20),
               const Text(
-                'Step 1/2',
+                'Gender',
                 style: TextStyle(
-                  fontSize: 16,
+                  fontSize: 14,
                   fontWeight: FontWeight.bold,
                   color: Colors.black,
                 ),
               ),
-              const SizedBox(height: 38),
-              LinearProgressIndicator(
-                value: 0.5,
-                backgroundColor: Colors.green[100],
-                valueColor: const AlwaysStoppedAnimation<Color>(Colors.green),
+              GenderSelectionScreen(
+                onChanged: (String? gender ) {
+                  setState(() {
+                    selectedGender = gender;
+                  });
+                },
               ),
-              TextField(
-                controller: _fullNameController,
-                decoration: const InputDecoration(labelText: 'Full Name'),
+              const SizedBox(height: 20),
+              const Text(
+                'Mobile Number',
+                style: TextStyle(
+                  fontSize: 14,
+                  fontWeight: FontWeight.bold,
+                  color: Colors.black
+                ),
               ),
               TextField(
                 controller: _mobileNumberController,
-                decoration: const InputDecoration(labelText: 'Mobile Number'),
+                decoration: InputDecoration(
+                  labelText: 'Mobile Number',
+                  fillColor: Colors.white,
+                  filled: true,
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(10),
+                  ),
+                ),
               ),
               TextField(
                 controller:_addressController,
-                decoration: const InputDecoration(labelText: 'Address'),
+                decoration: InputDecoration(
+                  labelText: 'Address',
+                  fillColor: Colors.white,
+                  filled: true,
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(10),
+                  ),
+                ),
               ),
               TextField(
                 controller: _cityController,
-                decoration: const InputDecoration(labelText: 'City'),
+                decoration: const InputDecoration(
+                  labelText: 'City'
+                ),
+              ),
+                  ],
+                ),
               ),
               const SizedBox(height: 54),
               CustomButton(
@@ -114,18 +210,32 @@ class _RegistrationState extends State<Registrartion> {
                   final String mobileNumber = _mobileNumberController.text;
                   final String address = _addressController.text;
                   final String city = _cityController.text;
+                  String gender = '';
+                  if (selectedGender == null) {
+                  // Menampilkan pesan error jika gender belum dipilih
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(content: Text('Please select a gender')),
+                  );
+                    return;
+                  }
                   
                   if (fullName.isNotEmpty && 
                   mobileNumber.isNotEmpty &&
                   address.isNotEmpty && 
                   city.isNotEmpty) {
+                    print("Full Name: $fullName");
+                    print("Mobile Number: $mobileNumber");
+                    print("Address: $address");
+                    print("City: $city");
+                    print("Gender: $selectedGender");
                     await _users.add({
                     'fullName': fullName,
                     'mobileNumber': mobileNumber,
                     'address': address,
                     'city': city,
+                    'gender': selectedGender,
                     });
-
+        
                     Navigator.push(
                       context, 
                       MaterialPageRoute(builder: (context) => const NextRegistration()),

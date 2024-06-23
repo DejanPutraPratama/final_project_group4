@@ -1,8 +1,11 @@
+import 'package:final_project_group4/page/login.dart';
 import 'package:flutter/material.dart';
 import 'package:final_project_group4/firebase_options.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:final_project_group4/page/splashScreen.dart';
 import 'package:flutter_native_splash/flutter_native_splash.dart';
+import 'package:final_project_group4/page/Donatepage.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 
 void main() async {
@@ -23,8 +26,9 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
         useMaterial3: true,
+        fontFamily: GoogleFonts.poppins().fontFamily
       ),
-      home: const SplashScreen(),
+      home: LoginScreen(),
     );
   }
 }

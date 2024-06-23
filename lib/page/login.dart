@@ -6,6 +6,7 @@ import 'package:final_project_group4/widget/button.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:final_project_group4/auth/auth_service.dart';
+import 'package:final_project_group4/page/Donatepage.dart';
 
 
 class LoginScreen extends StatefulWidget {
@@ -374,7 +375,12 @@ class _LoginScreenState extends State<LoginScreen> {
             const SizedBox(height: 16),
             CustomButton(
               label: "Login",
-              onPressed: _Login
+              onPressed: () {
+                Navigator.push(
+                  context, 
+                  MaterialPageRoute(builder: (context) => DonateScreen()),
+                );
+              }
             ),
             const SizedBox(height: 16),
             Row(mainAxisAlignment: MainAxisAlignment.center, children: [
