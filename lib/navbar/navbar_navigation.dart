@@ -1,6 +1,7 @@
 import 'package:final_project_group4/navbar/navbar.dart';
 import 'package:final_project_group4/navbar/navbar_model.dart';
 import 'package:final_project_group4/navbar/tab_page.dart';
+import 'package:final_project_group4/page/Donatepage.dart';
 import 'package:final_project_group4/page/home_page.dart';
 import 'package:final_project_group4/page/profile_page.dart';
 import 'package:final_project_group4/utils/custom_colors.dart';
@@ -96,7 +97,10 @@ class _NavbarNavigationState extends State<NavbarNavigation> {
           child: FloatingActionButton(
             foregroundColor: Colors.white,
             backgroundColor: customColors.darkGreen,
-            onPressed: () {},
+            onPressed: () {
+              Navigator.push(context,
+                  MaterialPageRoute(builder: (context) => DonateScreen()));
+            },
             shape:
                 CircleBorder(side: BorderSide(width: 0, color: Colors.green)),
             child: Column(

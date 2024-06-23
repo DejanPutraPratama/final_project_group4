@@ -1,6 +1,7 @@
 import 'package:final_project_group4/utils/custom_colors.dart';
 import 'package:final_project_group4/widget/custom_widgets.dart';
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -56,21 +57,21 @@ class _HomePageState extends State<HomePage> {
                         children: [
                           Text(
                             "Welcome, John Doe",
-                            style: TextStyle(
-                                fontSize: 18,
-                                fontWeight: FontWeight.bold,
-                                color: customColors.redText),
+                            style: GoogleFonts.getFont('Poppins',
+                                textStyle: TextStyle(
+                                    fontSize: 18,
+                                    fontWeight: FontWeight.bold,
+                                    color: customColors.redText)),
                           ),
                           const SizedBox(
                             height: 20,
                           ),
-                          Text(
-                            "Better environment, better tommorow\n-Unknown-",
-                            style: TextStyle(
-                                fontSize: 14,
-                                fontWeight: FontWeight.bold,
-                                color: customColors.redText),
-                          ),
+                          Text("Better environment, better tommorow\n-Unknown-",
+                              style: GoogleFonts.getFont('Poppins',
+                                  textStyle: TextStyle(
+                                      fontSize: 12,
+                                      fontWeight: FontWeight.w600,
+                                      color: customColors.redText))),
                         ],
                       ),
                     ),
@@ -81,15 +82,21 @@ class _HomePageState extends State<HomePage> {
             customWidgets.greyBox(
                 deviceWidth * 0.9,
                 75,
-                const Row(
+                Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     Text(
                       "Your Balance Point",
-                      style: TextStyle(fontWeight: FontWeight.bold),
+                      style: GoogleFonts.getFont('Poppins',
+                          textStyle: TextStyle(
+                            fontWeight: FontWeight.bold,
+                          )),
                     ),
                     Text("100000 pts",
-                        style: TextStyle(fontWeight: FontWeight.bold))
+                        style: GoogleFonts.getFont('Poppins',
+                            textStyle: TextStyle(
+                              fontWeight: FontWeight.bold,
+                            )))
                   ],
                 )),
             customWidgets.greyBox(
@@ -99,10 +106,11 @@ class _HomePageState extends State<HomePage> {
                   mainAxisAlignment: MainAxisAlignment.center,
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    const Text(
-                      "Destination Landfill",
-                      style: TextStyle(fontWeight: FontWeight.bold),
-                    ),
+                    Text("Destination Landfill",
+                        style: GoogleFonts.getFont('Poppins',
+                            textStyle: TextStyle(
+                              fontWeight: FontWeight.bold,
+                            ))),
                     customWidgets.greyBox(
                       deviceWidth * 0.8,
                       50,
@@ -111,7 +119,12 @@ class _HomePageState extends State<HomePage> {
                           decoration:
                               const InputDecoration(border: InputBorder.none),
                           isExpanded: true,
-                          hint: const Text('Please select location'),
+                          hint: Text(
+                            'Please select location',
+                            style: GoogleFonts.getFont('Poppins',
+                                textStyle:
+                                    TextStyle(fontWeight: FontWeight.bold)),
+                          ),
                           icon: const Icon(Icons.keyboard_arrow_down_rounded),
                           items: const [
                             DropdownMenuItem<String>(
@@ -139,9 +152,12 @@ class _HomePageState extends State<HomePage> {
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        const Text(
+                        Text(
                           'Feel like to dispose today?',
-                          style: TextStyle(fontSize: 12),
+                          style: GoogleFonts.getFont('Poppins',
+                              textStyle: TextStyle(
+                                fontSize: 10,
+                              )),
                         ),
                         ElevatedButton(
                             onPressed: () {},
@@ -152,10 +168,12 @@ class _HomePageState extends State<HomePage> {
                                 backgroundColor: customColors.darkGreen,
                                 shape: RoundedRectangleBorder(
                                     borderRadius: BorderRadius.circular(10))),
-                            child: const Text(
+                            child: Text(
                               'Donate Now',
-                              style:
-                                  TextStyle(color: Colors.white, fontSize: 12),
+                              style: GoogleFonts.getFont('Poppins',
+                                  textStyle: TextStyle(
+                                      fontWeight: FontWeight.w600,
+                                      color: Colors.white)),
                             ))
                       ],
                     )
@@ -168,12 +186,11 @@ class _HomePageState extends State<HomePage> {
                   mainAxisAlignment: MainAxisAlignment.center,
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
-                    Text(
-                      'Instruction',
-                      style: TextStyle(
-                          color: customColors.redText,
-                          fontWeight: FontWeight.bold),
-                    ),
+                    Text('Instruction',
+                        style: GoogleFonts.getFont('Poppins',
+                            textStyle: TextStyle(
+                                fontWeight: FontWeight.bold,
+                                color: customColors.redText))),
                     SizedBox(
                       height: 250,
                       child: GridView.count(
@@ -187,11 +204,12 @@ class _HomePageState extends State<HomePage> {
                                 'assets/trash.png',
                                 height: 75,
                               ),
-                              const Text(
-                                'Sort your waste',
-                                style: TextStyle(
-                                    fontSize: 8, fontWeight: FontWeight.bold),
-                              )
+                              Text('Sort your waste',
+                                  style: GoogleFonts.getFont('Poppins',
+                                      textStyle: TextStyle(
+                                        fontSize: 8,
+                                        fontWeight: FontWeight.w500,
+                                      )))
                             ],
                           ),
                           Column(
@@ -201,9 +219,12 @@ class _HomePageState extends State<HomePage> {
                                 scale: 2,
                                 height: 75,
                               ),
-                              const Text('Send to nearest landfill',
-                                  style: TextStyle(
-                                      fontSize: 8, fontWeight: FontWeight.bold))
+                              Text('Send to nearest landfill',
+                                  style: GoogleFonts.getFont('Poppins',
+                                      textStyle: TextStyle(
+                                        fontSize: 8,
+                                        fontWeight: FontWeight.w500,
+                                      )))
                             ],
                           ),
                           Column(
@@ -213,9 +234,13 @@ class _HomePageState extends State<HomePage> {
                                 scale: 2,
                                 height: 50,
                               ),
-                              const Text('Wait for verification and get points',
-                                  style: TextStyle(
-                                      fontSize: 8, fontWeight: FontWeight.bold))
+                              Text('Wait for verification and get points',
+                                  textAlign: TextAlign.center,
+                                  style: GoogleFonts.getFont('Poppins',
+                                      textStyle: TextStyle(
+                                        fontSize: 8,
+                                        fontWeight: FontWeight.w500,
+                                      )))
                             ],
                           ),
                           Column(
@@ -225,9 +250,12 @@ class _HomePageState extends State<HomePage> {
                                 scale: 2,
                                 height: 50,
                               ),
-                              const Text('Excange points to e-wallet',
-                                  style: TextStyle(
-                                      fontSize: 8, fontWeight: FontWeight.bold))
+                              Text('Excange points to e-wallet',
+                                  style: GoogleFonts.getFont('Poppins',
+                                      textStyle: TextStyle(
+                                        fontSize: 8,
+                                        fontWeight: FontWeight.w500,
+                                      )))
                             ],
                           ),
                         ],
@@ -254,25 +282,27 @@ class _HomePageState extends State<HomePage> {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Text(
-                            'Congratulation! you have already sort and dispose the waste with total of',
-                            style: TextStyle(
-                                color: customColors.redText,
-                                fontWeight: FontWeight.bold),
-                          ),
+                              'Congratulation! you have already sort and dispose the waste with total of',
+                              style: GoogleFonts.getFont('Poppins',
+                                  textStyle: TextStyle(
+                                      fontWeight: FontWeight.bold,
+                                      color: customColors.redText))),
                           RichText(
-                              text: const TextSpan(children: [
+                              text: TextSpan(children: [
                             TextSpan(
                                 text: '15',
-                                style: TextStyle(
-                                    color: Colors.green,
-                                    fontSize: 36,
-                                    fontWeight: FontWeight.w900)),
+                                style: GoogleFonts.getFont('Poppins',
+                                    textStyle: TextStyle(
+                                        fontSize: 36,
+                                        fontWeight: FontWeight.bold,
+                                        color: Colors.green))),
                             TextSpan(
                                 text: 'kg',
-                                style: TextStyle(
-                                    color: Colors.green,
-                                    fontSize: 24,
-                                    fontWeight: FontWeight.bold))
+                                style: GoogleFonts.getFont('Poppins',
+                                    textStyle: TextStyle(
+                                        fontSize: 24,
+                                        fontWeight: FontWeight.bold,
+                                        color: Colors.green)))
                           ]))
                         ],
                       ),

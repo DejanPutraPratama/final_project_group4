@@ -1,6 +1,7 @@
 import 'dart:developer';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:final_project_group4/auth/forgot_password.dart';
+import 'package:final_project_group4/navbar/navbar_navigation.dart';
 import 'package:final_project_group4/page/home_page.dart';
 import 'package:final_project_group4/page/registration.dart';
 import 'package:final_project_group4/widget/button.dart';
@@ -377,7 +378,8 @@ class _LoginScreenState extends State<LoginScreen> {
                     onPressed: () {
                       Navigator.push(
                         context,
-                        MaterialPageRoute(builder: (context) => DonateScreen()),
+                        MaterialPageRoute(
+                            builder: (context) => NavbarNavigation()),
                       );
                     }),
                 const SizedBox(height: 16),
