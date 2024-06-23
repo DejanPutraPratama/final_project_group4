@@ -88,13 +88,13 @@ class _HomePageState extends State<HomePage> {
                     Text(
                       "Your Balance Point",
                       style: GoogleFonts.getFont('Poppins',
-                          textStyle: TextStyle(
+                          textStyle: const TextStyle(
                             fontWeight: FontWeight.bold,
                           )),
                     ),
                     Text("100000 pts",
                         style: GoogleFonts.getFont('Poppins',
-                            textStyle: TextStyle(
+                            textStyle: const TextStyle(
                               fontWeight: FontWeight.bold,
                             )))
                   ],
@@ -108,7 +108,7 @@ class _HomePageState extends State<HomePage> {
                   children: [
                     Text("Destination Landfill",
                         style: GoogleFonts.getFont('Poppins',
-                            textStyle: TextStyle(
+                            textStyle: const TextStyle(
                               fontWeight: FontWeight.bold,
                             ))),
                     customWidgets.greyBox(
@@ -122,8 +122,8 @@ class _HomePageState extends State<HomePage> {
                           hint: Text(
                             'Please select location',
                             style: GoogleFonts.getFont('Poppins',
-                                textStyle:
-                                    TextStyle(fontWeight: FontWeight.bold)),
+                                textStyle: const TextStyle(
+                                    fontWeight: FontWeight.bold)),
                           ),
                           icon: const Icon(Icons.keyboard_arrow_down_rounded),
                           items: const [
@@ -155,7 +155,7 @@ class _HomePageState extends State<HomePage> {
                         Text(
                           'Feel like to dispose today?',
                           style: GoogleFonts.getFont('Poppins',
-                              textStyle: TextStyle(
+                              textStyle: const TextStyle(
                                 fontSize: 10,
                               )),
                         ),
@@ -171,7 +171,7 @@ class _HomePageState extends State<HomePage> {
                             child: Text(
                               'Donate Now',
                               style: GoogleFonts.getFont('Poppins',
-                                  textStyle: TextStyle(
+                                  textStyle: const TextStyle(
                                       fontWeight: FontWeight.w600,
                                       color: Colors.white)),
                             ))
@@ -206,7 +206,7 @@ class _HomePageState extends State<HomePage> {
                               ),
                               Text('Sort your waste',
                                   style: GoogleFonts.getFont('Poppins',
-                                      textStyle: TextStyle(
+                                      textStyle: const TextStyle(
                                         fontSize: 8,
                                         fontWeight: FontWeight.w500,
                                       )))
@@ -221,7 +221,7 @@ class _HomePageState extends State<HomePage> {
                               ),
                               Text('Send to nearest landfill',
                                   style: GoogleFonts.getFont('Poppins',
-                                      textStyle: TextStyle(
+                                      textStyle: const TextStyle(
                                         fontSize: 8,
                                         fontWeight: FontWeight.w500,
                                       )))
@@ -237,7 +237,7 @@ class _HomePageState extends State<HomePage> {
                               Text('Wait for verification and get points',
                                   textAlign: TextAlign.center,
                                   style: GoogleFonts.getFont('Poppins',
-                                      textStyle: TextStyle(
+                                      textStyle: const TextStyle(
                                         fontSize: 8,
                                         fontWeight: FontWeight.w500,
                                       )))
@@ -252,7 +252,7 @@ class _HomePageState extends State<HomePage> {
                               ),
                               Text('Excange points to e-wallet',
                                   style: GoogleFonts.getFont('Poppins',
-                                      textStyle: TextStyle(
+                                      textStyle: const TextStyle(
                                         fontSize: 8,
                                         fontWeight: FontWeight.w500,
                                       )))
@@ -292,14 +292,14 @@ class _HomePageState extends State<HomePage> {
                             TextSpan(
                                 text: '15',
                                 style: GoogleFonts.getFont('Poppins',
-                                    textStyle: TextStyle(
+                                    textStyle: const TextStyle(
                                         fontSize: 36,
                                         fontWeight: FontWeight.bold,
                                         color: Colors.green))),
                             TextSpan(
                                 text: 'kg',
                                 style: GoogleFonts.getFont('Poppins',
-                                    textStyle: TextStyle(
+                                    textStyle: const TextStyle(
                                         fontSize: 24,
                                         fontWeight: FontWeight.bold,
                                         color: Colors.green)))
@@ -309,7 +309,7 @@ class _HomePageState extends State<HomePage> {
                     ),
                   ],
                 )),
-            SizedBox(
+            const SizedBox(
               height: 100,
             )
           ],

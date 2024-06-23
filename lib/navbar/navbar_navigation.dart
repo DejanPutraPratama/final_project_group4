@@ -5,7 +5,6 @@ import 'package:final_project_group4/page/Donatepage.dart';
 import 'package:final_project_group4/page/home_page.dart';
 import 'package:final_project_group4/page/profile_page.dart';
 import 'package:final_project_group4/utils/custom_colors.dart';
-import 'package:final_project_group4/widget/custom_widgets.dart';
 import 'package:flutter/material.dart';
 
 class NavbarNavigation extends StatefulWidget {
@@ -28,27 +27,24 @@ class _NavbarNavigationState extends State<NavbarNavigation> {
     // TODO: implement initState
     super.initState();
     items = [
-      NavbarModel(page: HomePage(), navkey: homeNavKey),
+      NavbarModel(page: const HomePage(), navkey: homeNavKey),
       NavbarModel(
-          page: TabPage(
+          page: const TabPage(
             tab: 2,
           ),
           navkey: redeemNavKey),
       NavbarModel(
-          page: TabPage(
+          page: const TabPage(
             tab: 3,
           ),
           navkey: historyNavKey),
-      NavbarModel(page: ProfilePage(), navkey: profileNavKey),
+      NavbarModel(page: const ProfilePage(), navkey: profileNavKey),
     ];
   }
 
   @override
   Widget build(BuildContext context) {
-    final CustomWidgets customWidgets = CustomWidgets();
     final CustomColors customColors = CustomColors();
-    double deviceWidth = MediaQuery.sizeOf(context).width;
-    double deviceHeight = MediaQuery.sizeOf(context).height;
 
     return PopScope(
       onPopInvoked: (value) async {
@@ -101,9 +97,9 @@ class _NavbarNavigationState extends State<NavbarNavigation> {
               Navigator.push(context,
                   MaterialPageRoute(builder: (context) => DonateScreen()));
             },
-            shape:
-                CircleBorder(side: BorderSide(width: 0, color: Colors.green)),
-            child: Column(
+            shape: const CircleBorder(
+                side: BorderSide(width: 0, color: Colors.green)),
+            child: const Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 Icon(

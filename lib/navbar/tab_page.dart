@@ -19,7 +19,7 @@ class TabPage extends StatelessWidget {
                     builder: (context) => Page(tab: tab),
                   ));
             },
-            child: Text('Goto Page')),
+            child: const Text('Goto Page')),
       ),
     );
   }

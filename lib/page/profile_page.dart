@@ -40,13 +40,13 @@ class ProfilePage extends StatelessWidget {
                     height: 250,
                     child: Row(
                       children: [
-                        CircleAvatar(
+                        const CircleAvatar(
                           backgroundColor: Colors.grey,
                           foregroundColor: Colors.black,
                           radius: 35,
                           child: Icon(Icons.camera_enhance),
                         ),
-                        SizedBox(
+                        const SizedBox(
                           width: 10,
                         ),
                         Column(
@@ -88,14 +88,14 @@ class ProfilePage extends StatelessWidget {
                       Text("Your Balance Point",
                           style: GoogleFonts.getFont(
                             'Poppins',
-                            textStyle: TextStyle(
+                            textStyle: const TextStyle(
                               fontWeight: FontWeight.w600,
                             ),
                           )),
                       Text("100000 pts",
                           style: GoogleFonts.getFont(
                             'Poppins',
-                            textStyle: TextStyle(
+                            textStyle: const TextStyle(
                               fontWeight: FontWeight.w600,
                             ),
                           ))
@@ -103,21 +103,21 @@ class ProfilePage extends StatelessWidget {
                   )),
             ),
             optionList('Update Profile', Colors.black,
-                Icon(Icons.chevron_right_rounded)),
+                const Icon(Icons.chevron_right_rounded)),
             optionList('Dark Mode', Colors.black, null),
-            SizedBox(
+            const SizedBox(
               height: 10,
             ),
             optionList('Terms & Conditions', Colors.black,
-                Icon(Icons.chevron_right_rounded)),
+                const Icon(Icons.chevron_right_rounded)),
             optionList('Personal Policy', Colors.black,
-                Icon(Icons.chevron_right_rounded)),
-            SizedBox(
+                const Icon(Icons.chevron_right_rounded)),
+            const SizedBox(
               height: 10,
             ),
             optionList('Log out', Colors.black, null),
             optionList('Delete Account', customColors.redText, null),
-            SizedBox(
+            const SizedBox(
               height: 100,
             )
           ],
@@ -135,7 +135,7 @@ class ProfilePage extends StatelessWidget {
                 fontSize: 12, fontWeight: FontWeight.w600, color: textColor),
           )),
       trailing: icon,
-      shape: Border.symmetric(
+      shape: const Border.symmetric(
           horizontal: BorderSide(width: 1, color: Colors.black12)),
     );
   }

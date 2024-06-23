@@ -15,7 +15,7 @@ class Navbar extends StatelessWidget {
       padding: EdgeInsets.zero,
       elevation: 0,
       child: ClipRRect(
-        borderRadius: BorderRadius.only(
+        borderRadius: const BorderRadius.only(
             topLeft: Radius.circular(40), topRight: Radius.circular(40)),
         child: Container(
           height: 60,
@@ -34,7 +34,7 @@ class Navbar extends StatelessWidget {
                 pageIndex == 1,
                 onTap: () => onTap(1),
               ),
-              SizedBox(
+              const SizedBox(
                 width: 50,
               ),
               navItem(
@@ -61,7 +61,7 @@ class Navbar extends StatelessWidget {
     CustomColors customColors = CustomColors();
     return Expanded(
         child: InkWell(
-      overlayColor: WidgetStatePropertyAll(Colors.transparent),
+      overlayColor: const WidgetStatePropertyAll(Colors.transparent),
       onTap: onTap,
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
