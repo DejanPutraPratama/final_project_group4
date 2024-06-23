@@ -1,9 +1,10 @@
+import 'package:final_project_group4/navbar/navbar_navigation.dart';
 import 'package:final_project_group4/page/login.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
 class SplashScreen extends StatefulWidget {
-  const SplashScreen ({super.key});
+  const SplashScreen({super.key});
 
   @override
   State<SplashScreen> createState() => _SplashScreenState();
@@ -15,7 +16,7 @@ class FirstScreen extends StatelessWidget {
     return GestureDetector(
       onTap: () {
         Navigator.pushReplacement(
-          context, 
+          context,
           MaterialPageRoute(builder: (context) => SecondScreen()),
         );
       },
@@ -51,9 +52,9 @@ class FirstScreen extends StatelessWidget {
               bottom: 200,
               left: 5,
               child: Image.asset(
-                'assets/Plastik_sampah.png', 
+                'assets/Plastik_sampah.png',
                 fit: BoxFit.contain,
-                width: 200, 
+                width: 200,
               ),
             ),
             Positioned(
@@ -64,7 +65,7 @@ class FirstScreen extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   Icon(Icons.circle, color: Colors.black),
-                  SizedBox(width:20),
+                  SizedBox(width: 20),
                   Icon(Icons.circle, color: Colors.grey),
                   SizedBox(width: 20),
                   Icon(Icons.circle, color: Colors.grey),
@@ -79,8 +80,8 @@ class FirstScreen extends StatelessWidget {
   }
 }
 
-class SecondScreen extends StatelessWidget{
-    @override
+class SecondScreen extends StatelessWidget {
+  @override
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () {
@@ -121,9 +122,9 @@ class SecondScreen extends StatelessWidget{
               bottom: 200,
               left: 5,
               child: Image.asset(
-                'assets/Plastik_sampah.png', 
+                'assets/Plastik_sampah.png',
                 fit: BoxFit.contain,
-                width: 200, 
+                width: 200,
               ),
             ),
             Positioned(
@@ -149,14 +150,14 @@ class SecondScreen extends StatelessWidget{
   }
 }
 
-class ThirdScreen extends StatelessWidget{
-    @override
+class ThirdScreen extends StatelessWidget {
+  @override
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () {
         Navigator.pushReplacement(
           context,
-          MaterialPageRoute(builder: (context) => LoginScreen()),
+          MaterialPageRoute(builder: (context) => NavbarNavigation()),
         );
       },
       child: Scaffold(
@@ -208,9 +209,9 @@ class ThirdScreen extends StatelessWidget{
               bottom: 200,
               left: 5,
               child: Image.asset(
-                'assets/Plastik_sampah.png', 
+                'assets/Plastik_sampah.png',
                 fit: BoxFit.contain,
-                width: 200, 
+                width: 200,
               ),
             ),
             Positioned(
@@ -237,27 +238,26 @@ class ThirdScreen extends StatelessWidget{
 }
 
 class _SplashScreenState extends State<SplashScreen>
-  with SingleTickerProviderStateMixin {
-    @override
-    void initState() {
-      super.initState();
-        SystemChrome.setEnabledSystemUIMode(SystemUiMode.immersive);
-        Future.delayed(const Duration(seconds: 3), () {
-          Navigator.of(context).pushReplacement(
-            MaterialPageRoute(builder: (_) => FirstScreen())
-          );
-        }
-      );
-    }
+    with SingleTickerProviderStateMixin {
+  @override
+  void initState() {
+    super.initState();
+    SystemChrome.setEnabledSystemUIMode(SystemUiMode.immersive);
+    Future.delayed(const Duration(seconds: 3), () {
+      Navigator.of(context)
+          .pushReplacement(MaterialPageRoute(builder: (_) => FirstScreen()));
+    });
+  }
 
-    @override
-    void dispose() {
-      SystemChrome.setEnabledSystemUIMode(SystemUiMode.manual,overlays: SystemUiOverlay.values);
-    }
+  @override
+  void dispose() {
+    SystemChrome.setEnabledSystemUIMode(SystemUiMode.manual,
+        overlays: SystemUiOverlay.values);
+  }
 
-    @override
-    Widget build(BuildContext context) {
-          return Scaffold(
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
       body: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
@@ -270,7 +270,8 @@ class _SplashScreenState extends State<SplashScreen>
           ],
         ),
       ),
-      backgroundColor: Color(0xFFEAF0DF), // Warna latar belakang sesuai dengan gambar
+      backgroundColor:
+          Color(0xFFEAF0DF), // Warna latar belakang sesuai dengan gambar
     );
-    }
   }
+}
