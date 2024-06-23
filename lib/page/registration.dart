@@ -37,213 +37,289 @@ class _RegistrationState extends State<Registrartion> {
     return Scaffold(
       backgroundColor: Colors.lightGreen[50],
       body: Container(
-        margin: EdgeInsets.all(10),
+        margin: const EdgeInsets.only(
+          top: 30,
+          left: 10,
+          right: 10,
+          bottom: 20,
+        ),
         child: Form(
           key: _formkey,
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Row(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: <Widget> [
-                  const SizedBox(height: 20),
-                  Container(
-                    width: 30,
-                    height: 40,
-                    decoration: BoxDecoration(
-                      color: Colors.white,
-                      borderRadius: BorderRadius.circular(10),
-                    ),
-                    child: Center(
-                      child: IconButton(
-                      padding: EdgeInsets.zero,
-                        onPressed: () {
-                          Navigator.pushReplacement(
-                            context, 
-                            MaterialPageRoute(builder: (context) => const LoginScreen()),
-                          );
-                        },
-                        icon: const Icon(Icons.chevron_left, color: Colors.black),
+          child: SingleChildScrollView(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Row(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: <Widget> [
+                    const SizedBox(height: 40),
+                    Container(
+                      width: 30,
+                      height: 40,
+                      decoration: BoxDecoration(
+                        color: Colors.white,
+                        borderRadius: BorderRadius.circular(10),
+                      ),
+                      child: Center(
+                        child: IconButton(
+                        padding: EdgeInsets.zero,
+                          onPressed: () {
+                            Navigator.pushReplacement(
+                              context, 
+                              MaterialPageRoute(builder: (context) => const LoginScreen()),
+                            );
+                          },
+                          icon: const Icon(Icons.chevron_left, color: Colors.black),
+                        ),
                       ),
                     ),
+                    const SizedBox(width: 10),
+                    const Text(
+                      "Let’s fill your data first",
+                      style: TextStyle(
+                        fontSize: 18,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.black
+                      ),
+                    ),
+                  ],
+                ),
+                const SizedBox(height: 20),
+                Container(
+                  padding: const EdgeInsets.only(
+                    top: 10,
+                    left: 14,
+                    right: 15,
+                    bottom: 7
                   ),
-                  const SizedBox(width: 10),
-                  const Text(
-                    "Let’s fill your data first",
+                  width: double.infinity,
+                  height: 38,
+                  decoration: BoxDecoration(
+                    color: Colors.white,
+                    borderRadius: BorderRadius.circular(10),
+                  ),
+                  child: Row(
+                    children: [
+                      const Text(
+                        'Step 1/2',
+                        style: TextStyle(
+                          fontSize: 16,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.black,
+                        ),
+                      ),
+                      const SizedBox(width: 10),
+                      Expanded(
+                        child: LinearProgressIndicator(
+                          value: 0.5,
+                          backgroundColor: Colors.green[100],
+                          valueColor: const AlwaysStoppedAnimation<Color>(Colors.green),
+                          borderRadius: BorderRadius.circular(10),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                const SizedBox(height: 20),
+                Container(
+                  width: double.infinity,
+                  decoration: BoxDecoration(
+                    color: Colors.white,
+                    borderRadius: BorderRadius.circular(10),
+                  ),
+                  child: Column(
+                    children: [
+                      const Padding(
+                        padding: EdgeInsets.only(
+                          right: 290,
+                          top: 20
+                        ),
+                        child: Text(
+                          'Full Name',
+                          style: TextStyle(
+                            fontSize: 14,
+                            fontWeight: FontWeight.bold,
+                            color: Colors.black,
+                          ),
+                        ),
+                      ),
+                      const SizedBox(height: 10),
+                      Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 10),
+                        child: TextField(
+                          controller: _fullNameController,
+                          decoration: InputDecoration(
+                            labelText:  'Full Name',
+                            fillColor: Colors.white,
+                            filled: true,
+                            border: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(10),
+                              borderSide: const BorderSide(
+                                color: Colors.green,
+                              ),
+                            ),
+                          ),
+                        ),
+                      ),
+                const SizedBox(height: 10),
+                const Padding(
+                  padding: EdgeInsets.only(
+                    right: 300,
+                    top: 10,
+                  ),
+                  child: Text(
+                    'Gender',
                     style: TextStyle(
-                      fontSize: 18,
+                      fontSize: 14,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.black,
+                    ),
+                  ),
+                ),
+                GenderSelectionScreen(
+                  onChanged: (String? gender ) {
+                    setState(() {
+                      selectedGender = gender;
+                    });
+                  },
+                ),
+                const SizedBox(height: 10),
+                const Padding(
+                  padding: EdgeInsets.only(
+                    right: 250,
+                    top: 10,
+                  ),
+                  child: Text(
+                    'Mobile Number',
+                    style: TextStyle(
+                      fontSize: 14,
                       fontWeight: FontWeight.bold,
                       color: Colors.black
                     ),
                   ),
-                ],
-              ),
-              const SizedBox(height: 20),
-              Container(
-                padding: const EdgeInsets.only(
-                  top: 10,
-                  left: 14,
-                  right: 15,
-                  bottom: 7
                 ),
-                width: double.infinity,
-                height: 38,
-                decoration: BoxDecoration(
-                  color: Colors.white,
-                  borderRadius: BorderRadius.circular(10),
-                ),
-                child: Row(
-                  children: [
-                    const Text(
-                      'Step 1/2',
-                      style: TextStyle(
-                        fontSize: 16,
-                        fontWeight: FontWeight.bold,
-                        color: Colors.black,
+                const SizedBox(height: 10),
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 10),
+                  child: TextField(
+                    controller: _mobileNumberController,
+                    decoration: InputDecoration(
+                      labelText: 'Mobile Number',
+                      fillColor: Colors.white,
+                      filled: true,
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(10),
                       ),
                     ),
-                    const SizedBox(width: 10),
-                    Expanded(
-                      child: LinearProgressIndicator(
-                        value: 0.5,
-                        backgroundColor: Colors.green[100],
-                        valueColor: const AlwaysStoppedAnimation<Color>(Colors.green),
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-              const SizedBox(height: 20),
-              Container(
-                width: double.infinity,
-                decoration: BoxDecoration(
-                  color: Colors.white,
-                  borderRadius: BorderRadius.circular(10),
-                ),
-                child: Column(
-                  children: [
-                    const Text(
-                      'Full Name',
-                      style: TextStyle(
-                        fontSize: 14,
-                        fontWeight: FontWeight.bold,
-                        color: Colors.black,
-                      ),
-                    ),
-                    const SizedBox(height: 20),
-  
-                    TextField(
-                      controller: _fullNameController,
-                      decoration: InputDecoration(
-                        labelText:  'Full Name',
-                        fillColor: Colors.white,
-                        filled: true,
-                        border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(10),
-                          borderSide: const BorderSide(
-                            color: Colors.green,
-                          ),
-                        ),
-                      ),
-                    ),
-              const SizedBox(height: 20),
-              const Text(
-                'Gender',
-                style: TextStyle(
-                  fontSize: 14,
-                  fontWeight: FontWeight.bold,
-                  color: Colors.black,
-                ),
-              ),
-              GenderSelectionScreen(
-                onChanged: (String? gender ) {
-                  setState(() {
-                    selectedGender = gender;
-                  });
-                },
-              ),
-              const SizedBox(height: 20),
-              const Text(
-                'Mobile Number',
-                style: TextStyle(
-                  fontSize: 14,
-                  fontWeight: FontWeight.bold,
-                  color: Colors.black
-                ),
-              ),
-              TextField(
-                controller: _mobileNumberController,
-                decoration: InputDecoration(
-                  labelText: 'Mobile Number',
-                  fillColor: Colors.white,
-                  filled: true,
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(10),
                   ),
                 ),
-              ),
-              TextField(
-                controller:_addressController,
-                decoration: InputDecoration(
-                  labelText: 'Address',
-                  fillColor: Colors.white,
-                  filled: true,
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(10),
+                const SizedBox(height: 10),
+                const Padding(
+                  padding: EdgeInsets.only(
+                    right: 290,
+                    top: 10
+                  ),
+                  child: Text(
+                    "Address",
+                    style: TextStyle(
+                      fontSize: 14,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.black
+                    ),
                   ),
                 ),
-              ),
-              TextField(
-                controller: _cityController,
-                decoration: const InputDecoration(
-                  labelText: 'City'
+                const SizedBox(height: 10),
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 10),
+                  child: TextField(
+                    controller:_addressController,
+                    decoration: InputDecoration(
+                      labelText: 'Address',
+                      fillColor: Colors.white,
+                      filled: true,
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(10),
+                      ),
+                    ),
+                  ),
                 ),
-              ),
-                  ],
+                const SizedBox(height: 10),
+                const Padding(
+                  padding: EdgeInsets.only(
+                    right: 330,
+                    top: 10
+                  ),
+                  child: Text(
+                    "City",
+                    style: TextStyle(
+                      fontSize: 14,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.black
+                    ),
+                  ),
                 ),
-              ),
-              const SizedBox(height: 54),
-              CustomButton(
-                label: "Next",
-                onPressed: () async {
-                  final String fullName = _fullNameController.text;
-                  final String mobileNumber = _mobileNumberController.text;
-                  final String address = _addressController.text;
-                  final String city = _cityController.text;
-                  String gender = '';
-                  if (selectedGender == null) {
-                  // Menampilkan pesan error jika gender belum dipilih
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    SnackBar(content: Text('Please select a gender')),
-                  );
-                    return;
-                  }
-                  
-                  if (fullName.isNotEmpty && 
-                  mobileNumber.isNotEmpty &&
-                  address.isNotEmpty && 
-                  city.isNotEmpty) {
-                    print("Full Name: $fullName");
-                    print("Mobile Number: $mobileNumber");
-                    print("Address: $address");
-                    print("City: $city");
-                    print("Gender: $selectedGender");
-                    await _users.add({
-                    'fullName': fullName,
-                    'mobileNumber': mobileNumber,
-                    'address': address,
-                    'city': city,
-                    'gender': selectedGender,
-                    });
-        
-                    Navigator.push(
-                      context, 
-                      MaterialPageRoute(builder: (context) => const NextRegistration()),
+                const SizedBox(height: 10),
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 10),
+                  child: TextField(
+                    controller: _cityController,
+                    decoration:  InputDecoration(
+                      labelText: 'City',
+                      fillColor: Colors.white,
+                      filled: true,
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(10),
+                      ),
+                    ),
+                  ),
+                ),
+                const SizedBox(height: 20),
+                    ],
+                  ),
+                ),
+                const SizedBox(height: 40),
+                CustomButton(
+                  label: "Next",
+                  onPressed: () async {
+                    final String fullName = _fullNameController.text;
+                    final String mobileNumber = _mobileNumberController.text;
+                    final String address = _addressController.text;
+                    final String city = _cityController.text;
+                    String gender = '';
+                    if (selectedGender == null) {
+                    // Menampilkan pesan error jika gender belum dipilih
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      SnackBar(content: Text('Please select a gender')),
                     );
-                  }
-                },
-              ),
-            ],
+                      return;
+                    }
+                    
+                    if (fullName.isNotEmpty && 
+                    mobileNumber.isNotEmpty &&
+                    address.isNotEmpty && 
+                    city.isNotEmpty) {
+                      print("Full Name: $fullName");
+                      print("Mobile Number: $mobileNumber");
+                      print("Address: $address");
+                      print("City: $city");
+                      print("Gender: $selectedGender");
+                      await _users.add({
+                      'fullName': fullName,
+                      'mobileNumber': mobileNumber,
+                      'address': address,
+                      'city': city,
+                      'gender': selectedGender,
+                      });
+                    
+                      Navigator.push(
+                        context, 
+                        MaterialPageRoute(builder: (context) => const NextRegistration()),
+                      );
+                    }
+                  },
+                ),
+              ],
+            ),
           ),
         ),
       ),
@@ -303,75 +379,208 @@ class _NextRegistrationState extends State<NextRegistration> {
   @override 
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text(
-          "Make an account",
-          style: TextStyle(color: Colors.black),
-        ),
-      ),
       backgroundColor: Colors.lightGreen[50],
-      body:  Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: Form(
-          child: Column(
-            children: [
-              const Text(
-                'Step 2/2',
-                style: TextStyle(
-                  fontSize: 16,
-                  fontWeight: FontWeight.bold,
-                  color: Colors.black,
+      body:  Container(
+          margin: const EdgeInsets.only(
+            top: 30,
+            left: 10,
+            right: 10,
+            bottom: 20,
+          ),
+          child: Form(
+            child: SingleChildScrollView(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                Row(
+                  children: <Widget> [
+                    const SizedBox(height: 40),
+                    Container(
+                      width: 30,
+                      height: 40,
+                      decoration: BoxDecoration(
+                        color: Colors.white,
+                        borderRadius: BorderRadius.circular(10),
+                      ),
+                      child: Center(
+                        child: IconButton(
+                          padding: EdgeInsets.zero,
+                          onPressed: () {
+                            Navigator.pushReplacement(
+                              context, 
+                              MaterialPageRoute(builder: (context) => const Registrartion()),
+                            );
+                          },
+                          icon: const Icon(Icons.chevron_left, color: Colors.black),
+                        ),
+                      ),
+                    ),
+                    const SizedBox(width: 10),
+                    const Text(
+                      "Make an account",
+                      style: TextStyle(
+                        fontSize: 18,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.black
+                      ),
+                    ),
+                  ],
                 ),
+                const SizedBox(height: 20),
+                Container(
+                  padding: const EdgeInsets.only(
+                    top: 10,
+                    left: 14,
+                    right: 15,
+                    bottom: 7
+                  ),
+                  width: double.infinity,
+                  height: 38,
+                  decoration: BoxDecoration(
+                    color: Colors.white,
+                    borderRadius: BorderRadius.circular(10),
+                  ),
+                  child: Row(
+                    children: [
+                      const Text(
+                        'Step 2/2',
+                        style: TextStyle(
+                          fontSize: 16,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.black,
+                        ),
+                      ),
+                      const SizedBox(width: 10),
+                      Expanded(
+                        child: LinearProgressIndicator(
+                          value: 1,
+                          backgroundColor: Colors.green[100],
+                          valueColor: const AlwaysStoppedAnimation<Color>(Colors.green),
+                          borderRadius: BorderRadius.circular(10),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                const SizedBox(height: 30,),
+                Container(
+                  width: double.infinity,
+                  decoration: BoxDecoration(
+                    color: Colors.white,
+                    borderRadius: BorderRadius.circular(10),
+                  ),
+                  child: Column(
+                    children: [
+                      const Padding(
+                        padding: EdgeInsets.only(
+                          right: 320,
+                          top: 20,
+                        ),
+                        child: Text(
+                          'Email',
+                          style: TextStyle(
+                            fontSize: 14,
+                            fontWeight: FontWeight.bold,
+                            color: Colors.black,
+                          ),
+                        ),
+                      ),
+                      const SizedBox(height: 20),
+                      Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 10),
+                        child: CustomTextField(
+                          hint: "Enter ur email", 
+                          label: "Email",
+                          controller: _email,
+                        ),
+                      ),
+                      const SizedBox(height: 10),
+                      const Padding(
+                        padding: EdgeInsets.only(
+                          right: 290,
+                          top: 10,
+                        ),
+                        child: Text(
+                          'Password',
+                          style: TextStyle(
+                            fontSize: 14,
+                            fontWeight: FontWeight.bold,
+                            color: Colors.black,
+                          ),
+                        ),
+                      ),
+                      const SizedBox(height: 20),
+                      Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 10),
+                        child: CustomTextField(
+                          hint: "Enter ur password", 
+                          label: "Password",
+                          isPassword: true,
+                          controller: _password,
+                        ),
+                      ),
+                      const SizedBox(height: 10),
+                      const Padding(
+                        padding: EdgeInsets.only(
+                          top: 10,
+                          right: 220
+                        ),
+                        child: Text(
+                          'Confirm Password',
+                          style: TextStyle(
+                            fontSize: 14,
+                            fontWeight: FontWeight.bold,
+                            color: Colors.black,
+                          ),
+                        ),
+                      ),
+                      const SizedBox(height: 20),
+                      Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 10),
+                        child: CustomTextField(
+                          hint: "Confirm ur password", 
+                          label: "Confirm Password",
+                          isPassword: true,
+                          controller: _password,
+                        ),
+                      ),
+                      const SizedBox(height: 20),
+                      CheckboxListTile(
+                        title: const Text(
+                          "By ticking, you are confirming that you have read, understood and agree with our terms and conditions",
+                          style: TextStyle(
+                            fontSize: 11,
+                            fontWeight: FontWeight.normal,
+                          ),
+                        ),
+                        value: agreeToTerms, 
+                        onChanged: (newValue) {
+                          setState(() {
+                            agreeToTerms = newValue!;
+                          });
+                        },
+                        controlAffinity: ListTileControlAffinity.leading,
+                        subtitle: !agreeToTerms
+                        ? const Text(
+                          'Please tick it before you register',
+                          style: TextStyle(color: Colors.red),
+                        )
+                        : null,
+                      ),
+                    ],
+                  ),
+                ),
+                  const SizedBox(height: 50),
+                  CustomButton(
+                    label: "Register",
+                    onPressed: _signup,
+                  ),
+                ],
               ),
-              const SizedBox(height: 38),
-              LinearProgressIndicator(
-                value: 1,
-                backgroundColor: Colors.green[100],
-                valueColor: const AlwaysStoppedAnimation<Color>(Colors.green),
-              ),
-              CustomTextField(
-                hint: "Enter ur email", 
-                label: "Email",
-                controller: _email
-              ),
-              CustomTextField(
-                hint: "Enter ur password", 
-                label: "Password",
-                isPassword: true,
-                controller: _password,
-              ),
-              CustomTextField(
-                hint: "Confirm ur password", 
-                label: "Confirm Passwor",
-                isPassword: true,
-                controller: _password,
-              ),
-              CheckboxListTile(
-                title: const Text('I agree to the terms and conitions'),
-                value: agreeToTerms,
-                onChanged: (newValue) {
-                  setState(() {
-                    agreeToTerms = newValue!;
-                  });
-                },
-                controlAffinity: ListTileControlAffinity.leading,
-                subtitle: !agreeToTerms
-                ? const Text(
-                  'Please agree to terms and conditions',
-                  style: TextStyle(color: Colors.red),
-                )
-                : null,
-              ),
-              const SizedBox(height: 54),
-              CustomButton(
-                label: "Register",
-                onPressed: _signup,
-              ),
-            ],
+            ),
           ),
         ),
-      ),
-    );
+      );
   }
   _signup() async {
     final User = await _auth.createUserWithEmailAndPassword(_email.text, _password.text,);

@@ -6,6 +6,7 @@ import 'package:final_project_group4/page/splashScreen.dart';
 import 'package:flutter_native_splash/flutter_native_splash.dart';
 import 'package:final_project_group4/page/Donatepage.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:final_project_group4/page/registration.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -26,7 +27,7 @@ class MyApp extends StatelessWidget {
           colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
           useMaterial3: true,
           fontFamily: GoogleFonts.poppins().fontFamily),
-      home: SplashScreen(),
+      home: const LoginScreen(),
     );
   }
 }
