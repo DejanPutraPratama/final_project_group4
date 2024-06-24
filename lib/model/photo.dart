@@ -1,10 +1,15 @@
 import 'dart:io';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_storage/firebase_storage.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 
 class uploadPhoto extends StatefulWidget {
   final Function(File) onFileChanged;
+
   const uploadPhoto({
     super.key,
     required this.onFileChanged,
@@ -16,36 +21,57 @@ class uploadPhoto extends StatefulWidget {
 
 class _UploadPhotoState extends State<uploadPhoto> {
   final ImagePicker _picker = ImagePicker();
-  XFile? _imageFile;
+  File? _imageFile;
 
   Future<void> _pickImageFromCamera() async {
     final pickedFile = await _picker.pickImage(source: ImageSource.camera);
-    if(mounted) {
-      setState(() {
-        _imageFile = pickedFile;
-      });
-    }
     if (pickedFile != null) {
-      widget.onFileChanged(File(pickedFile.path));
+      setState(() {
+        _imageFile = File(pickedFile.path);
+      });
+      widget.onFileChanged(_imageFile!);
+      // await _uploadImageToFirebase();
     }
   }
 
   Future<void> _pickImageFromGallery() async {
     final pickedFile = await _picker.pickImage(source: ImageSource.gallery);
-    if (mounted) {
-      setState(() {
-        _imageFile = pickedFile;
-      });
-    }
     if (pickedFile != null) {
-      widget.onFileChanged(File(pickedFile.path));
+      setState(() {
+        _imageFile = File(pickedFile.path);
+      });
+      widget.onFileChanged(_imageFile!);
+      // await _uploadImageToFirebase();
     }
   }
   
+  // Future<void> _uploadImageToFirebase() async {
+  //   if (_imageFile == null) return;
+
+  //   try {
+  //     String fileName = 'photo/${DateTime.now().millisecondsSinceEpoch.toString()}.png';
+  //     Reference storageReference = FirebaseStorage.instance.ref().child(fileName);
+  //     UploadTask uploadTask = storageReference.putFile(_imageFile!);
+  //     TaskSnapshot snapshot = await uploadTask;
+  //     String downloadUrl = await snapshot.ref.getDownloadURL();
+
+  //     // Save image link to Firestore
+  //     await FirebaseFirestore.instance.collection('users').add({
+  //       'photoUrl': downloadUrl,
+  //       'uploadedAt': Timestamp.now(),
+  //     });
+
+  //     print('File uploaded and URL saved to Firestore');
+  //     } catch(e) {
+  //       print('Error uploading image: $e ');
+  //     }
+  //   }
+  
+
   @override
   Widget build(BuildContext context) {
     return Container(
-      margin: EdgeInsets.only(
+      margin: const EdgeInsets.only(
         top: 15,
       ),
       child: Column(
@@ -58,57 +84,52 @@ class _UploadPhotoState extends State<uploadPhoto> {
             ),
           ),
           const SizedBox(height: 10),
-          Container(
-            width: double.infinity,
-            height: 205,
-            color: Colors.grey[300],
-            child: Icon(
-              Icons.camera_alt,
-              size: 50,
-              color: Colors.grey[700],
-            ),
+          Stack(
+            children: [
+              Container(
+                width: double.infinity,
+                height: 205,
+                color: Colors.grey[300],
+                child: _imageFile == null 
+                ? Icon(
+                  Icons.camera_alt,
+                  size: 50,
+                  color: Colors.grey[700],
+                ) : Image.file(
+                  _imageFile!,
+                  width: double.infinity,
+                  height: 205,
+                  fit: BoxFit.cover,
+                ),
+              ),
+            ],
           ),
-          Center(
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                if (_imageFile != null)
-                  Image.file(
-                    File(_imageFile!.path),
-                    width: double.infinity,
-                    height: 205,
-                    fit: BoxFit.cover,
-                  )
-                else 
-                  Column(
-                    children: [
-                      GestureDetector(
-                        onTap: _pickImageFromGallery,
-                        child: IntrinsicWidth(
-                          child: Container(
-                            padding: EdgeInsets.symmetric(
-                              vertical: 10,
-                              horizontal: 30,
-                            ),
-                            decoration: BoxDecoration(
-                              border: Border.all(
-                                color: Colors.black,
-                              ),
-                              borderRadius: BorderRadius.circular(10),
-                            ),
-                            child: const Center(
-                              child: Text(
-                                'Pilih di Galeri'
-                              ),
-                            ),
-                          ),
-                        ),
+          if (_imageFile == null)
+            GestureDetector(
+              onTap: _pickImageFromGallery,
+              child: IntrinsicWidth(
+                child: Padding(
+                  padding: const EdgeInsets.only(top: 20),
+                  child: Container(
+                    padding: const EdgeInsets.symmetric(
+                      vertical: 10,
+                      horizontal: 30,
+                    ),
+                    decoration: BoxDecoration(
+                      border: Border.all(
+                        color: Colors.black,
                       ),
-                    ],
-                  )
-              ],
-            ),
-          )
+                      borderRadius: BorderRadius.circular(10),
+                    ),
+                    child: const Center(
+                      child: Text(
+                        'Pilih di Galeri'
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+            )
         ],
       ),
     );
