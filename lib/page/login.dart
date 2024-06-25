@@ -9,6 +9,8 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:final_project_group4/auth/auth_service.dart';
 import 'package:final_project_group4/page/Donatepage.dart';
+import 'package:email_otp/email_otp.dart';
+import 'package:flutter/services.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
@@ -48,6 +50,8 @@ class _LoginScreenState extends State<LoginScreen> {
   }
 
   Future<void> _resetpassword([DocumentSnapshot? documentSnapshot]) async {
+    TextEditingController email = TextEditingController();
+    EmailOTP myauth = EmailOTP();
     await showModalBottomSheet(
         isScrollControlled: true,
         context: context,
@@ -55,7 +59,7 @@ class _LoginScreenState extends State<LoginScreen> {
           return StatefulBuilder(
               builder: (BuildContext context, StateSetter setState) {
             return DecoratedBox(
-              decoration: BoxDecoration(
+              decoration: const BoxDecoration(
                 color: Colors.white,
                 borderRadius: BorderRadius.vertical(top: Radius.circular(50)),
               ),
@@ -68,54 +72,66 @@ class _LoginScreenState extends State<LoginScreen> {
                       left: 20,
                       right: 20,
                       bottom: MediaQuery.of(ctx).viewInsets.bottom + 20),
-                  child: Column(
-                    mainAxisSize: MainAxisSize.min,
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      const Text(
-                        "Forgot your password ?",
-                        style: TextStyle(
-                            fontSize: 24, fontWeight: FontWeight.bold),
-                      ),
-                      const Text(
-                        "Let’s fine your password back",
-                        style: TextStyle(
-                            fontSize: 18, fontWeight: FontWeight.bold),
-                      ),
-                      const SizedBox(height: 50),
-                      const Text(
-                        "Please provide your email",
-                        style: TextStyle(
-                            fontSize: 18, fontWeight: FontWeight.bold),
-                      ),
-                      const SizedBox(height: 20),
-                      TextField(
-                        controller: _email,
-                        decoration: InputDecoration(
-                          labelText: 'Email',
-                          fillColor: Colors.white,
-                          filled: true,
-                          errorText: _resetEmailError,
-                          border: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(10.0),
+                  child: SingleChildScrollView(
+                    child: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        const Text(
+                          "Forgot your password ?",
+                          style: TextStyle(
+                              fontSize: 24, fontWeight: FontWeight.bold),
+                        ),
+                        const Text(
+                          "Let’s fine your password back",
+                          style: TextStyle(
+                              fontSize: 18, fontWeight: FontWeight.bold),
+                        ),
+                        const SizedBox(height: 50),
+                        const Text(
+                          "Please provide your email",
+                          style: TextStyle(
+                              fontSize: 18, fontWeight: FontWeight.bold),
+                        ),
+                        const SizedBox(height: 20),
+                        TextField(
+                          controller: email,
+                          decoration: InputDecoration(
+                            labelText: 'Email',
+                            fillColor: Colors.white,
+                            filled: true,
+                            errorText: _resetEmailError,
+                            border: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(10.0),
+                            ),
                           ),
                         ),
-                      ),
-                      const SizedBox(height: 16),
-                      CustomButton(
-                          label: "Next",
-                          onPressed: () {
-                            setState(() {
-                              if (_email.text.isEmpty) {
-                                _resetEmailError =
-                                    'Email have not been registered';
-                              } else {
-                                _resetEmailError = null;
+                        const SizedBox(height: 16),
+                        CustomButton(
+                            label: "Next",
+                            onPressed: () async {
+                              EmailOTP.config(
+                                appEmail: "dejanputra12@gmail.com",
+                                appName: "Email OTP",
+                                emailTheme: EmailTheme.v4,
+                                otpLength: 4,
+                                otpType: OTPType.numeric,
+                              );
+                              bool otpSent = await EmailOTP.sendOTP(email: email.text);
+                              if (otpSent) {
+                                ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+                                  content: Text("OTP dikirim"),
+                                  ));
+                                Navigator.pop(ctx);
                                 _SendOTP();
+                              } else {
+                                ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+                                  content: Text("Something wrong I can feel it")
+                                ));
                               }
-                            });
-                          }),
-                    ],
+                            }),
+                      ],
+                    ),
                   ),
                 ),
               ),
@@ -125,8 +141,11 @@ class _LoginScreenState extends State<LoginScreen> {
   }
 
   Future<void> _SendOTP([DocumentSnapshot? documentSnapshot]) async {
-    String? _OTPerror;
-
+    final TextEditingController otpController;
+    final TextEditingController otp1controller = TextEditingController();
+    final TextEditingController otp2controller = TextEditingController();
+    final TextEditingController otp3controller = TextEditingController();
+    final otp4controller = TextEditingController();
     await showModalBottomSheet(
         isScrollControlled: true,
         context: context,
@@ -147,59 +166,92 @@ class _LoginScreenState extends State<LoginScreen> {
                       left: 20,
                       right: 20,
                       bottom: MediaQuery.of(ctx).viewInsets.bottom + 20),
-                  child: Column(
-                    mainAxisSize: MainAxisSize.min,
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      const Text(
-                        "Verification email is sent",
-                        style: TextStyle(
-                            fontSize: 24, fontWeight: FontWeight.bold),
-                      ),
-                      const Text(
-                        "Please verify that’s you",
-                        style: TextStyle(
-                            fontSize: 18, fontWeight: FontWeight.bold),
-                      ),
-                      const SizedBox(height: 50),
-                      const Text(
-                        "Please provide the OTP code",
-                        style: TextStyle(
-                            fontSize: 18, fontWeight: FontWeight.bold),
-                      ),
-                      const SizedBox(height: 20),
-                      TextField(
-                        controller: _email,
-                        decoration: InputDecoration(
-                          labelText: 'OTP Code',
-                          fillColor: Colors.white,
-                          filled: true,
-                          errorText: _OTPerror,
-                          border: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(10.0),
-                          ),
+                  child: SingleChildScrollView(
+                    child: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        const Text(
+                          "Verification email is sent",
+                          style: TextStyle(
+                              fontSize: 24, fontWeight: FontWeight.bold),
                         ),
-                      ),
-                      const SizedBox(height: 16),
-                      CustomButton(
-                          label: "Next",
-                          onPressed: () {
-                            setState(() {
-                              if (_email.text.isEmpty) {
-                                _OTPerror = 'The OTP does not match';
-                              } else {
-                                _OTPerror = null;
+                        const Text(
+                          "Please verify that’s you",
+                          style: TextStyle(
+                              fontSize: 18, fontWeight: FontWeight.bold),
+                        ),
+                        const SizedBox(height: 50),
+                        const Text(
+                          "Please provide the OTP code",
+                          style: TextStyle(
+                              fontSize: 18, fontWeight: FontWeight.bold),
+                        ),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                          children: [
+                            _buildOTPfield(context, otp1controller),
+                            _buildOTPfield(context, otp2controller),
+                            _buildOTPfield(context, otp3controller),
+                            _buildOTPfield(context, otp4controller),
+                          ],
+                        ),
+                        const SizedBox(height: 20),
+                        const SizedBox(height: 16),
+                        CustomButton(
+                            label: "Next",
+                            onPressed: () async {
+                              if (await EmailOTP.verifyOTP(otp: otp1controller.text + 
+                              otp2controller.text + 
+                              otp3controller.text + 
+                              otp4controller.text)
+                              == true ) {
+                                ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+                                  content: Text("OTP is verified")
+                                ));
+                                Navigator.pop(ctx);
                                 _InputNewPassword();
+                              } else {
+                                ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+                                  content: Text("invalid OTP")
+                                ));
                               }
-                            });
-                          }),
-                    ],
+                        }),
+                      ],
+                    ),
                   ),
                 ),
               ),
             );
           });
         });
+  }
+
+  Widget _buildOTPfield(BuildContext context, TextEditingController controller) {
+    return SizedBox(
+      width: 50,
+      child: TextFormField(
+        controller: controller,
+        keyboardType: TextInputType.number,
+        style: Theme.of(context).textTheme.headlineMedium,
+        textAlign: TextAlign.center,
+        inputFormatters: [
+          LengthLimitingTextInputFormatter(1),
+          FilteringTextInputFormatter.digitsOnly
+        ],
+        onChanged: (value) {
+          if (value.length == 1) {
+            FocusScope.of(context).nextFocus();
+          }
+          if (value.isEmpty) {
+            FocusScope.of(context).previousFocus();
+          }
+       },
+        decoration: const InputDecoration(
+          hintText: '0',
+        ),
+      ),
+    );
   }
 
   Future<void> _InputNewPassword([DocumentSnapshot? documentSnapshot]) async {
