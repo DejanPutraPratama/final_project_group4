@@ -8,6 +8,7 @@ import 'package:final_project_group4/auth/auth_service.dart';
 import 'package:final_project_group4/widget/button.dart';
 import 'package:final_project_group4/widget/textfield.dart';
 import 'package:flutter/widgets.dart';
+import 'package:final_project_group4/widget/birthForm.dart';
 
 class Registrartion extends StatefulWidget {
   const Registrartion({super.key});
@@ -20,7 +21,7 @@ class _RegistrationState extends State<Registrartion> {
   final _formkey = GlobalKey<FormState>();
   final CollectionReference _users = FirebaseFirestore.instance.collection('users');
   final TextEditingController _fullNameController = TextEditingController();
-  final TextEditingController _birthDateController = TextEditingController();
+  final TextEditingController dateController = TextEditingController();
   final TextEditingController _addressController = TextEditingController();
   final TextEditingController _mobileNumberController = TextEditingController();
   final TextEditingController _cityController = TextEditingController();
@@ -162,6 +163,7 @@ class _RegistrationState extends State<Registrartion> {
                         ),
                       ),
                 const SizedBox(height: 10),
+                DateOfBirthForm(dateController: dateController),
                 const Padding(
                   padding: EdgeInsets.only(
                     right: 300,
@@ -282,6 +284,7 @@ class _RegistrationState extends State<Registrartion> {
                   label: "Next",
                   onPressed: () async {
                     final String fullName = _fullNameController.text;
+                    final String birthDate = dateController.text;
                     final String mobileNumber = _mobileNumberController.text;
                     final String address = _addressController.text;
                     final String city = _cityController.text;
@@ -294,17 +297,19 @@ class _RegistrationState extends State<Registrartion> {
                       return;
                     }
                     
-                    if (fullName.isNotEmpty && 
+                    if (fullName.isNotEmpty && birthDate.isNotEmpty &&
                     mobileNumber.isNotEmpty &&
                     address.isNotEmpty && 
                     city.isNotEmpty) {
                       print("Full Name: $fullName");
+                      print("birth Date: $birthDate");
                       print("Mobile Number: $mobileNumber");
                       print("Address: $address");
                       print("City: $city");
                       print("Gender: $selectedGender");
                       await _users.add({
                       'fullName': fullName,
+                      'birth Date': birthDate,
                       'mobileNumber': mobileNumber,
                       'address': address,
                       'city': city,
