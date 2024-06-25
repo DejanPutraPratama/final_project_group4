@@ -1,5 +1,7 @@
+import 'package:final_project_group4/page/detail_profile.dart';
 import 'package:final_project_group4/utils/custom_colors.dart';
 import 'package:final_project_group4/widget/custom_widgets.dart';
+import 'package:final_project_group4/widget/popup_dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
@@ -103,20 +105,36 @@ class ProfilePage extends StatelessWidget {
                   )),
             ),
             optionList('Update Profile', Colors.black,
-                const Icon(Icons.chevron_right_rounded)),
-            optionList('Dark Mode', Colors.black, null),
+                const Icon(Icons.chevron_right_rounded), () {
+              Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => const DetailProfile()));
+            }),
+            optionList('Dark Mode', Colors.black, null, () {}),
             const SizedBox(
               height: 10,
             ),
             optionList('Terms & Conditions', Colors.black,
-                const Icon(Icons.chevron_right_rounded)),
+                const Icon(Icons.chevron_right_rounded), () {}),
             optionList('Personal Policy', Colors.black,
-                const Icon(Icons.chevron_right_rounded)),
+                const Icon(Icons.chevron_right_rounded), () {}),
             const SizedBox(
               height: 10,
             ),
-            optionList('Log out', Colors.black, null),
-            optionList('Delete Account', customColors.redText, null),
+            optionList('Log out', Colors.black, null, () {
+              popUpDialog('Are you sure you want to Log Out?', '', context,
+                  "Yes, I'm sure", "No, I'm not", () {});
+            }),
+            optionList('Delete Account', customColors.redText, null, () {
+              popUpDialog(
+                  'Are you sure you want to delete your account?',
+                  'This action can not be undone, your data will deleted permanently',
+                  context,
+                  "Yes, I'm sure",
+                  "No, I'm not",
+                  () {});
+            }),
             const SizedBox(
               height: 100,
             )
@@ -126,17 +144,21 @@ class ProfilePage extends StatelessWidget {
     );
   }
 
-  ListTile optionList(String title, Color textColor, Icon? icon) {
-    return ListTile(
-      title: Text(title,
-          style: GoogleFonts.getFont(
-            'Poppins',
-            textStyle: TextStyle(
-                fontSize: 12, fontWeight: FontWeight.w600, color: textColor),
-          )),
-      trailing: icon,
-      shape: const Border.symmetric(
-          horizontal: BorderSide(width: 1, color: Colors.black12)),
+  Widget optionList(
+      String title, Color textColor, Icon? icon, Function() onTap) {
+    return GestureDetector(
+      onTap: onTap,
+      child: ListTile(
+        title: Text(title,
+            style: GoogleFonts.getFont(
+              'Poppins',
+              textStyle: TextStyle(
+                  fontSize: 12, fontWeight: FontWeight.w600, color: textColor),
+            )),
+        trailing: icon,
+        shape: const Border.symmetric(
+            horizontal: BorderSide(width: 1, color: Colors.black12)),
+      ),
     );
   }
 }

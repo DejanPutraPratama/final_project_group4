@@ -1,12 +1,9 @@
+import 'package:final_project_group4/navbar/navbar_navigation.dart';
 import 'package:final_project_group4/page/login.dart';
 import 'package:flutter/material.dart';
 import 'package:final_project_group4/firebase_options.dart';
 import 'package:firebase_core/firebase_core.dart';
-import 'package:final_project_group4/page/splashScreen.dart';
-import 'package:flutter_native_splash/flutter_native_splash.dart';
-import 'package:final_project_group4/page/Donatepage.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:final_project_group4/page/registration.dart';
 import 'package:get/get.dart';
 
 void main() async {
@@ -25,10 +22,10 @@ class MyApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       title: 'Storbage',
       theme: ThemeData(
-          colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
+          colorScheme: ColorScheme.fromSeed(seedColor: Colors.green),
           useMaterial3: true,
           fontFamily: GoogleFonts.poppins().fontFamily),
-      home: DonateScreen(),
+      home: const NavbarNavigation(),
     );
   }
 }

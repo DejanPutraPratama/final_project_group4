@@ -37,4 +37,21 @@ class CustomWidgets {
           padding: const EdgeInsets.symmetric(horizontal: 20), child: child),
     );
   }
+
+  Widget birthGreyBox(double width, double height, Widget child) {
+    return Container(
+      width: width,
+      height: height,
+      margin: const EdgeInsets.symmetric(vertical: 10),
+      decoration: BoxDecoration(
+          border: Border.all(color: Colors.black12, width: 3),
+          borderRadius: BorderRadius.circular(20)),
+      child: Padding(
+          padding: EdgeInsets.only(
+            top: 5,
+            left: 15,
+          ),
+          child: child),
+    );
+  }
 }

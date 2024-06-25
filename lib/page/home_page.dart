@@ -123,7 +123,7 @@ class _HomePageState extends State<HomePage> {
                             'Please select location',
                             style: GoogleFonts.getFont('Poppins',
                                 textStyle: const TextStyle(
-                                    fontWeight: FontWeight.bold)),
+                                    fontWeight: FontWeight.w500)),
                           ),
                           icon: const Icon(Icons.keyboard_arrow_down_rounded),
                           items: const [
