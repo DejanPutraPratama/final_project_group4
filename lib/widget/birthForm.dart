@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
+import 'package:intl/intl.dart';
 
 class DateOfBirthForm extends StatefulWidget {
   final TextEditingController dateController;
@@ -21,7 +22,7 @@ class _DateOfBirthFormState extends State<DateOfBirthForm> {
     );
     if (picked != null) 
       setState(() {
-        widget.dateController.text = picked.toString().split(" ")[0];
+        widget.dateController.text = DateFormat('yyyy-MM-dd').format(picked);
       });
   }
   @override

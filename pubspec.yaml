@@ -44,6 +44,7 @@ dependencies:
   flutter_native_splash: ^2.4.0
   google_fonts: ^6.2.1
   email_otp: ^3.0.1
+  intl: ^0.19.0
 
 dev_dependencies:
   flutter_test:
