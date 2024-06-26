@@ -4,16 +4,15 @@ import 'package:final_project_group4/page/redeem/redeemsuccess.dart';
 class WaitingRedeem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    Future.delayed(Duration(seconds: 3), () {
+    Future.delayed(Duration(seconds: 5), () {
       Navigator.push(
         context,
         MaterialPageRoute(builder: (context) => RedeemSuccessPage()),
       );
     });
 
-    return Scaffold(
-      appBar: AppBar(
-      ),
+    return const Scaffold(
+      appBar: null,
       backgroundColor: Color(0xFFE6F0DC), // Set background color here
       body: Center(
         child: Column(

@@ -57,10 +57,10 @@ class _RedeemPaymentPageState extends State<RedeemPaymentPage> {
         await _redeemService.redeemPoints(
           userId: widget.userId,
           phoneNumber: _phoneNumberController.text,
+          paymentMethod: widget.ewallet.name,
           amount: amount,
         );
 
-        // Navigate to waiting page after successful redeem
         Navigator.pushReplacement(
           context,
           MaterialPageRoute(builder: (context) => WaitingRedeem()),
@@ -203,7 +203,7 @@ class _RedeemPaymentPageState extends State<RedeemPaymentPage> {
                             });
                           },
                         ),
-                        Expanded(
+                        const Expanded(
                           child: Text(
                             'By ticking, you confirm that all the data you inputted is correct. If any data is found to be false, it is outside our responsibility.',
                             style: TextStyle(fontSize: 16),

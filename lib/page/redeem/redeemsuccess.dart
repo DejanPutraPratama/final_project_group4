@@ -2,10 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:final_project_group4/page/homepage.dart';
 
 class RedeemSuccessPage extends StatelessWidget {
+  const RedeemSuccessPage({super.key});
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Color(0xFFE6F0DC),
+      appBar: null,
       body: GestureDetector(
         onTap: () {
           Navigator.push(
@@ -13,7 +16,7 @@ class RedeemSuccessPage extends StatelessWidget {
             MaterialPageRoute(builder: (context) => HomePage()),
           );
         },
-        child: Center(
+        child: const Center(
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
@@ -31,12 +34,15 @@ class RedeemSuccessPage extends StatelessWidget {
                 ),
               ),
               SizedBox(height: 20),
-              Text(
-                'Please wait a maximum of 5 working days for the amount to arrive in your e-wallet account.',
-                textAlign: TextAlign.center,
-                style: TextStyle(
-                  fontSize: 16,
-                  color: Colors.black,
+              Padding(
+                padding: EdgeInsets.symmetric(horizontal: 20.0),
+                child: Text(
+                  'Please wait a maximum of 5 working days for the amount to arrive in your e-wallet account.',
+                  textAlign: TextAlign.center,
+                  style: TextStyle(
+                    fontSize: 16,
+                    color: Colors.black,
+                  ),
                 ),
               ),
             ],
