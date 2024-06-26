@@ -1,3 +1,4 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:final_project_group4/page/home_page.dart';
 
@@ -6,6 +7,7 @@ class RedeemSuccessPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final userInfo = FirebaseAuth.instance.currentUser;
     return Scaffold(
       backgroundColor: Color(0xFFE6F0DC),
       appBar: null,
@@ -13,7 +15,10 @@ class RedeemSuccessPage extends StatelessWidget {
         onTap: () {
           Navigator.push(
             context,
-            MaterialPageRoute(builder: (context) => HomePage()),
+            MaterialPageRoute(
+                builder: (context) => HomePage(
+                      userId: userInfo!.uid,
+                    )),
           );
         },
         child: const Center(

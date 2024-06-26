@@ -440,7 +440,7 @@ class _LoginScreenState extends State<LoginScreen> {
                         style: TextStyle(color: Colors.lightGreen)),
                   )
                 ]),
-                const SizedBox(height: 150),
+                const SizedBox(height: 100),
                 Row(mainAxisAlignment: MainAxisAlignment.center, children: [
                   InkWell(
                       onTap: () => goToSignup(context),
@@ -472,7 +472,7 @@ class _LoginScreenState extends State<LoginScreen> {
         log("User ID: $userId");
         Navigator.pushReplacement(
           context,
-          MaterialPageRoute(builder: (context) => HomePage()),
+          MaterialPageRoute(builder: (context) => NavbarNavigation()),
         );
       } else {
         log("Tidak ada user ID masbro");

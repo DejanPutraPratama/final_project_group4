@@ -1,4 +1,6 @@
 import 'dart:developer';
+import 'package:final_project_group4/controller/database.dart';
+import 'package:final_project_group4/model/userModel.dart';
 import 'package:final_project_group4/page/login.dart';
 import 'package:final_project_group4/widget/radioButton.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -21,7 +23,7 @@ class Registrartion extends StatefulWidget {
 
 class _RegistrationState extends State<Registrartion> {
   final _formkey = GlobalKey<FormState>();
-  final firebaseUser = FirebaseAuth.instance.currentUser;
+  final userInfo = FirebaseAuth.instance.currentUser;
   final CollectionReference _users =
       FirebaseFirestore.instance.collection('users');
   final TextEditingController _fullNameController = TextEditingController();
@@ -284,7 +286,6 @@ class _RegistrationState extends State<Registrartion> {
                 CustomButton(
                   label: "Next",
                   onPressed: () async {
-                    final String userId = firebaseUser!.uid;
                     final String fullName = _fullNameController.text;
                     final String birthDate = dateController.text;
                     final String mobileNumber = _mobileNumberController.text;
@@ -313,19 +314,29 @@ class _RegistrationState extends State<Registrartion> {
                       print("Address: $address");
                       print("City: $city");
                       print("Gender: $selectedGender");
-                      await _users.add({
-                        'fullName': fullName,
-                        'birth Date': birthDateTimestamp,
-                        'mobileNumber': mobileNumber,
-                        'address': address,
-                        'city': city,
-                        'gender': selectedGender,
-                      });
+                      // await _users.add({
+                      //   'fullName': fullName,
+                      //   'birth Date': birthDateTimestamp,
+                      //   'mobileNumber': mobileNumber,
+                      //   'address': address,
+                      //   'city': city,
+                      //   'gender': selectedGender,
+                      // });
+                      UserModel regisInfo = UserModel(
+                          userId: '0',
+                          fullName: fullName,
+                          birthDate: birthDate,
+                          mobileNumber: mobileNumber,
+                          address: address,
+                          city: city,
+                          gender: selectedGender!);
 
                       Navigator.push(
                         context,
                         MaterialPageRoute(
-                            builder: (context) => const NextRegistration()),
+                            builder: (context) => NextRegistration(
+                                  regisInfo: regisInfo,
+                                )),
                       );
                     }
                   },
@@ -340,13 +351,15 @@ class _RegistrationState extends State<Registrartion> {
 }
 
 class NextRegistration extends StatefulWidget {
-  const NextRegistration({super.key});
+  UserModel regisInfo;
+  NextRegistration({super.key, required this.regisInfo});
 
   @override
   _NextRegistrationState createState() => _NextRegistrationState();
 }
 
 class _NextRegistrationState extends State<NextRegistration> {
+  Database database = Database();
   final _formkey = GlobalKey<FormState>();
   final _firestore = FirebaseFirestore.instance;
   final AuthService _auth = AuthService();
@@ -549,7 +562,9 @@ class _NextRegistrationState extends State<NextRegistration> {
                 const SizedBox(height: 50),
                 CustomButton(
                   label: "Register",
-                  onPressed: _signup,
+                  onPressed: () async {
+                    await _signup(widget.regisInfo);
+                  },
                 ),
               ],
             ),
@@ -559,12 +574,23 @@ class _NextRegistrationState extends State<NextRegistration> {
     );
   }
 
-  _signup() async {
+  _signup(UserModel regisInfo) async {
     final User = await _auth.createUserWithEmailAndPassword(
       _email.text,
       _password.text,
     );
     if (User != null) {
+      final userInfo = FirebaseAuth.instance.currentUser;
+      Map<String, dynamic> newUserData = {
+        'id': userInfo!.uid,
+        'fullName': regisInfo.fullName,
+        'birthdate': regisInfo.birthDate,
+        'mobileNumber': regisInfo.mobileNumber,
+        'address': regisInfo.address,
+        'city': regisInfo.city,
+        'gender': regisInfo.gender,
+      };
+      await database.addUser(userInfo.uid, newUserData);
       log("User created Succesfully");
       Navigator.push(
         context,

@@ -4,7 +4,9 @@ import 'package:final_project_group4/navbar/tab_page.dart';
 import 'package:final_project_group4/page/Donatepage.dart';
 import 'package:final_project_group4/page/home_page.dart';
 import 'package:final_project_group4/page/profile_page.dart';
+import 'package:final_project_group4/page/redeem/redeem.dart';
 import 'package:final_project_group4/utils/custom_colors.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
 class NavbarNavigation extends StatefulWidget {
@@ -15,6 +17,7 @@ class NavbarNavigation extends StatefulWidget {
 }
 
 class _NavbarNavigationState extends State<NavbarNavigation> {
+  final userInfo = FirebaseAuth.instance.currentUser;
   final homeNavKey = GlobalKey<NavigatorState>();
   final redeemNavKey = GlobalKey<NavigatorState>();
   final historyNavKey = GlobalKey<NavigatorState>();
@@ -27,18 +30,20 @@ class _NavbarNavigationState extends State<NavbarNavigation> {
     // TODO: implement initState
     super.initState();
     items = [
-      NavbarModel(page: const HomePage(), navkey: homeNavKey),
       NavbarModel(
-          page: const TabPage(
-            tab: 2,
+          page: HomePage(
+            userId: userInfo!.uid,
           ),
-          navkey: redeemNavKey),
+          navkey: homeNavKey),
+      NavbarModel(
+          page: RedeemPage(userId: userInfo!.uid), navkey: redeemNavKey),
       NavbarModel(
           page: const TabPage(
             tab: 3,
           ),
           navkey: historyNavKey),
-      NavbarModel(page: const ProfilePage(), navkey: profileNavKey),
+      NavbarModel(
+          page: ProfilePage(userId: userInfo!.uid), navkey: profileNavKey),
     ];
   }
 

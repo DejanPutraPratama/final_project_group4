@@ -1,12 +1,46 @@
+import 'package:final_project_group4/controller/database.dart';
 import 'package:final_project_group4/page/detail_profile.dart';
+import 'package:final_project_group4/services/UserPointService.dart';
 import 'package:final_project_group4/utils/custom_colors.dart';
 import 'package:final_project_group4/widget/custom_widgets.dart';
 import 'package:final_project_group4/widget/popup_dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
-class ProfilePage extends StatelessWidget {
-  const ProfilePage({super.key});
+class ProfilePage extends StatefulWidget {
+  String userId;
+  ProfilePage({super.key, required this.userId});
+
+  @override
+  State<ProfilePage> createState() => _ProfilePageState();
+}
+
+class _ProfilePageState extends State<ProfilePage> {
+  int _userPoints = 0;
+  Database database = Database();
+  final UserPointsService _userPointsService = UserPointsService();
+
+  var userData;
+
+  @override
+  void initState() {
+    super.initState();
+    _loadUserPoints();
+    _loadUserData();
+  }
+
+  Future<void> _loadUserPoints() async {
+    int points = await _userPointsService.getUserPoints(widget.userId);
+    setState(() {
+      _userPoints = points;
+    });
+  }
+
+  Future _loadUserData() async {
+    await database.getDataUser(widget.userId).then((value) {
+      userData = value.data();
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -55,7 +89,7 @@ class ProfilePage extends StatelessWidget {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           mainAxisSize: MainAxisSize.min,
                           children: [
-                            Text('John Doe',
+                            Text(userData['fullName'],
                                 style: GoogleFonts.getFont(
                                   'Poppins',
                                   textStyle: TextStyle(
@@ -64,11 +98,11 @@ class ProfilePage extends StatelessWidget {
                                       color: customColors.redText),
                                 )),
                             Text(
-                              'Member ID : 21328941621643871',
+                              'Member ID : ${userData['id']}',
                               style: GoogleFonts.getFont(
                                 'Poppins',
                                 textStyle: TextStyle(
-                                    fontSize: 12, color: customColors.redText),
+                                    fontSize: 8, color: customColors.redText),
                               ),
                             )
                           ],
@@ -94,7 +128,7 @@ class ProfilePage extends StatelessWidget {
                               fontWeight: FontWeight.w600,
                             ),
                           )),
-                      Text("100000 pts",
+                      Text(_userPoints.toString(),
                           style: GoogleFonts.getFont(
                             'Poppins',
                             textStyle: const TextStyle(

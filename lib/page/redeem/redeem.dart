@@ -105,7 +105,9 @@ class _RedeemPageState extends State<RedeemPage> {
                   ),
                   SizedBox(height: 10),
                   StreamBuilder<QuerySnapshot>(
-                    stream: FirebaseFirestore.instance.collection('ewallets').snapshots(),
+                    stream: FirebaseFirestore.instance
+                        .collection('ewallets')
+                        .snapshots(),
                     builder: (context, snapshot) {
                       if (snapshot.connectionState == ConnectionState.waiting) {
                         return const Center(child: CircularProgressIndicator());
@@ -115,51 +117,62 @@ class _RedeemPageState extends State<RedeemPage> {
                       }
 
                       var ewallets = snapshot.data!.docs.map((doc) {
-                        return EWallet.fromMap(doc.data() as Map<String, dynamic>);
+                        return EWallet.fromMap(
+                            doc.data() as Map<String, dynamic>);
                       }).toList();
-
-                      return ListView.builder(
-                        shrinkWrap: true,
-                        itemCount: ewallets.length,
-                        itemBuilder: (context, index) {
-                          var ewallet = ewallets[index];
-                          return SizedBox(
-                            height: 100,
-                            child: Center(
-                              child: ListTile(
-                                contentPadding: EdgeInsets.symmetric(horizontal: 10),
-                                leading: Image.network(
-                                  ewallet.imageUrl,
-                                  width: 40,
-                                  height: 40,
-                                ),
-                                title: Text(
-                                  ewallet.name,
-                                  style: GoogleFonts.poppins(
-                                    textStyle: const TextStyle(
-                                      fontSize: 16,
+                      return SizedBox(
+                        height: 300,
+                        child: ListView.builder(
+                          physics: NeverScrollableScrollPhysics(),
+                          shrinkWrap: true,
+                          itemCount: ewallets.length,
+                          itemBuilder: (context, index) {
+                            var ewallet = ewallets[index];
+                            return SizedBox(
+                              height: 75,
+                              child: Center(
+                                child: ListTile(
+                                  contentPadding:
+                                      EdgeInsets.symmetric(horizontal: 10),
+                                  leading: Image.network(
+                                    ewallet.imageUrl,
+                                    width: 40,
+                                    height: 40,
+                                  ),
+                                  title: Text(
+                                    ewallet.name,
+                                    style: GoogleFonts.poppins(
+                                      textStyle: const TextStyle(
+                                        fontSize: 16,
+                                      ),
                                     ),
                                   ),
+                                  trailing: Icon(Icons.arrow_forward),
+                                  onTap: () {
+                                    Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                        builder: (context) => RedeemPaymentPage(
+                                            ewallet: ewallet,
+                                            userPoints: _userPoints,
+                                            userId: widget.userId),
+                                      ),
+                                    );
+                                  },
                                 ),
-                                trailing: Icon(Icons.arrow_forward),
-                                onTap: () {
-                                  Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                      builder: (context) => RedeemPaymentPage(ewallet: ewallet, userPoints: _userPoints, userId: widget.userId),
-                                    ),
-                                  );
-                                },
                               ),
-                            ),
-                          );
-                        },
+                            );
+                          },
+                        ),
                       );
                     },
                   ),
                 ],
               ),
             ),
+            SizedBox(
+              height: 100,
+            )
           ],
         ),
       ),

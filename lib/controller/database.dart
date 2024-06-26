@@ -8,7 +8,14 @@ class Database {
         .set(donatedetails);
   }
 
-  Future getUserDetails(String id) async {
+  Future addUser(String id, Map<String, dynamic> userDetails) async {
+    return await FirebaseFirestore.instance
+        .collection('users')
+        .doc(id)
+        .set(userDetails);
+  }
+
+  Future getDataUser(String id) async {
     return await FirebaseFirestore.instance.collection('users').doc(id).get();
   }
 }
