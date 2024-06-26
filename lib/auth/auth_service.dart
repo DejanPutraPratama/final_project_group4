@@ -1,4 +1,5 @@
 import 'dart:developer';
+import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
 class AuthService {
@@ -35,6 +36,16 @@ class AuthService {
       await _auth.signOut();
     } catch (e) {
       log("Something went wrong");
+    }
+  }
+
+  Future<String?> getCurrentUserId() async {
+    try {
+      User? user = _auth.currentUser;
+      return user?.uid;
+    } catch (e) {
+      log("Error dengan user ID: $e");
+      return null;
     }
   }
 }

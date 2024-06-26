@@ -6,6 +6,7 @@ import 'package:final_project_group4/widget/button.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:final_project_group4/auth/auth_service.dart';
+import 'package:final_project_group4/page/homepage.dart';
 
 
 class LoginScreen extends StatefulWidget {
@@ -415,6 +416,17 @@ class _LoginScreenState extends State<LoginScreen> {
 
     if (user != null) {
       log("User Logged In");
+      String? userId = await _auth.getCurrentUserId();
+
+      if (userId != null) {
+        log("User ID: $userId");
+        Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(builder: (context) => HomePage()),
+        );
+      } else {
+        log("Tidak ada user ID masbro");
+      }
     }
   }
 }

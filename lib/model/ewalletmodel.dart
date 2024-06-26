@@ -16,4 +16,12 @@ class EWallet {
       'imageUrl': imageUrl,
     };
   }
+
+  factory EWallet.fromMap(Map<String, dynamic> map) {
+    return EWallet(
+      id: map['id'],
+      name: map['name'],
+      imageUrl: map['imageUrl'],
+    );
+  }
 }
