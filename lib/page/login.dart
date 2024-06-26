@@ -261,18 +261,19 @@ class _LoginScreenState extends State<LoginScreen> {
   Future passwordReset() async {
     try {
       await FirebaseAuth.instance
-        .sendPasswordResetEmail(email: emailController.text.trim());
+          .sendPasswordResetEmail(email: emailController.text.trim());
     } on FirebaseAuthException catch (e) {
       print(e);
       showDialog(
-        context: context, 
-        builder: (context) {
-        return const AlertDialog(
-          content: Text("Password reset email sent"),
-        );
-      });
+          context: context,
+          builder: (context) {
+            return const AlertDialog(
+              content: Text("Password reset email sent"),
+            );
+          });
     }
   }
+
   Future<void> _InputNewPassword([DocumentSnapshot? documentSnapshot]) async {
     await showModalBottomSheet(
         isScrollControlled: true,
@@ -317,9 +318,9 @@ class _LoginScreenState extends State<LoginScreen> {
                             fillColor: Colors.white,
                             filled: true,
                             enabledBorder: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(10),
-                              borderSide: const BorderSide(color: Colors.black)
-                            ),
+                                borderRadius: BorderRadius.circular(10),
+                                borderSide:
+                                    const BorderSide(color: Colors.black)),
                             focusedBorder: OutlineInputBorder(
                               borderRadius: BorderRadius.circular(10.00),
                               borderSide: const BorderSide(color: Colors.green),
@@ -329,8 +330,7 @@ class _LoginScreenState extends State<LoginScreen> {
                         ),
                         const SizedBox(height: 16),
                         CustomButton(
-                            label: "Reset Password",
-                            onPressed: passwordReset),
+                            label: "Reset Password", onPressed: passwordReset),
                       ],
                     ),
                   ),
@@ -460,13 +460,13 @@ class _LoginScreenState extends State<LoginScreen> {
       );
 
   _Login() async {
-    final user = await _auth.loginUserWithEmailAndPassword(_email.text, _password.text);
+    final user =
+        await _auth.loginUserWithEmailAndPassword(_email.text, _password.text);
 
     if (user != null) {
       final userId = FirebaseAuth.instance.currentUser;
       print(userId!.uid);
       log("User Logged In");
-      String? userId = await _auth.getCurrentUserId();
 
       if (userId != null) {
         log("User ID: $userId");
