@@ -10,6 +10,7 @@ import 'package:final_project_group4/widget/button.dart';
 import 'package:final_project_group4/widget/textfield.dart';
 import 'package:flutter/widgets.dart';
 import 'package:final_project_group4/widget/birthForm.dart';
+import 'package:intl/intl.dart';
 
 class Registrartion extends StatefulWidget {
   const Registrartion({super.key});
@@ -27,14 +28,16 @@ class _RegistrationState extends State<Registrartion> {
   final TextEditingController dateController = TextEditingController();
   final TextEditingController _addressController = TextEditingController();
   final TextEditingController _mobileNumberController = TextEditingController();
-  final TextEditingController _cityController = TextEditingController();
   String? selectedGender;
-  // String fullName = '';
-  // String birthDate = '';
-  // String gender = '';
-  // String address = '';
-  // String mobileNumber = '';
-  // String city = '';
+  String? selectedCity;
+
+  final List<String> cities = [
+    'TPA Jakarta Utara',
+    'TPA Jakarta Selatan',
+    'TPA Jakarta Barat',
+    'TPA Jakarta Timur',
+    'TPA Jakarta Pusat'
+  ];
 
   @override
   Widget build(BuildContext context) {
@@ -252,10 +255,19 @@ class _RegistrationState extends State<Registrartion> {
                       const SizedBox(height: 10),
                       Padding(
                         padding: const EdgeInsets.symmetric(horizontal: 10),
-                        child: TextField(
-                          controller: _cityController,
+                        child: DropdownButtonFormField<String>(
+                          value: selectedCity,
+                          hint: const Text('Select City'),
+                          items: cities.map((String city) {
+                            return DropdownMenuItem<String>(
+                                value: city, child: Text(city));
+                          }).toList(),
+                          onChanged: (String? newValue) {
+                            setState(() {
+                              selectedCity = newValue;
+                            });
+                          },
                           decoration: InputDecoration(
-                            labelText: 'City',
                             fillColor: Colors.white,
                             filled: true,
                             border: OutlineInputBorder(
@@ -277,7 +289,7 @@ class _RegistrationState extends State<Registrartion> {
                     final String birthDate = dateController.text;
                     final String mobileNumber = _mobileNumberController.text;
                     final String address = _addressController.text;
-                    final String city = _cityController.text;
+                    final String city = selectedCity ?? '';
                     String gender = '';
                     if (selectedGender == null) {
                       // Menampilkan pesan error jika gender belum dipilih
@@ -292,17 +304,18 @@ class _RegistrationState extends State<Registrartion> {
                         mobileNumber.isNotEmpty &&
                         address.isNotEmpty &&
                         city.isNotEmpty) {
-                      print("User Id: $userId");
+                      Timestamp birthDateTimestamp = Timestamp.fromDate(
+                          DateFormat('yyyy-MM-dd').parse(birthDate));
+
                       print("Full Name: $fullName");
-                      print("birth Date: $birthDate");
+                      print("birth Date: $birthDateTimestamp");
                       print("Mobile Number: $mobileNumber");
                       print("Address: $address");
                       print("City: $city");
                       print("Gender: $selectedGender");
                       await _users.add({
-                        'userId': userId,
                         'fullName': fullName,
-                        'birth Date': birthDate,
+                        'birth Date': birthDateTimestamp,
                         'mobileNumber': mobileNumber,
                         'address': address,
                         'city': city,
@@ -341,39 +354,6 @@ class _NextRegistrationState extends State<NextRegistration> {
   final _password = TextEditingController();
   final _confirmPassword = TextEditingController();
   bool agreeToTerms = false;
-
-  // Future<void> registerUser() async {
-  //   if(_formkey.currentState!.validate()) {
-  //     try {
-  //       User? user = await _auth.createUserWithEmailAndPassword(email, password);
-
-  //       if (user != null) {
-  //         await _firestore.collection('users').doc(user.uid).set({
-  //           'fullName': widget.fullName,
-  //           'birthDate': widget.birthDate,
-  //           'gender': widget.gender,
-  //           'mobileNumber': widget.mobileNumber,
-  //           'address': widget.addres,
-  //           'city': widget.city,
-  //           'email': email,
-  //         });
-
-  //         Navigator.pushReplacement(
-  //           context,
-  //           MaterialPageRoute(builder: (context) => ConfirmationPage ()),
-  //         );
-  //       } else {
-  //         ScaffoldMessenger.of(context).showSnackBar(
-  //           SnackBar(content: Text('User creation failed')),
-  //         );
-  //       }
-  //     } catch (e) {
-  //       ScaffoldMessenger.of(context).showSnackBar(
-  //         SnackBar(content: Text('An error occured: $e ')),
-  //       );
-  //     }
-  //   }
-  // }
 
   @override
   Widget build(BuildContext context) {
@@ -585,8 +565,11 @@ class _NextRegistrationState extends State<NextRegistration> {
       _password.text,
     );
     if (User != null) {
-      print(User.uid);
       log("User created Succesfully");
+      Navigator.push(
+        context,
+        MaterialPageRoute(builder: (context) => LoginScreen()),
+      );
     }
   }
 }

@@ -1,6 +1,5 @@
 import 'dart:developer';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:final_project_group4/auth/forgot_password.dart';
 import 'package:final_project_group4/navbar/navbar_navigation.dart';
 import 'package:final_project_group4/page/home_page.dart';
 import 'package:final_project_group4/page/registration.dart';
@@ -8,7 +7,6 @@ import 'package:final_project_group4/widget/button.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:final_project_group4/auth/auth_service.dart';
-import 'package:final_project_group4/page/Donatepage.dart';
 import 'package:email_otp/email_otp.dart';
 import 'package:flutter/services.dart';
 
@@ -22,6 +20,7 @@ class LoginScreen extends StatefulWidget {
 class _LoginScreenState extends State<LoginScreen> {
   final _auth = AuthService();
   final _email = TextEditingController();
+  final emailController = TextEditingController();
   final _password = TextEditingController();
   bool _showPassword = false;
   String? _emailError;
@@ -156,7 +155,7 @@ class _LoginScreenState extends State<LoginScreen> {
           return StatefulBuilder(
               builder: (BuildContext context, StateSetter setState) {
             return DecoratedBox(
-              decoration: BoxDecoration(
+              decoration: const BoxDecoration(
                 color: Colors.white,
                 borderRadius: BorderRadius.vertical(top: Radius.circular(30)),
               ),
@@ -259,9 +258,22 @@ class _LoginScreenState extends State<LoginScreen> {
     );
   }
 
+  Future passwordReset() async {
+    try {
+      await FirebaseAuth.instance
+        .sendPasswordResetEmail(email: emailController.text.trim());
+    } on FirebaseAuthException catch (e) {
+      print(e);
+      showDialog(
+        context: context, 
+        builder: (context) {
+        return const AlertDialog(
+          content: Text("Password reset email sent"),
+        );
+      });
+    }
+  }
   Future<void> _InputNewPassword([DocumentSnapshot? documentSnapshot]) async {
-    String? _OTPerror;
-
     await showModalBottomSheet(
         isScrollControlled: true,
         context: context,
@@ -269,7 +281,7 @@ class _LoginScreenState extends State<LoginScreen> {
           return StatefulBuilder(
               builder: (BuildContext context, StateSetter setState) {
             return DecoratedBox(
-              decoration: BoxDecoration(
+              decoration: const BoxDecoration(
                 color: Colors.white,
                 borderRadius: BorderRadius.vertical(top: Radius.circular(30)),
               ),
@@ -282,61 +294,45 @@ class _LoginScreenState extends State<LoginScreen> {
                       left: 20,
                       right: 20,
                       bottom: MediaQuery.of(ctx).viewInsets.bottom + 20),
-                  child: Column(
-                    mainAxisSize: MainAxisSize.min,
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      const Text(
-                        "Reset Password",
-                        style: TextStyle(
-                            fontSize: 24, fontWeight: FontWeight.bold),
-                      ),
-                      const Text(
-                        "Make yourself a new password",
-                        style: TextStyle(
-                            fontSize: 18, fontWeight: FontWeight.bold),
-                      ),
-                      const SizedBox(height: 40),
-                      TextField(
-                        controller: _password,
-                        decoration: InputDecoration(
-                          labelText: 'Password',
-                          fillColor: Colors.white,
-                          filled: true,
-                          errorText: _passwordError,
-                          border: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(10.00),
+                  child: SingleChildScrollView(
+                    child: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        const Text(
+                          "Reset Password",
+                          style: TextStyle(
+                              fontSize: 24, fontWeight: FontWeight.bold),
+                        ),
+                        const Text(
+                          "Make yourself a new password",
+                          style: TextStyle(
+                              fontSize: 18, fontWeight: FontWeight.bold),
+                        ),
+                        const SizedBox(height: 40),
+                        TextField(
+                          controller: emailController,
+                          decoration: InputDecoration(
+                            labelText: 'Email',
+                            fillColor: Colors.white,
+                            filled: true,
+                            enabledBorder: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(10),
+                              borderSide: const BorderSide(color: Colors.black)
+                            ),
+                            focusedBorder: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(10.00),
+                              borderSide: const BorderSide(color: Colors.green),
+                            ),
+                            hintText: 'Input ur email',
                           ),
                         ),
-                      ),
-                      const SizedBox(height: 20),
-                      TextField(
-                        controller: _password,
-                        decoration: InputDecoration(
-                          labelText: 'Confirm password',
-                          fillColor: Colors.white,
-                          filled: true,
-                          errorText: _passwordError2,
-                          border: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(10.00),
-                          ),
-                        ),
-                      ),
-                      const SizedBox(height: 16),
-                      CustomButton(
-                          label: "Next",
-                          onPressed: () {
-                            setState(() {
-                              if (_email.text.isEmpty) {
-                                _passwordError2 =
-                                    'Confirm password is not same with the password';
-                              } else {
-                                _passwordError2 = null;
-                                Navigator.pop(ctx);
-                              }
-                            });
-                          }),
-                    ],
+                        const SizedBox(height: 16),
+                        CustomButton(
+                            label: "Reset Password",
+                            onPressed: passwordReset),
+                      ],
+                    ),
                   ),
                 ),
               ),
@@ -350,6 +346,7 @@ class _LoginScreenState extends State<LoginScreen> {
     super.dispose();
     _email.dispose();
     _password.dispose();
+    emailController.dispose();
   }
 
   @override
@@ -462,21 +459,24 @@ class _LoginScreenState extends State<LoginScreen> {
         MaterialPageRoute(builder: (context) => const Registrartion()),
       );
 
-  // forgetPassword(BuildContext context) => Navigator.push(
-  //   context,
-  //   MaterialPageRoute(builder: (context) => const _resetpassword)
-  // );
-
   _Login() async {
-    final user =
-        await _auth.loginUserWithEmailAndPassword(_email.text, _password.text);
+    final user = await _auth.loginUserWithEmailAndPassword(_email.text, _password.text);
 
     if (user != null) {
       final userId = FirebaseAuth.instance.currentUser;
       print(userId!.uid);
       log("User Logged In");
-      Navigator.push(
-          context, MaterialPageRoute(builder: (context) => HomePage()));
+      String? userId = await _auth.getCurrentUserId();
+
+      if (userId != null) {
+        log("User ID: $userId");
+        Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(builder: (context) => HomePage()),
+        );
+      } else {
+        log("Tidak ada user ID masbro");
+      }
     }
   }
 }
