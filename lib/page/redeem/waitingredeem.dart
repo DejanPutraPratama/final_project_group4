@@ -13,7 +13,7 @@ class WaitingRedeem extends StatelessWidget {
 
     return const Scaffold(
       appBar: null,
-      backgroundColor: Color(0xFFE6F0DC), // Set background color here
+      backgroundColor: Color(0xFFE6F0DC),
       body: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
