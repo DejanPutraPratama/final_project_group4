@@ -1,5 +1,9 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:final_project_group4/controller/database.dart';
 import 'package:final_project_group4/utils/custom_colors.dart';
 import 'package:final_project_group4/widget/custom_widgets.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
@@ -11,6 +15,9 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
+  Database database = Database();
+  final userId = FirebaseAuth.instance.currentUser;
+
   @override
   Widget build(BuildContext context) {
     final CustomWidgets customWidgets = CustomWidgets();
@@ -160,7 +167,14 @@ class _HomePageState extends State<HomePage> {
                               )),
                         ),
                         ElevatedButton(
-                            onPressed: () {},
+                            onPressed: () async {
+                              var data;
+                              DocumentSnapshot documentSnapshot = await database
+                                  .getUserDetails('JeYvTWnz2DNdlP94ZLuc');
+                              data = documentSnapshot.data();
+                              print(data['fullName']);
+                              print(userId);
+                            },
                             style: ElevatedButton.styleFrom(
                                 padding: const EdgeInsets.symmetric(
                                     vertical: 0, horizontal: 20),

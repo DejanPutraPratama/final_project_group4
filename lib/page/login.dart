@@ -117,17 +117,20 @@ class _LoginScreenState extends State<LoginScreen> {
                                 otpLength: 4,
                                 otpType: OTPType.numeric,
                               );
-                              bool otpSent = await EmailOTP.sendOTP(email: email.text);
+                              bool otpSent =
+                                  await EmailOTP.sendOTP(email: email.text);
                               if (otpSent) {
-                                ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+                                ScaffoldMessenger.of(context)
+                                    .showSnackBar(const SnackBar(
                                   content: Text("OTP dikirim"),
-                                  ));
+                                ));
                                 Navigator.pop(ctx);
                                 _SendOTP();
                               } else {
-                                ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-                                  content: Text("Something wrong I can feel it")
-                                ));
+                                ScaffoldMessenger.of(context).showSnackBar(
+                                    const SnackBar(
+                                        content: Text(
+                                            "Something wrong I can feel it")));
                               }
                             }),
                       ],
@@ -201,22 +204,23 @@ class _LoginScreenState extends State<LoginScreen> {
                         CustomButton(
                             label: "Next",
                             onPressed: () async {
-                              if (await EmailOTP.verifyOTP(otp: otp1controller.text + 
-                              otp2controller.text + 
-                              otp3controller.text + 
-                              otp4controller.text)
-                              == true ) {
-                                ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-                                  content: Text("OTP is verified")
-                                ));
+                              if (await EmailOTP.verifyOTP(
+                                      otp: otp1controller.text +
+                                          otp2controller.text +
+                                          otp3controller.text +
+                                          otp4controller.text) ==
+                                  true) {
+                                ScaffoldMessenger.of(context).showSnackBar(
+                                    const SnackBar(
+                                        content: Text("OTP is verified")));
                                 Navigator.pop(ctx);
                                 _InputNewPassword();
                               } else {
-                                ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-                                  content: Text("invalid OTP")
-                                ));
+                                ScaffoldMessenger.of(context).showSnackBar(
+                                    const SnackBar(
+                                        content: Text("invalid OTP")));
                               }
-                        }),
+                            }),
                       ],
                     ),
                   ),
@@ -227,7 +231,8 @@ class _LoginScreenState extends State<LoginScreen> {
         });
   }
 
-  Widget _buildOTPfield(BuildContext context, TextEditingController controller) {
+  Widget _buildOTPfield(
+      BuildContext context, TextEditingController controller) {
     return SizedBox(
       width: 50,
       child: TextFormField(
@@ -246,7 +251,7 @@ class _LoginScreenState extends State<LoginScreen> {
           if (value.isEmpty) {
             FocusScope.of(context).previousFocus();
           }
-       },
+        },
         decoration: const InputDecoration(
           hintText: '0',
         ),
@@ -428,11 +433,7 @@ class _LoginScreenState extends State<LoginScreen> {
                 CustomButton(
                     label: "Login",
                     onPressed: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) => NavbarNavigation()),
-                      );
+                      _Login();
                     }),
                 const SizedBox(height: 16),
                 Row(mainAxisAlignment: MainAxisAlignment.center, children: [
@@ -471,6 +472,8 @@ class _LoginScreenState extends State<LoginScreen> {
         await _auth.loginUserWithEmailAndPassword(_email.text, _password.text);
 
     if (user != null) {
+      final userId = FirebaseAuth.instance.currentUser;
+      print(userId!.uid);
       log("User Logged In");
       Navigator.push(
           context, MaterialPageRoute(builder: (context) => HomePage()));
