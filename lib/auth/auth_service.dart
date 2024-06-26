@@ -37,4 +37,14 @@ class AuthService {
       log("Something went wrong");
     }
   }
+
+  Future<String?> getCurrentUserId() async {
+    try {
+      User? user = _auth.currentUser;
+      return user?.uid;
+    } catch (e) {
+      log("Error dengan user ID: $e");
+      return null;
+    }
+  }
 }

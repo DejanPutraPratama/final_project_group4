@@ -459,13 +459,21 @@ class _LoginScreenState extends State<LoginScreen> {
       );
 
   _Login() async {
-    final user =
-        await _auth.loginUserWithEmailAndPassword(_email.text, _password.text);
+    final user = await _auth.loginUserWithEmailAndPassword(_email.text, _password.text);
 
     if (user != null) {
       log("User Logged In");
-      Navigator.push(
-          context, MaterialPageRoute(builder: (context) => HomePage()));
+      String? userId = await _auth.getCurrentUserId();
+
+      if (userId != null) {
+        log("User ID: $userId");
+        Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(builder: (context) => HomePage()),
+        );
+      } else {
+        log("Tidak ada user ID masbro");
+      }
     }
   }
 }
