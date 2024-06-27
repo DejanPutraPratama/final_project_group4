@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:final_project_group4/page/donate/donatesuccess.dart';
 
-class WaitingRedeem extends StatelessWidget {
+class WaitingDonate extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    Future.delayed(Duration(seconds: 5), () {
+    Future.delayed(const Duration(seconds: 5), () {
       Navigator.push(
         context,
         MaterialPageRoute(builder: (context) => const DonateSuccessPage()),

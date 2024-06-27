@@ -29,13 +29,9 @@ class MyApp extends StatelessWidget {
           colorScheme: ColorScheme.fromSeed(seedColor: Colors.green),
           useMaterial3: true,
           fontFamily: GoogleFonts.poppins().fontFamily),
-<<<<<<< HEAD
-      home: const LoginScreen(),
-=======
       home: LoginScreen(
-        hasLogOut: false,
-      ),
->>>>>>> f34ed5bfd43c66b5fdb9665773169a37e67bc0d0
+          hasLogOut: false,
+        ),
     );
   }
 }
