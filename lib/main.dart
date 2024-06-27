@@ -2,6 +2,7 @@ import 'package:final_project_group4/navbar/navbar_navigation.dart';
 import 'package:final_project_group4/page/Donatepage.dart';
 import 'package:final_project_group4/page/login.dart';
 import 'package:final_project_group4/page/registration.dart';
+import 'package:final_project_group4/page/history.dart';
 import 'package:final_project_group4/page/splashScreen.dart';
 import 'package:flutter/material.dart';
 import 'package:final_project_group4/firebase_options.dart';
@@ -28,7 +29,7 @@ class MyApp extends StatelessWidget {
           colorScheme: ColorScheme.fromSeed(seedColor: Colors.green),
           useMaterial3: true,
           fontFamily: GoogleFonts.poppins().fontFamily),
-      home: DonateScreen(),
+      home: const LoginScreen(),
     );
   }
 }

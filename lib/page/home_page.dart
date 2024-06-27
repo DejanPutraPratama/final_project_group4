@@ -170,21 +170,25 @@ class _HomePageState extends State<HomePage> {
                                     Icons.keyboard_arrow_down_rounded),
                                 items: const [
                                   DropdownMenuItem<String>(
-                                    value: 'Jakarta',
-                                    child: Text('Jakarta'),
+                                    value: 'Bank Sampah Jakarta Utara',
+                                    child: Text('Bank Sampah Jakarta Utara'),
                                   ),
                                   DropdownMenuItem<String>(
-                                    value: 'Serang',
-                                    child: Text("Serang"),
+                                    value: 'Bank Sampah Jakarta Selatan',
+                                    child: Text("Bank Sampah Jakarta Selatan"),
                                   ),
                                   DropdownMenuItem<String>(
-                                    value: 'Tangerang',
-                                    child: Text("Tangerang"),
+                                    value: 'Bank Sampah Jakarta Barat',
+                                    child: Text("Bank Sampah Jakarta Barat"),
                                   ),
                                   DropdownMenuItem<String>(
-                                    value: 'Yogyakarta',
-                                    child: Text("Yogyakarta"),
-                                  )
+                                    value: 'Bank Sampah Jakarta Timur',
+                                    child: Text("Bank Sampah Jakarta Timur"),
+                                  ),
+                                  DropdownMenuItem<String>(
+                                    value: 'Bank Sampah Jakarta Pusat',
+                                    child: Text("Bank Sampah Jakarta Pusat"),
+                                  ),
                                 ],
                                 onChanged: dropdownCallback),
                           ),
@@ -332,7 +336,7 @@ class _HomePageState extends State<HomePage> {
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
                                 Text(
-                                    'Congratulation! you have already sort and dispose the waste with total of',
+                                    'Congratulation! you have already to save the world',
                                     style: GoogleFonts.getFont('Poppins',
                                         textStyle: TextStyle(
                                             fontWeight: FontWeight.bold,
@@ -340,19 +344,19 @@ class _HomePageState extends State<HomePage> {
                                 RichText(
                                     text: TextSpan(children: [
                                   TextSpan(
-                                      text: '15',
-                                      style: GoogleFonts.getFont('Poppins',
-                                          textStyle: const TextStyle(
-                                              fontSize: 36,
-                                              fontWeight: FontWeight.bold,
-                                              color: Colors.green))),
-                                  TextSpan(
-                                      text: 'kg',
+                                      text: 'Nice Storbagers!',
                                       style: GoogleFonts.getFont('Poppins',
                                           textStyle: const TextStyle(
                                               fontSize: 24,
                                               fontWeight: FontWeight.bold,
-                                              color: Colors.green)))
+                                              color: Colors.green))),
+                                  // TextSpan(
+                                  //     text: 'kg',
+                                  //     style: GoogleFonts.getFont('Poppins',
+                                  //         textStyle: const TextStyle(
+                                  //             fontSize: 24,
+                                  //             fontWeight: FontWeight.bold,
+                                  //             color: Colors.green)))
                                 ]))
                               ],
                             ),
