@@ -1,17 +1,19 @@
 import 'package:final_project_group4/navbar/navbar.dart';
+import 'package:final_project_group4/navbar/navbar_controller.dart';
 import 'package:final_project_group4/navbar/navbar_model.dart';
 import 'package:final_project_group4/navbar/tab_page.dart';
 import 'package:final_project_group4/page/Donatepage.dart';
+import 'package:final_project_group4/page/detail_profile.dart';
 import 'package:final_project_group4/page/home_page.dart';
 import 'package:final_project_group4/page/profile_page.dart';
 import 'package:final_project_group4/page/redeem/redeem.dart';
 import 'package:final_project_group4/utils/custom_colors.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 
 class NavbarNavigation extends StatefulWidget {
-  const NavbarNavigation({super.key});
-
+  NavbarNavigation({super.key});
   @override
   State<NavbarNavigation> createState() => _NavbarNavigationState();
 }
@@ -24,6 +26,7 @@ class _NavbarNavigationState extends State<NavbarNavigation> {
   final profileNavKey = GlobalKey<NavigatorState>();
   int selectedTab = 0;
   List<NavbarModel> items = [];
+  final NavbarController navbarController = Get.find<NavbarController>();
 
   @override
   void initState() {
@@ -50,7 +53,6 @@ class _NavbarNavigationState extends State<NavbarNavigation> {
   @override
   Widget build(BuildContext context) {
     final CustomColors customColors = CustomColors();
-
     return PopScope(
       onPopInvoked: (value) async {
         if (items[selectedTab].navkey.currentState?.canPop() ?? false) {
@@ -76,44 +78,52 @@ class _NavbarNavigationState extends State<NavbarNavigation> {
                   ))
               .toList(),
         ),
-        bottomNavigationBar: Navbar(
-          pageIndex: selectedTab,
-          onTap: (index) {
-            if (index == selectedTab) {
-              items[index]
-                  .navkey
-                  .currentState
-                  ?.popUntil((route) => route.isFirst);
-            } else {
-              setState(() {
-                selectedTab = index;
-              });
-            }
-          },
-        ),
+        bottomNavigationBar: Obx(() => navbarController.isBottomNavVisible.value
+            ? Navbar(
+                pageIndex: selectedTab,
+                onTap: (index) {
+                  if (index == selectedTab) {
+                    items[index]
+                        .navkey
+                        .currentState
+                        ?.popUntil((route) => route.isFirst);
+                  } else {
+                    setState(() {
+                      selectedTab = index;
+                    });
+                  }
+                },
+              )
+            : SizedBox.shrink()),
         floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
-        floatingActionButton: SizedBox(
-          width: 75,
-          height: 75,
-          child: FloatingActionButton(
-            foregroundColor: Colors.white,
-            backgroundColor: customColors.darkGreen,
-            onPressed: () {
-              Navigator.push(context,
-                  MaterialPageRoute(builder: (context) => DonateScreen()));
-            },
-            shape: const CircleBorder(
-                side: BorderSide(width: 0, color: Colors.green)),
-            child: const Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Icon(
-                  Icons.recycling,
-                ),
-                Text('Donate')
-              ],
-            ),
-          ),
+        floatingActionButton: Obx(
+          () => navbarController.isBottomNavVisible.value
+              ? SizedBox(
+                  width: 75,
+                  height: 75,
+                  child: FloatingActionButton(
+                    foregroundColor: Colors.white,
+                    backgroundColor: customColors.darkGreen,
+                    onPressed: () {
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => DonateScreen()));
+                    },
+                    shape: const CircleBorder(
+                        side: BorderSide(width: 0, color: Colors.green)),
+                    child: const Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Icon(
+                          Icons.recycling,
+                        ),
+                        Text('Donate')
+                      ],
+                    ),
+                  ),
+                )
+              : SizedBox.shrink(),
         ),
       ),
     );

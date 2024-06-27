@@ -1,5 +1,6 @@
 import 'dart:io';
 import 'package:final_project_group4/navbar/navbar.dart';
+import 'package:final_project_group4/navbar/navbar_controller.dart';
 import 'package:final_project_group4/navbar/navbar_navigation.dart';
 import 'package:final_project_group4/widget/button.dart';
 import 'package:flutter/material.dart';
@@ -30,6 +31,7 @@ class _DonateScreenState extends State<DonateScreen> {
   ];
   final List<String> wasteTypes = ['Plastic', 'Organic', 'Metal'];
   final TextEditingController weightController = TextEditingController();
+  final NavbarController navbarController = Get.find<NavbarController>();
   final donateData = Get.put(DonateDatabase());
   File? selectedImage;
 
@@ -43,22 +45,23 @@ class _DonateScreenState extends State<DonateScreen> {
   //   await donateData.createData(donate);
   // }
 
-    Future<String?> _uploadImageToFirebase() async {
+  Future<String?> _uploadImageToFirebase() async {
     if (selectedImage == null) return null;
 
     try {
-      String fileName = 'photo/${DateTime.now().millisecondsSinceEpoch.toString()}.png';
-      Reference storageReference = FirebaseStorage.instance.ref().child(fileName);
+      String fileName =
+          'photo/${DateTime.now().millisecondsSinceEpoch.toString()}.png';
+      Reference storageReference =
+          FirebaseStorage.instance.ref().child(fileName);
       UploadTask uploadTask = storageReference.putFile(selectedImage!);
       TaskSnapshot snapshot = await uploadTask;
       String downloadUrl = await snapshot.ref.getDownloadURL();
       return downloadUrl;
-
-      } catch(e) {
-        print('Error uploading image: $e ');
-        return null;
-      }
+    } catch (e) {
+      print('Error uploading image: $e ');
+      return null;
     }
+  }
 
   Future<void> addDonation({
     String? selectedLandfill,
@@ -83,13 +86,10 @@ class _DonateScreenState extends State<DonateScreen> {
     try {
       String? imageUrl = await _uploadImageToFirebase();
       if (imageUrl == null) {
-        Get.snackbar(
-          "Error", 
-          "Failed to upload image. Try again.",
-          snackPosition: SnackPosition.TOP,
-          backgroundColor: Colors.redAccent.withOpacity(0.1),
-          colorText: Colors.red
-        );
+        Get.snackbar("Error", "Failed to upload image. Try again.",
+            snackPosition: SnackPosition.TOP,
+            backgroundColor: Colors.redAccent.withOpacity(0.1),
+            colorText: Colors.red);
         return;
       }
 
@@ -101,15 +101,15 @@ class _DonateScreenState extends State<DonateScreen> {
         'UploadedAt': Timestamp.now(),
       }).whenComplete(() {
         Get.snackbar(
-          "Success", 
+          "Success",
           "Your data has been created.",
           snackPosition: SnackPosition.TOP,
           backgroundColor: Colors.green.withOpacity(0.1),
           colorText: Colors.green,
         );
-      }) .catchError((error, StackTrace) {
+      }).catchError((error, StackTrace) {
         Get.snackbar(
-          "Error", 
+          "Error",
           "Something went wrong. Try again.",
           snackPosition: SnackPosition.TOP,
           backgroundColor: Colors.redAccent.withOpacity(0.1),
@@ -121,7 +121,7 @@ class _DonateScreenState extends State<DonateScreen> {
     } catch (e) {
       print(e);
       Get.snackbar(
-        "Error", 
+        "Error",
         "An unexpected error occured. Try again",
         snackPosition: SnackPosition.TOP,
         backgroundColor: Colors.redAccent.withOpacity(0.1),
@@ -136,6 +136,13 @@ class _DonateScreenState extends State<DonateScreen> {
     final Function(int) onTap;
     return Scaffold(
       appBar: AppBar(
+        leading: GestureDetector(
+          onTap: () {
+            navbarController.showBottomNav();
+            Navigator.pop(context);
+          },
+          child: const Icon(Icons.arrow_back),
+        ),
         title: const Text('Donate'),
         centerTitle: true,
       ),
