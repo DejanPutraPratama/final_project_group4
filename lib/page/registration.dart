@@ -76,7 +76,9 @@ class _RegistrationState extends State<Registrartion> {
                             Navigator.pushReplacement(
                               context,
                               MaterialPageRoute(
-                                  builder: (context) => const LoginScreen()),
+                                  builder: (context) => LoginScreen(
+                                        hasLogOut: false,
+                                      )),
                             );
                           },
                           icon: const Icon(Icons.chevron_left,
@@ -594,7 +596,10 @@ class _NextRegistrationState extends State<NextRegistration> {
       log("User created Succesfully");
       Navigator.push(
         context,
-        MaterialPageRoute(builder: (context) => LoginScreen()),
+        MaterialPageRoute(
+            builder: (context) => LoginScreen(
+                  hasLogOut: false,
+                )),
       );
     }
   }
@@ -617,6 +622,9 @@ class ConfirmationPage extends StatelessWidget {
 
   goToLogin(BuildContext context) => Navigator.push(
         context,
-        MaterialPageRoute(builder: (context) => const LoginScreen()),
+        MaterialPageRoute(
+            builder: (context) => LoginScreen(
+                  hasLogOut: false,
+                )),
       );
 }

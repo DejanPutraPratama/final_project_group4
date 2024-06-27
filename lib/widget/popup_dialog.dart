@@ -3,12 +3,13 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 Future<Widget?> popUpDialog(
-    String title,
-    String description,
-    BuildContext context,
-    String confirmText,
-    String cancelText,
-    Function() onTapYes) async {
+  String title,
+  String description,
+  BuildContext context,
+  String confirmText,
+  String cancelText,
+  Future? onTapYes,
+) async {
   CustomColors customColors = CustomColors();
   return await showModalBottomSheet(
       useRootNavigator: true,
@@ -52,8 +53,8 @@ Future<Widget?> popUpDialog(
                               elevation: 0,
                               backgroundColor: customColors.darkGreen,
                               foregroundColor: Colors.white),
-                          onPressed: () {
-                            onTapYes;
+                          onPressed: () async {
+                            await onTapYes;
                             Navigator.pop(context);
                           },
                           child: Text(confirmText)),

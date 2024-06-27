@@ -1,5 +1,6 @@
 import 'dart:developer';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:final_project_group4/navbar/navbar_controller.dart';
 import 'package:final_project_group4/navbar/navbar_navigation.dart';
 import 'package:final_project_group4/page/home_page.dart';
 import 'package:final_project_group4/page/registration.dart';
@@ -9,15 +10,18 @@ import 'package:flutter/material.dart';
 import 'package:final_project_group4/auth/auth_service.dart';
 import 'package:email_otp/email_otp.dart';
 import 'package:flutter/services.dart';
+import 'package:get/get.dart';
 
 class LoginScreen extends StatefulWidget {
-  const LoginScreen({super.key});
+  bool hasLogOut;
+  LoginScreen({super.key, required this.hasLogOut});
 
   @override
   State<LoginScreen> createState() => _LoginScreenState();
 }
 
 class _LoginScreenState extends State<LoginScreen> {
+  final NavbarController navbarController = Get.put(NavbarController());
   final _auth = AuthService();
   final _email = TextEditingController();
   final emailController = TextEditingController();
@@ -470,10 +474,21 @@ class _LoginScreenState extends State<LoginScreen> {
 
       if (userId != null) {
         log("User ID: $userId");
-        Navigator.pushReplacement(
-          context,
-          MaterialPageRoute(builder: (context) => NavbarNavigation()),
-        );
+        navbarController.showBottomNav();
+        if (widget.hasLogOut) {
+          Navigator.pushReplacement(
+            context,
+            MaterialPageRoute(
+                builder: (context) => HomePage(
+                      userId: userId.uid,
+                    )),
+          );
+        } else {
+          Navigator.pushReplacement(
+            context,
+            MaterialPageRoute(builder: (context) => NavbarNavigation()),
+          );
+        }
       } else {
         log("Tidak ada user ID masbro");
       }

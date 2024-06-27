@@ -1,6 +1,8 @@
+import 'package:final_project_group4/navbar/navbar_controller.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:final_project_group4/page/home_page.dart';
+import 'package:get/get.dart';
 
 class RedeemSuccessPage extends StatelessWidget {
   const RedeemSuccessPage({super.key});
@@ -8,17 +10,20 @@ class RedeemSuccessPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final userInfo = FirebaseAuth.instance.currentUser;
+    final NavbarController navbarController = Get.find<NavbarController>();
     return Scaffold(
       backgroundColor: Color(0xFFE6F0DC),
       appBar: null,
       body: GestureDetector(
         onTap: () {
-          Navigator.push(
+          navbarController.showBottomNav();
+          Navigator.pushAndRemoveUntil(
             context,
             MaterialPageRoute(
                 builder: (context) => HomePage(
                       userId: userInfo!.uid,
                     )),
+            ((Route<dynamic> route) => route.isFirst),
           );
         },
         child: const Center(

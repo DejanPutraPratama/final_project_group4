@@ -1,4 +1,6 @@
+import 'package:final_project_group4/navbar/navbar_controller.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:final_project_group4/model/ewalletmodel.dart';
 import 'package:flutter/services.dart';
@@ -10,7 +12,11 @@ class RedeemPaymentPage extends StatefulWidget {
   final int userPoints;
   final String userId;
 
-  const RedeemPaymentPage({super.key, required this.ewallet, required this.userPoints, required this.userId});
+  const RedeemPaymentPage(
+      {super.key,
+      required this.ewallet,
+      required this.userPoints,
+      required this.userId});
 
   @override
   _RedeemPaymentPageState createState() => _RedeemPaymentPageState();
@@ -22,6 +28,8 @@ class _RedeemPaymentPageState extends State<RedeemPaymentPage> {
   final _amountController = TextEditingController();
   String? _errorMessage;
   final RedeemService _redeemService = RedeemService();
+
+  final NavbarController navbarController = Get.find<NavbarController>();
 
   @override
   void initState() {
@@ -87,17 +95,23 @@ class _RedeemPaymentPageState extends State<RedeemPaymentPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Center(
-          child: Text(
-            'Redeem',
-            style: GoogleFonts.poppins(
-              textStyle: const TextStyle(
-                fontWeight: FontWeight.bold,
-                color: Color(0xFF5E3023),
-              ),
+        leading: GestureDetector(
+          onTap: () {
+            navbarController.showBottomNav();
+            Navigator.pop(context);
+          },
+          child: const Icon(Icons.arrow_back),
+        ),
+        title: Text(
+          'Redeem',
+          style: GoogleFonts.poppins(
+            textStyle: const TextStyle(
+              fontWeight: FontWeight.bold,
+              color: Color(0xFF5E3023),
             ),
           ),
         ),
+        centerTitle: true,
       ),
       body: SingleChildScrollView(
         child: Center(
@@ -125,7 +139,8 @@ class _RedeemPaymentPageState extends State<RedeemPaymentPage> {
                           widget.ewallet.name,
                           style: GoogleFonts.poppins(
                             textStyle: const TextStyle(
-                              fontWeight: FontWeight.bold, fontSize: 18,
+                              fontWeight: FontWeight.bold,
+                              fontSize: 18,
                             ),
                           ),
                         ),

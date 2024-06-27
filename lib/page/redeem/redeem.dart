@@ -1,4 +1,6 @@
+import 'package:final_project_group4/navbar/navbar_controller.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:final_project_group4/model/ewalletmodel.dart';
@@ -17,6 +19,7 @@ class RedeemPage extends StatefulWidget {
 class _RedeemPageState extends State<RedeemPage> {
   int _userPoints = 0;
   final UserPointsService _userPointsService = UserPointsService();
+  final NavbarController navbarController = Get.find<NavbarController>();
 
   @override
   void initState() {
@@ -34,7 +37,6 @@ class _RedeemPageState extends State<RedeemPage> {
   @override
   Widget build(BuildContext context) {
     double deviceWidth = MediaQuery.of(context).size.width;
-
     return Scaffold(
       appBar: AppBar(
         title: Center(
@@ -149,6 +151,7 @@ class _RedeemPageState extends State<RedeemPage> {
                                   ),
                                   trailing: Icon(Icons.arrow_forward),
                                   onTap: () {
+                                    navbarController.hideBottomNav();
                                     Navigator.push(
                                       context,
                                       MaterialPageRoute(
