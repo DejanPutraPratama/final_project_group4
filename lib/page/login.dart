@@ -357,104 +357,113 @@ class _LoginScreenState extends State<LoginScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
         backgroundColor: Colors.lightGreen[50],
-        body: Padding(
-            padding: const EdgeInsets.all(16.0),
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: <Widget>[
-                const SizedBox(height: 50),
-                RichText(
-                  text: const TextSpan(
-                    children: [
-                      TextSpan(
-                        text: 'Hello ',
-                        style: TextStyle(
-                          fontSize: 24,
-                          fontWeight: FontWeight.bold,
-                          color: Colors.black,
+        body: SingleChildScrollView(
+            child: ConstrainedBox(
+              constraints: BoxConstraints(
+                minHeight: MediaQuery.of(context).size.height,
+              ),
+              child: IntrinsicHeight(
+                child: Padding(
+                  padding: const EdgeInsets.all(16),
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: <Widget>[
+                      const SizedBox(height: 50),
+                      RichText(
+                        text: const TextSpan(
+                          children: [
+                            TextSpan(
+                              text: 'Hello ',
+                              style: TextStyle(
+                                fontSize: 24,
+                                fontWeight: FontWeight.bold,
+                                color: Colors.black,
+                              ),
+                            ),
+                            TextSpan(
+                              text: 'Storbagers!',
+                              style: TextStyle(
+                                fontSize: 24,
+                                fontWeight: FontWeight.bold,
+                                color: Colors.green,
+                              ),
+                            ),
+                          ],
                         ),
                       ),
-                      TextSpan(
-                        text: 'Storbagers!',
-                        style: TextStyle(
-                          fontSize: 24,
-                          fontWeight: FontWeight.bold,
-                          color: Colors.green,
+                      const SizedBox(height: 8),
+                      const Text(
+                        "Let's sustaining our environment together!",
+                        style: TextStyle(fontSize: 16),
+                        textAlign: TextAlign.center,
+                      ),
+                      const SizedBox(height: 50),
+                      TextField(
+                        controller: _email,
+                        decoration: InputDecoration(
+                          labelText: 'Email',
+                          fillColor: Colors.white,
+                          filled: true,
+                          border: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(10.0)),
+                          // errorText: 'Email have not been registered',
                         ),
                       ),
+                      const SizedBox(height: 20),
+                      TextField(
+                        controller: _password,
+                        obscureText: !_showPassword,
+                        decoration: InputDecoration(
+                          labelText: 'Password',
+                          fillColor: Colors.white,
+                          filled: true,
+                          border: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(10.0)),
+                          // errorText: 'Password is not matched with the record',
+                        ),
+                      ),
+                      const SizedBox(height: 16),
+                      Row(
+                        children: <Widget>[
+                          Checkbox(
+                            value: _showPassword,
+                            onChanged: (bool? value) {
+                              setState(() {
+                                _showPassword = value ?? false;
+                              });
+                            },
+                          ),
+                          const Text('Show password'),
+                        ],
+                      ),
+                      const SizedBox(height: 16),
+                      CustomButton(
+                          label: "Login",
+                          onPressed: () {
+                            _Login();
+                          }),
+                      const SizedBox(height: 16),
+                      Row(mainAxisAlignment: MainAxisAlignment.center, children: [
+                        InkWell(
+                          onTap: () => _resetpassword(),
+                          child: const Text("Forgot password",
+                              style: TextStyle(color: Colors.lightGreen)),
+                        )
+                      ]),
+                      const SizedBox(height: 100),
+                      Row(mainAxisAlignment: MainAxisAlignment.center, children: [
+                        InkWell(
+                            onTap: () => goToSignup(context),
+                            child: const Text(
+                              "Don't have an account ? Join us",
+                              style: TextStyle(color: Colors.lightGreen),
+                            ))
+                      ]),
+                      const Spacer()
                     ],
                   ),
                 ),
-                const SizedBox(height: 8),
-                const Text(
-                  "Let's sustaining our environment together!",
-                  style: TextStyle(fontSize: 16),
-                  textAlign: TextAlign.center,
-                ),
-                const SizedBox(height: 50),
-                TextField(
-                  controller: _email,
-                  decoration: InputDecoration(
-                    labelText: 'Email',
-                    fillColor: Colors.white,
-                    filled: true,
-                    border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(10.0)),
-                    // errorText: 'Email have not been registered',
-                  ),
-                ),
-                const SizedBox(height: 20),
-                TextField(
-                  controller: _password,
-                  obscureText: !_showPassword,
-                  decoration: InputDecoration(
-                    labelText: 'Password',
-                    fillColor: Colors.white,
-                    filled: true,
-                    border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(10.0)),
-                    // errorText: 'Password is not matched with the record',
-                  ),
-                ),
-                const SizedBox(height: 16),
-                Row(
-                  children: <Widget>[
-                    Checkbox(
-                      value: _showPassword,
-                      onChanged: (bool? value) {
-                        setState(() {
-                          _showPassword = value ?? false;
-                        });
-                      },
-                    ),
-                    const Text('Show password'),
-                  ],
-                ),
-                const SizedBox(height: 16),
-                CustomButton(
-                    label: "Login",
-                    onPressed: () {
-                      _Login();
-                    }),
-                const SizedBox(height: 16),
-                Row(mainAxisAlignment: MainAxisAlignment.center, children: [
-                  InkWell(
-                    onTap: () => _resetpassword(),
-                    child: const Text("Forgot password",
-                        style: TextStyle(color: Colors.lightGreen)),
-                  )
-                ]),
-                const SizedBox(height: 100),
-                Row(mainAxisAlignment: MainAxisAlignment.center, children: [
-                  InkWell(
-                      onTap: () => goToSignup(context),
-                      child: const Text(
-                        "Don't have an account ? Join us",
-                        style: TextStyle(color: Colors.lightGreen),
-                      ))
-                ]),
-                const Spacer()
-              ],
+              ),
             )));
   }
 
