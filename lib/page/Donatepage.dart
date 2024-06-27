@@ -2,6 +2,7 @@ import 'dart:io';
 import 'package:final_project_group4/navbar/navbar.dart';
 import 'package:final_project_group4/navbar/navbar_navigation.dart';
 import 'package:final_project_group4/widget/button.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -21,6 +22,7 @@ class DonateScreen extends StatefulWidget {
 }
 
 class _DonateScreenState extends State<DonateScreen> {
+  final userInfo = FirebaseAuth.instance.currentUser;
   String? selectedLandfill;
   String? selectedWasteType;
   final List<String> destinationLandfill = [
@@ -30,7 +32,7 @@ class _DonateScreenState extends State<DonateScreen> {
     'Bank Sampah Jakarta Timur',
     'Bank Sampah Jakarta Pusat'
   ];
-  final List<String> wasteTypes = ['Plastic', 'Organic', 'Metal'];
+  final List<String> wasteTypes = ['Plastic', 'Anorganic', 'Metal', 'Paper'];
   final TextEditingController weightController = TextEditingController();
   final NavbarController navbarController = Get.find<NavbarController>();
   final donateData = Get.put(DonateDatabase());

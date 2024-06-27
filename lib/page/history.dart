@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:final_project_group4/navbar/navbar_controller.dart';
+import 'package:get/get.dart';
 
 class HistoryScreen extends StatefulWidget {
   @override
@@ -7,11 +9,19 @@ class HistoryScreen extends StatefulWidget {
 
 class _HistoryScreenState extends State<HistoryScreen> {
   bool showWaste = true;
+  final NavbarController navbarController = Get.find<NavbarController>();
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+          leading: GestureDetector(
+          onTap: () {
+            navbarController.showBottomNav();
+            Navigator.pop(context);
+          },
+          child: const Icon(Icons.arrow_back),
+        ),
         title: const Text('History'),
         centerTitle: true,
       ),

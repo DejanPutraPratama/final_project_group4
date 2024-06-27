@@ -1,6 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:final_project_group4/page/home_page.dart';
+import 'package:final_project_group4/page/history.dart';
 
 class DonateSuccessPage extends StatelessWidget {
   const DonateSuccessPage({super.key});
@@ -16,9 +16,7 @@ class DonateSuccessPage extends StatelessWidget {
           Navigator.push(
             context,
             MaterialPageRoute(
-                builder: (context) => HomePage(
-                      userId: userInfo!.uid,
-                    )),
+                builder: (context) => HistoryScreen()),
           );
         },
         child: const Center(
