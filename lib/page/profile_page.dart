@@ -49,6 +49,11 @@ class _ProfilePageState extends State<ProfilePage> {
     });
   }
 
+  Future _onPullRefresh() async {
+    await _loadUserData();
+    await _loadUserPoints();
+  }
+
   @override
   Widget build(BuildContext context) {
     final CustomWidgets customWidgets = CustomWidgets();
@@ -60,154 +65,158 @@ class _ProfilePageState extends State<ProfilePage> {
         builder: (context, snapshot) {
           if (snapshot.hasData) {
             userData = snapshot.data;
-            return Scaffold(
-              body: SingleChildScrollView(
-                child: Column(
-                  children: [
-                    Container(
-                      width: deviceWidth,
-                      height: 200,
-                      decoration: const BoxDecoration(
-                        color: Color.fromRGBO(230, 240, 220, 1),
-                      ),
-                      child: Stack(
-                        children: [
-                          Positioned(
-                            left: deviceWidth * 0.1,
-                            top: deviceHeight * 0.1,
-                            child: customWidgets.lightGreenCircle(
-                                deviceWidth, deviceHeight),
-                          ),
-                          Positioned(
-                            right: deviceWidth * 0.5,
-                            top: deviceHeight * 0.15,
-                            child: customWidgets.greenCircle(
-                                deviceWidth, deviceHeight),
-                          ),
-                          Positioned(
-                            left: 30,
-                            height: 250,
-                            child: Row(
-                              children: [
-                                const CircleAvatar(
-                                  backgroundColor: Colors.grey,
-                                  foregroundColor: Colors.black,
-                                  radius: 35,
-                                  child: Icon(Icons.camera_enhance),
-                                ),
-                                const SizedBox(
-                                  width: 10,
-                                ),
-                                Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  mainAxisSize: MainAxisSize.min,
-                                  children: [
-                                    Text(snapshot.data['fullName'],
+            return RefreshIndicator(
+              onRefresh: _onPullRefresh,
+              child: Scaffold(
+                body: SingleChildScrollView(
+                  child: Column(
+                    children: [
+                      Container(
+                        width: deviceWidth,
+                        height: 200,
+                        decoration: const BoxDecoration(
+                          color: Color.fromRGBO(230, 240, 220, 1),
+                        ),
+                        child: Stack(
+                          children: [
+                            Positioned(
+                              left: deviceWidth * 0.1,
+                              top: deviceHeight * 0.1,
+                              child: customWidgets.lightGreenCircle(
+                                  deviceWidth, deviceHeight),
+                            ),
+                            Positioned(
+                              right: deviceWidth * 0.5,
+                              top: deviceHeight * 0.15,
+                              child: customWidgets.greenCircle(
+                                  deviceWidth, deviceHeight),
+                            ),
+                            Positioned(
+                              left: 30,
+                              height: 250,
+                              child: Row(
+                                children: [
+                                  const CircleAvatar(
+                                    backgroundColor: Colors.grey,
+                                    foregroundColor: Colors.black,
+                                    radius: 35,
+                                    child: Icon(Icons.camera_enhance),
+                                  ),
+                                  const SizedBox(
+                                    width: 10,
+                                  ),
+                                  Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    mainAxisSize: MainAxisSize.min,
+                                    children: [
+                                      Text(snapshot.data['fullName'],
+                                          style: GoogleFonts.getFont(
+                                            'Poppins',
+                                            textStyle: TextStyle(
+                                                fontSize: 24,
+                                                fontWeight: FontWeight.w600,
+                                                color: customColors.redText),
+                                          )),
+                                      Text(
+                                        'Member ID : ${userData['id']}',
                                         style: GoogleFonts.getFont(
                                           'Poppins',
                                           textStyle: TextStyle(
-                                              fontSize: 24,
-                                              fontWeight: FontWeight.w600,
+                                              fontSize: 8,
                                               color: customColors.redText),
-                                        )),
-                                    Text(
-                                      'Member ID : ${userData['id']}',
-                                      style: GoogleFonts.getFont(
-                                        'Poppins',
-                                        textStyle: TextStyle(
-                                            fontSize: 8,
-                                            color: customColors.redText),
-                                      ),
-                                    )
-                                  ],
-                                ),
-                              ],
-                            ),
-                          )
-                        ],
+                                        ),
+                                      )
+                                    ],
+                                  ),
+                                ],
+                              ),
+                            )
+                          ],
+                        ),
                       ),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.symmetric(vertical: 10),
-                      child: customWidgets.greyBox(
-                          deviceWidth * 0.9,
-                          60,
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              Text("Your Balance Point",
-                                  style: GoogleFonts.getFont(
-                                    'Poppins',
-                                    textStyle: const TextStyle(
-                                      fontWeight: FontWeight.w600,
-                                    ),
-                                  )),
-                              Text(_userPoints.toString(),
-                                  style: GoogleFonts.getFont(
-                                    'Poppins',
-                                    textStyle: const TextStyle(
-                                      fontWeight: FontWeight.w600,
-                                    ),
-                                  ))
-                            ],
-                          )),
-                    ),
-                    optionList('Update Profile', Colors.black,
-                        const Icon(Icons.chevron_right_rounded), () {
-                      navbarController.hideBottomNav();
-                      Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => DetailProfile(
-                                    userId: widget.userId,
-                                  )));
-                    }),
-                    optionList('Dark Mode', Colors.black, null, () {}),
-                    const SizedBox(
-                      height: 10,
-                    ),
-                    optionList('Terms & Conditions', Colors.black,
-                        const Icon(Icons.chevron_right_rounded), () {}),
-                    optionList('Personal Policy', Colors.black,
-                        const Icon(Icons.chevron_right_rounded), () {}),
-                    const SizedBox(
-                      height: 10,
-                    ),
-                    optionList('Log out', Colors.black, null, () async {
-                      await popUpDialog(
-                              'Are you sure you want to Log Out?',
-                              '',
-                              context,
-                              "Yes, I'm sure",
-                              "No, I'm not",
-                              FirebaseAuth.instance.signOut())
-                          .then((_) {
+                      Padding(
+                        padding: const EdgeInsets.symmetric(vertical: 10),
+                        child: customWidgets.greyBox(
+                            deviceWidth * 0.9,
+                            60,
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Text("Your Balance Point",
+                                    style: GoogleFonts.getFont(
+                                      'Poppins',
+                                      textStyle: const TextStyle(
+                                        fontWeight: FontWeight.w600,
+                                      ),
+                                    )),
+                                Text(_userPoints.toString(),
+                                    style: GoogleFonts.getFont(
+                                      'Poppins',
+                                      textStyle: const TextStyle(
+                                        fontWeight: FontWeight.w600,
+                                      ),
+                                    ))
+                              ],
+                            )),
+                      ),
+                      optionList('Update Profile', Colors.black,
+                          const Icon(Icons.chevron_right_rounded), () {
                         navbarController.hideBottomNav();
-                        loggedOut = true;
-                        Navigator.pushAndRemoveUntil(
+                        Navigator.push(
                             context,
                             MaterialPageRoute(
-                                builder: (context) => LoginScreen(
-                                      hasLogOut: loggedOut,
-                                    )),
-                            (Route<dynamic> route) => route.isFirst);
-                      });
-                    }),
-                    optionList('Delete Account', customColors.redText, null,
-                        () {
-                      popUpDialog(
-                        'Are you sure you want to delete your account?',
-                        'This action can not be undone, your data will deleted permanently',
-                        context,
-                        "Yes, I'm sure",
-                        "No, I'm not",
-                        null,
-                      );
-                    }),
-                    const SizedBox(
-                      height: 100,
-                    )
-                  ],
+                                builder: (context) => DetailProfile(
+                                      userId: widget.userId,
+                                    )));
+                      }),
+                      optionList('Dark Mode', Colors.black, null, () {}),
+                      const SizedBox(
+                        height: 10,
+                      ),
+                      optionList('Terms & Conditions', Colors.black,
+                          const Icon(Icons.chevron_right_rounded), () {}),
+                      optionList('Personal Policy', Colors.black,
+                          const Icon(Icons.chevron_right_rounded), () {}),
+                      const SizedBox(
+                        height: 10,
+                      ),
+                      optionList('Log out', Colors.black, null, () async {
+                        await popUpDialog(
+                                'Are you sure you want to Log Out?',
+                                '',
+                                context,
+                                "Yes, I'm sure",
+                                "No, I'm not",
+                                FirebaseAuth.instance.signOut())
+                            .then((_) {
+                          navbarController.hideBottomNav();
+                          loggedOut = true;
+                          Navigator.pushAndRemoveUntil(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => LoginScreen(
+                                        hasLogOut: loggedOut,
+                                      )),
+                              (Route<dynamic> route) => route.isFirst);
+                        });
+                      }),
+                      optionList('Delete Account', customColors.redText, null,
+                          () {
+                        popUpDialog(
+                          'Are you sure you want to delete your account?',
+                          'This action can not be undone, your data will deleted permanently',
+                          context,
+                          "Yes, I'm sure",
+                          "No, I'm not",
+                          null,
+                        );
+                      }),
+                      const SizedBox(
+                        height: 100,
+                      )
+                    ],
+                  ),
                 ),
               ),
             );

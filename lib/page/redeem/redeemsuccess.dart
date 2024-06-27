@@ -1,4 +1,5 @@
 import 'package:final_project_group4/navbar/navbar_controller.dart';
+import 'package:final_project_group4/page/redeem/redeem.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:final_project_group4/page/home_page.dart';
@@ -20,7 +21,7 @@ class RedeemSuccessPage extends StatelessWidget {
           Navigator.pushAndRemoveUntil(
             context,
             MaterialPageRoute(
-                builder: (context) => HomePage(
+                builder: (context) => RedeemPage(
                       userId: userInfo!.uid,
                     )),
             ((Route<dynamic> route) => route.isFirst),

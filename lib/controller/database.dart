@@ -15,6 +15,13 @@ class Database {
         .set(userDetails);
   }
 
+  Future updateUser(String id, Map<String, dynamic> updateInfo) async {
+    return await FirebaseFirestore.instance
+        .collection('users')
+        .doc(id)
+        .update(updateInfo);
+  }
+
   Future getDataUser(String id) async {
     return await FirebaseFirestore.instance.collection('users').doc(id).get();
   }

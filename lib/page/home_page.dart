@@ -50,6 +50,11 @@ class _HomePageState extends State<HomePage> {
     });
   }
 
+  Future _onPullRefresh() async {
+    await _loadUserData();
+    await _loadUserPoints();
+  }
+
   @override
   Widget build(BuildContext context) {
     final CustomWidgets customWidgets = CustomWidgets();
@@ -70,305 +75,310 @@ class _HomePageState extends State<HomePage> {
       builder: (context, snapshot) {
         if (snapshot.hasData) {
           userData = snapshot.data;
-          return Scaffold(
-            body: SingleChildScrollView(
-              child: Column(
-                children: [
-                  Container(
-                    width: deviceWidth,
-                    height: 200,
-                    decoration: const BoxDecoration(
-                      color: Color.fromRGBO(230, 240, 220, 1),
-                    ),
-                    child: Stack(
-                      children: [
-                        Positioned(
-                          right: deviceWidth * 0.2,
-                          top: deviceHeight * 0.1,
-                          child: customWidgets.lightGreenCircle(
-                              deviceWidth, deviceHeight),
-                        ),
-                        Positioned(
-                          left: -10,
-                          top: deviceHeight * 0.15,
-                          child: customWidgets.greenCircle(
-                              deviceWidth, deviceHeight),
-                        ),
-                        Positioned(
-                          width: deviceWidth,
-                          height: 250,
-                          child: Center(
-                            child: Column(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                Text(
-                                  "Welcome, ${userData['fullName']}",
-                                  style: GoogleFonts.getFont('Poppins',
-                                      textStyle: TextStyle(
-                                          fontSize: 18,
-                                          fontWeight: FontWeight.bold,
-                                          color: customColors.redText)),
-                                ),
-                                const SizedBox(
-                                  height: 20,
-                                ),
-                                Text(
-                                    "Better environment, better tommorow\n-Unknown-",
+          return RefreshIndicator(
+            onRefresh: _onPullRefresh,
+            child: Scaffold(
+              body: SingleChildScrollView(
+                child: Column(
+                  children: [
+                    Container(
+                      width: deviceWidth,
+                      height: 200,
+                      decoration: const BoxDecoration(
+                        color: Color.fromRGBO(230, 240, 220, 1),
+                      ),
+                      child: Stack(
+                        children: [
+                          Positioned(
+                            right: deviceWidth * 0.2,
+                            top: deviceHeight * 0.1,
+                            child: customWidgets.lightGreenCircle(
+                                deviceWidth, deviceHeight),
+                          ),
+                          Positioned(
+                            left: -10,
+                            top: deviceHeight * 0.15,
+                            child: customWidgets.greenCircle(
+                                deviceWidth, deviceHeight),
+                          ),
+                          Positioned(
+                            width: deviceWidth,
+                            height: 250,
+                            child: Center(
+                              child: Column(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  Text(
+                                    "Welcome, ${userData['fullName']}",
                                     style: GoogleFonts.getFont('Poppins',
                                         textStyle: TextStyle(
-                                            fontSize: 12,
-                                            fontWeight: FontWeight.w600,
-                                            color: customColors.redText))),
-                              ],
-                            ),
-                          ),
-                        )
-                      ],
-                    ),
-                  ),
-                  customWidgets.greyBox(
-                      deviceWidth * 0.9,
-                      75,
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Text(
-                            "Your Balance Point",
-                            style: GoogleFonts.getFont('Poppins',
-                                textStyle: const TextStyle(
-                                  fontWeight: FontWeight.bold,
-                                )),
-                          ),
-                          Text(_userPoints.toString(),
-                              style: GoogleFonts.getFont('Poppins',
-                                  textStyle: const TextStyle(
-                                    fontWeight: FontWeight.bold,
-                                  )))
-                        ],
-                      )),
-                  customWidgets.greyBox(
-                      deviceWidth * 0.9,
-                      180,
-                      Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text("Destination Landfill",
-                              style: GoogleFonts.getFont('Poppins',
-                                  textStyle: const TextStyle(
-                                    fontWeight: FontWeight.bold,
-                                  ))),
-                          customWidgets.greyBox(
-                            deviceWidth * 0.8,
-                            50,
-                            DropdownButtonFormField<String>(
-                                value: selectedItem,
-                                decoration: const InputDecoration(
-                                    border: InputBorder.none),
-                                isExpanded: true,
-                                hint: Text(
-                                  'Please select location',
-                                  style: GoogleFonts.getFont('Poppins',
-                                      textStyle: const TextStyle(
-                                          fontWeight: FontWeight.w500)),
-                                ),
-                                icon: const Icon(
-                                    Icons.keyboard_arrow_down_rounded),
-                                items: const [
-                                  DropdownMenuItem<String>(
-                                    value: 'Jakarta',
-                                    child: Text('Jakarta'),
+                                            fontSize: 18,
+                                            fontWeight: FontWeight.bold,
+                                            color: customColors.redText)),
                                   ),
-                                  DropdownMenuItem<String>(
-                                    value: 'Serang',
-                                    child: Text("Serang"),
+                                  const SizedBox(
+                                    height: 20,
                                   ),
-                                  DropdownMenuItem<String>(
-                                    value: 'Tangerang',
-                                    child: Text("Tangerang"),
-                                  ),
-                                  DropdownMenuItem<String>(
-                                    value: 'Yogyakarta',
-                                    child: Text("Yogyakarta"),
-                                  )
+                                  Text(
+                                      "Better environment, better tommorow\n-Unknown-",
+                                      style: GoogleFonts.getFont('Poppins',
+                                          textStyle: TextStyle(
+                                              fontSize: 12,
+                                              fontWeight: FontWeight.w600,
+                                              color: customColors.redText))),
                                 ],
-                                onChanged: dropdownCallback),
-                          ),
-                          const SizedBox(
-                            height: 10,
-                          ),
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              Text(
-                                'Feel like to dispose today?',
-                                style: GoogleFonts.getFont('Poppins',
-                                    textStyle: const TextStyle(
-                                      fontSize: 10,
-                                    )),
                               ),
-                              ElevatedButton(
-                                  onPressed: () {
-                                    navbarController.hideBottomNav();
-                                    Navigator.push(
-                                        context,
-                                        MaterialPageRoute(
-                                            builder: (context) =>
-                                                DonateScreen()));
-                                  },
-                                  style: ElevatedButton.styleFrom(
-                                      padding: const EdgeInsets.symmetric(
-                                          vertical: 0, horizontal: 20),
-                                      elevation: 0,
-                                      backgroundColor: customColors.darkGreen,
-                                      shape: RoundedRectangleBorder(
-                                          borderRadius:
-                                              BorderRadius.circular(10))),
-                                  child: Text(
-                                    'Donate Now',
-                                    style: GoogleFonts.getFont('Poppins',
-                                        textStyle: const TextStyle(
-                                            fontWeight: FontWeight.w600,
-                                            color: Colors.white)),
-                                  ))
-                            ],
+                            ),
                           )
                         ],
-                      )),
-                  customWidgets.greyBox(
-                      deviceWidth * 0.9,
-                      300,
-                      Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        children: [
-                          Text('Instruction',
+                      ),
+                    ),
+                    customWidgets.greyBox(
+                        deviceWidth * 0.9,
+                        75,
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Text(
+                              "Your Balance Point",
                               style: GoogleFonts.getFont('Poppins',
-                                  textStyle: TextStyle(
-                                      fontWeight: FontWeight.bold,
-                                      color: customColors.redText))),
-                          SizedBox(
-                            height: 250,
-                            child: GridView.count(
-                              childAspectRatio: 1.0,
-                              physics: const NeverScrollableScrollPhysics(),
-                              crossAxisCount: 2,
-                              children: [
-                                Column(
-                                  children: [
-                                    Image.asset(
-                                      'assets/trash.png',
-                                      height: 75,
-                                    ),
-                                    Text('Sort your waste',
-                                        style: GoogleFonts.getFont('Poppins',
-                                            textStyle: const TextStyle(
-                                              fontSize: 8,
-                                              fontWeight: FontWeight.w500,
-                                            )))
-                                  ],
-                                ),
-                                Column(
-                                  children: [
-                                    Image.asset(
-                                      'assets/location.png',
-                                      scale: 2,
-                                      height: 75,
-                                    ),
-                                    Text('Send to nearest landfill',
-                                        style: GoogleFonts.getFont('Poppins',
-                                            textStyle: const TextStyle(
-                                              fontSize: 8,
-                                              fontWeight: FontWeight.w500,
-                                            )))
-                                  ],
-                                ),
-                                Column(
-                                  children: [
-                                    Image.asset(
-                                      'assets/verified.png',
-                                      scale: 2,
-                                      height: 50,
-                                    ),
-                                    Text('Wait for verification and get points',
-                                        textAlign: TextAlign.center,
-                                        style: GoogleFonts.getFont('Poppins',
-                                            textStyle: const TextStyle(
-                                              fontSize: 8,
-                                              fontWeight: FontWeight.w500,
-                                            )))
-                                  ],
-                                ),
-                                Column(
-                                  children: [
-                                    Image.asset(
-                                      'assets/money.png',
-                                      scale: 2,
-                                      height: 50,
-                                    ),
-                                    Text('Excange points to e-wallet',
-                                        style: GoogleFonts.getFont('Poppins',
-                                            textStyle: const TextStyle(
-                                              fontSize: 8,
-                                              fontWeight: FontWeight.w500,
-                                            )))
-                                  ],
-                                ),
-                              ],
+                                  textStyle: const TextStyle(
+                                    fontWeight: FontWeight.bold,
+                                  )),
                             ),
-                          ),
-                        ],
-                      )),
-                  customWidgets.greyBox(
-                      deviceWidth * 0.9,
-                      200,
-                      Row(
-                        children: [
-                          Image.asset(
-                            'assets/person.png',
-                            scale: 1.5,
-                          ),
-                          const SizedBox(
-                            width: 10,
-                          ),
-                          SizedBox(
-                            width: deviceWidth * 0.4,
-                            child: Column(
-                              mainAxisAlignment: MainAxisAlignment.spaceAround,
-                              crossAxisAlignment: CrossAxisAlignment.start,
+                            Text(_userPoints.toString(),
+                                style: GoogleFonts.getFont('Poppins',
+                                    textStyle: const TextStyle(
+                                      fontWeight: FontWeight.bold,
+                                    )))
+                          ],
+                        )),
+                    customWidgets.greyBox(
+                        deviceWidth * 0.9,
+                        180,
+                        Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text("Destination Landfill",
+                                style: GoogleFonts.getFont('Poppins',
+                                    textStyle: const TextStyle(
+                                      fontWeight: FontWeight.bold,
+                                    ))),
+                            customWidgets.greyBox(
+                              deviceWidth * 0.8,
+                              50,
+                              DropdownButtonFormField<String>(
+                                  value: selectedItem,
+                                  decoration: const InputDecoration(
+                                      border: InputBorder.none),
+                                  isExpanded: true,
+                                  hint: Text(
+                                    'Please select location',
+                                    style: GoogleFonts.getFont('Poppins',
+                                        textStyle: const TextStyle(
+                                            fontWeight: FontWeight.w500)),
+                                  ),
+                                  icon: const Icon(
+                                      Icons.keyboard_arrow_down_rounded),
+                                  items: const [
+                                    DropdownMenuItem<String>(
+                                      value: 'Jakarta',
+                                      child: Text('Jakarta'),
+                                    ),
+                                    DropdownMenuItem<String>(
+                                      value: 'Serang',
+                                      child: Text("Serang"),
+                                    ),
+                                    DropdownMenuItem<String>(
+                                      value: 'Tangerang',
+                                      child: Text("Tangerang"),
+                                    ),
+                                    DropdownMenuItem<String>(
+                                      value: 'Yogyakarta',
+                                      child: Text("Yogyakarta"),
+                                    )
+                                  ],
+                                  onChanged: dropdownCallback),
+                            ),
+                            const SizedBox(
+                              height: 10,
+                            ),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
                                 Text(
-                                    'Congratulation! you have already sort and dispose the waste with total of',
-                                    style: GoogleFonts.getFont('Poppins',
-                                        textStyle: TextStyle(
-                                            fontWeight: FontWeight.bold,
-                                            color: customColors.redText))),
-                                RichText(
-                                    text: TextSpan(children: [
-                                  TextSpan(
-                                      text: '15',
+                                  'Feel like to dispose today?',
+                                  style: GoogleFonts.getFont('Poppins',
+                                      textStyle: const TextStyle(
+                                        fontSize: 10,
+                                      )),
+                                ),
+                                ElevatedButton(
+                                    onPressed: () {
+                                      navbarController.hideBottomNav();
+                                      Navigator.push(
+                                          context,
+                                          MaterialPageRoute(
+                                              builder: (context) =>
+                                                  DonateScreen()));
+                                    },
+                                    style: ElevatedButton.styleFrom(
+                                        padding: const EdgeInsets.symmetric(
+                                            vertical: 0, horizontal: 20),
+                                        elevation: 0,
+                                        backgroundColor: customColors.darkGreen,
+                                        shape: RoundedRectangleBorder(
+                                            borderRadius:
+                                                BorderRadius.circular(10))),
+                                    child: Text(
+                                      'Donate Now',
                                       style: GoogleFonts.getFont('Poppins',
                                           textStyle: const TextStyle(
-                                              fontSize: 36,
-                                              fontWeight: FontWeight.bold,
-                                              color: Colors.green))),
-                                  TextSpan(
-                                      text: 'kg',
-                                      style: GoogleFonts.getFont('Poppins',
-                                          textStyle: const TextStyle(
-                                              fontSize: 24,
-                                              fontWeight: FontWeight.bold,
-                                              color: Colors.green)))
-                                ]))
+                                              fontWeight: FontWeight.w600,
+                                              color: Colors.white)),
+                                    ))
                               ],
+                            )
+                          ],
+                        )),
+                    customWidgets.greyBox(
+                        deviceWidth * 0.9,
+                        300,
+                        Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: [
+                            Text('Instruction',
+                                style: GoogleFonts.getFont('Poppins',
+                                    textStyle: TextStyle(
+                                        fontWeight: FontWeight.bold,
+                                        color: customColors.redText))),
+                            SizedBox(
+                              height: 250,
+                              child: GridView.count(
+                                childAspectRatio: 1.0,
+                                physics: const NeverScrollableScrollPhysics(),
+                                crossAxisCount: 2,
+                                children: [
+                                  Column(
+                                    children: [
+                                      Image.asset(
+                                        'assets/trash.png',
+                                        height: 75,
+                                      ),
+                                      Text('Sort your waste',
+                                          style: GoogleFonts.getFont('Poppins',
+                                              textStyle: const TextStyle(
+                                                fontSize: 8,
+                                                fontWeight: FontWeight.w500,
+                                              )))
+                                    ],
+                                  ),
+                                  Column(
+                                    children: [
+                                      Image.asset(
+                                        'assets/location.png',
+                                        scale: 2,
+                                        height: 75,
+                                      ),
+                                      Text('Send to nearest landfill',
+                                          style: GoogleFonts.getFont('Poppins',
+                                              textStyle: const TextStyle(
+                                                fontSize: 8,
+                                                fontWeight: FontWeight.w500,
+                                              )))
+                                    ],
+                                  ),
+                                  Column(
+                                    children: [
+                                      Image.asset(
+                                        'assets/verified.png',
+                                        scale: 2,
+                                        height: 50,
+                                      ),
+                                      Text(
+                                          'Wait for verification and get points',
+                                          textAlign: TextAlign.center,
+                                          style: GoogleFonts.getFont('Poppins',
+                                              textStyle: const TextStyle(
+                                                fontSize: 8,
+                                                fontWeight: FontWeight.w500,
+                                              )))
+                                    ],
+                                  ),
+                                  Column(
+                                    children: [
+                                      Image.asset(
+                                        'assets/money.png',
+                                        scale: 2,
+                                        height: 50,
+                                      ),
+                                      Text('Excange points to e-wallet',
+                                          style: GoogleFonts.getFont('Poppins',
+                                              textStyle: const TextStyle(
+                                                fontSize: 8,
+                                                fontWeight: FontWeight.w500,
+                                              )))
+                                    ],
+                                  ),
+                                ],
+                              ),
                             ),
-                          ),
-                        ],
-                      )),
-                  const SizedBox(
-                    height: 100,
-                  )
-                ],
+                          ],
+                        )),
+                    customWidgets.greyBox(
+                        deviceWidth * 0.9,
+                        200,
+                        Row(
+                          children: [
+                            Image.asset(
+                              'assets/person.png',
+                              scale: 1.5,
+                            ),
+                            const SizedBox(
+                              width: 10,
+                            ),
+                            SizedBox(
+                              width: deviceWidth * 0.4,
+                              child: Column(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceAround,
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(
+                                      'Congratulation! you have already sort and dispose the waste with total of',
+                                      style: GoogleFonts.getFont('Poppins',
+                                          textStyle: TextStyle(
+                                              fontWeight: FontWeight.bold,
+                                              color: customColors.redText))),
+                                  RichText(
+                                      text: TextSpan(children: [
+                                    TextSpan(
+                                        text: '15',
+                                        style: GoogleFonts.getFont('Poppins',
+                                            textStyle: const TextStyle(
+                                                fontSize: 36,
+                                                fontWeight: FontWeight.bold,
+                                                color: Colors.green))),
+                                    TextSpan(
+                                        text: 'kg',
+                                        style: GoogleFonts.getFont('Poppins',
+                                            textStyle: const TextStyle(
+                                                fontSize: 24,
+                                                fontWeight: FontWeight.bold,
+                                                color: Colors.green)))
+                                  ]))
+                                ],
+                              ),
+                            ),
+                          ],
+                        )),
+                    const SizedBox(
+                      height: 100,
+                    )
+                  ],
+                ),
               ),
             ),
           );

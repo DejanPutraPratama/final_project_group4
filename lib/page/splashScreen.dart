@@ -18,20 +18,20 @@ class FirstScreen extends StatelessWidget {
         Navigator.pushReplacement(
           context,
           PageRouteBuilder(
-            pageBuilder: (context, animation, secondaryAnimation) => SecondScreen(),
-            transitionsBuilder: (context, animation, secondaryAnimation, child) {
-              const begin = Offset(1.0, 0.0);
-              const end = Offset.zero;
-              const curve = Curves.easeInOut;
+              pageBuilder: (context, animation, secondaryAnimation) =>
+                  SecondScreen(),
+              transitionsBuilder:
+                  (context, animation, secondaryAnimation, child) {
+                const begin = Offset(1.0, 0.0);
+                const end = Offset.zero;
+                const curve = Curves.easeInOut;
 
-              var tween = Tween(begin: begin, end: end).chain(CurveTween(curve: curve));
+                var tween = Tween(begin: begin, end: end)
+                    .chain(CurveTween(curve: curve));
 
-              return SlideTransition(
-                position: animation.drive(tween),
-                child: child
-              );
-            }
-          ),
+                return SlideTransition(
+                    position: animation.drive(tween), child: child);
+              }),
         );
       },
       child: Scaffold(
@@ -101,20 +101,20 @@ class SecondScreen extends StatelessWidget {
         Navigator.pushReplacement(
           context,
           PageRouteBuilder(
-            pageBuilder: (context, animation, secondaryAnimation) => ThirdScreen(),
-            transitionsBuilder: (context, animation, secondaryAnimation, child) {
-              const begin = Offset(1.0, 0.0);
-              const end = Offset.zero;
-              const curve = Curves.easeInOut;
+              pageBuilder: (context, animation, secondaryAnimation) =>
+                  ThirdScreen(),
+              transitionsBuilder:
+                  (context, animation, secondaryAnimation, child) {
+                const begin = Offset(1.0, 0.0);
+                const end = Offset.zero;
+                const curve = Curves.easeInOut;
 
-              var tween = Tween(begin: begin, end: end).chain(CurveTween(curve: curve));
+                var tween = Tween(begin: begin, end: end)
+                    .chain(CurveTween(curve: curve));
 
-              return SlideTransition(
-                position: animation.drive(tween),
-                child: child
-              );
-            }
-          ),
+                return SlideTransition(
+                    position: animation.drive(tween), child: child);
+              }),
         );
       },
       child: Scaffold(
@@ -184,20 +184,22 @@ class ThirdScreen extends StatelessWidget {
         Navigator.pushReplacement(
           context,
           PageRouteBuilder(
-            pageBuilder: (context, animation, secondaryAnimation) => const LoginScreen(),
-            transitionsBuilder: (context, animation, secondaryAnimation, child) {
-              const begin = Offset(1.0, 0.0);
-              const end = Offset.zero;
-              const curve = Curves.easeInOut;
+              pageBuilder: (context, animation, secondaryAnimation) =>
+                  LoginScreen(
+                    hasLogOut: false,
+                  ),
+              transitionsBuilder:
+                  (context, animation, secondaryAnimation, child) {
+                const begin = Offset(1.0, 0.0);
+                const end = Offset.zero;
+                const curve = Curves.easeInOut;
 
-              var tween = Tween(begin: begin, end: end).chain(CurveTween(curve: curve));
+                var tween = Tween(begin: begin, end: end)
+                    .chain(CurveTween(curve: curve));
 
-              return SlideTransition(
-                position: animation.drive(tween),
-                child: child
-              );
-            }
-          ),
+                return SlideTransition(
+                    position: animation.drive(tween), child: child);
+              }),
         );
       },
       child: Scaffold(
