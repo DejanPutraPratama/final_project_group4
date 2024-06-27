@@ -34,11 +34,11 @@ class _RegistrationState extends State<Registrartion> {
   String? selectedCity;
 
   final List<String> cities = [
-    'TPA Jakarta Utara',
-    'TPA Jakarta Selatan',
-    'TPA Jakarta Barat',
-    'TPA Jakarta Timur',
-    'TPA Jakarta Pusat'
+    'Jakarta Utara',
+    'Jakarta Selatan',
+    'Jakarta Barat',
+    'Jakarta Timur',
+    'Jakarta Pusat'
   ];
 
   @override
@@ -367,6 +367,9 @@ class _NextRegistrationState extends State<NextRegistration> {
   final _password = TextEditingController();
   final _confirmPassword = TextEditingController();
   bool agreeToTerms = false;
+  bool _isPasswordVisible = false;
+  bool showPassword = false;
+  bool _isConfirmPasswordVisible = false;
 
   @override
   Widget build(BuildContext context) {
@@ -505,10 +508,23 @@ class _NextRegistrationState extends State<NextRegistration> {
                       Padding(
                         padding: const EdgeInsets.symmetric(horizontal: 10),
                         child: CustomTextField(
+                          controller: _password,
+                          obscureText: !_isPasswordVisible,
                           hint: "Enter ur password",
                           label: "Password",
                           isPassword: true,
-                          controller: _password,
+                          suffixIcon: IconButton(
+                            icon: Icon(
+                              _isPasswordVisible
+                                ? Icons.visibility
+                                : Icons.visibility_off,
+                            ),
+                            onPressed: () {
+                              setState(() {
+                                _isPasswordVisible = !_isPasswordVisible;
+                              });
+                            },
+                          ),
                         ),
                       ),
                       const SizedBox(height: 10),
@@ -530,7 +546,7 @@ class _NextRegistrationState extends State<NextRegistration> {
                           hint: "Confirm ur password",
                           label: "Confirm Password",
                           isPassword: true,
-                          controller: _password,
+                          controller: _confirmPassword,
                         ),
                       ),
                       const SizedBox(height: 20),
@@ -563,7 +579,9 @@ class _NextRegistrationState extends State<NextRegistration> {
                 CustomButton(
                   label: "Register",
                   onPressed: () async {
-                    await _signup(widget.regisInfo);
+                        if (_password.text == _confirmPassword.text) {
+                          await _signup(widget.regisInfo);
+                        }
                   },
                 ),
               ],

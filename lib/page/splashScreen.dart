@@ -17,14 +17,28 @@ class FirstScreen extends StatelessWidget {
       onTap: () {
         Navigator.pushReplacement(
           context,
-          MaterialPageRoute(builder: (context) => SecondScreen()),
+          PageRouteBuilder(
+            pageBuilder: (context, animation, secondaryAnimation) => SecondScreen(),
+            transitionsBuilder: (context, animation, secondaryAnimation, child) {
+              const begin = Offset(1.0, 0.0);
+              const end = Offset.zero;
+              const curve = Curves.easeInOut;
+
+              var tween = Tween(begin: begin, end: end).chain(CurveTween(curve: curve));
+
+              return SlideTransition(
+                position: animation.drive(tween),
+                child: child
+              );
+            }
+          ),
         );
       },
       child: Scaffold(
         backgroundColor: Color(0xFFEAF0DF),
         body: Stack(
           children: [
-            Positioned(
+            const Positioned(
               top: 40,
               right: 20,
               child: Column(
@@ -49,27 +63,26 @@ class FirstScreen extends StatelessWidget {
               ),
             ),
             Positioned(
-              bottom: 200,
-              left: 5,
+              bottom: 160,
               child: Image.asset(
                 'assets/Plastik_sampah.png',
                 fit: BoxFit.contain,
                 width: 200,
               ),
             ),
-            Positioned(
+            const Positioned(
               bottom: 20,
               left: 0,
               right: 0,
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  Icon(Icons.circle, color: Colors.black),
-                  SizedBox(width: 20),
-                  Icon(Icons.circle, color: Colors.grey),
-                  SizedBox(width: 20),
-                  Icon(Icons.circle, color: Colors.grey),
-                  SizedBox(width: 20),
+                  Icon(Icons.circle, color: Colors.black, size: 10.0),
+                  SizedBox(width: 10),
+                  Icon(Icons.circle, color: Colors.grey, size: 10.0),
+                  SizedBox(width: 10),
+                  Icon(Icons.circle, color: Colors.grey, size: 10.0),
+                  SizedBox(width: 10),
                 ],
               ),
             ),
@@ -87,14 +100,28 @@ class SecondScreen extends StatelessWidget {
       onTap: () {
         Navigator.pushReplacement(
           context,
-          MaterialPageRoute(builder: (context) => ThirdScreen()),
+          PageRouteBuilder(
+            pageBuilder: (context, animation, secondaryAnimation) => ThirdScreen(),
+            transitionsBuilder: (context, animation, secondaryAnimation, child) {
+              const begin = Offset(1.0, 0.0);
+              const end = Offset.zero;
+              const curve = Curves.easeInOut;
+
+              var tween = Tween(begin: begin, end: end).chain(CurveTween(curve: curve));
+
+              return SlideTransition(
+                position: animation.drive(tween),
+                child: child
+              );
+            }
+          ),
         );
       },
       child: Scaffold(
         backgroundColor: Color(0xFFEAF0DF),
         body: Stack(
           children: [
-            Positioned(
+            const Positioned(
               top: 40,
               right: 20,
               child: Column(
@@ -119,27 +146,26 @@ class SecondScreen extends StatelessWidget {
               ),
             ),
             Positioned(
-              bottom: 200,
-              left: 5,
+              bottom: 160,
               child: Image.asset(
                 'assets/Plastik_sampah.png',
                 fit: BoxFit.contain,
                 width: 200,
               ),
             ),
-            Positioned(
+            const Positioned(
               bottom: 20,
               left: 0,
               right: 0,
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  Icon(Icons.circle, color: Colors.grey),
-                  SizedBox(width: 20),
-                  Icon(Icons.circle, color: Colors.black),
-                  SizedBox(width: 20),
-                  Icon(Icons.circle, color: Colors.grey),
-                  SizedBox(width: 20),
+                  Icon(Icons.circle, color: Colors.grey, size: 10.0),
+                  SizedBox(width: 10),
+                  Icon(Icons.circle, color: Colors.black, size: 10.0),
+                  SizedBox(width: 10),
+                  Icon(Icons.circle, color: Colors.grey, size: 10.0),
+                  SizedBox(width: 10),
                 ],
               ),
             ),
@@ -157,14 +183,28 @@ class ThirdScreen extends StatelessWidget {
       onTap: () {
         Navigator.pushReplacement(
           context,
-          MaterialPageRoute(builder: (context) => NavbarNavigation()),
+          PageRouteBuilder(
+            pageBuilder: (context, animation, secondaryAnimation) => const LoginScreen(),
+            transitionsBuilder: (context, animation, secondaryAnimation, child) {
+              const begin = Offset(1.0, 0.0);
+              const end = Offset.zero;
+              const curve = Curves.easeInOut;
+
+              var tween = Tween(begin: begin, end: end).chain(CurveTween(curve: curve));
+
+              return SlideTransition(
+                position: animation.drive(tween),
+                child: child
+              );
+            }
+          ),
         );
       },
       child: Scaffold(
         backgroundColor: Color(0xFFEAF0DF),
         body: Stack(
           children: [
-            Positioned(
+            const Positioned(
               top: 40,
               right: 70,
               child: Column(
@@ -185,13 +225,18 @@ class ThirdScreen extends StatelessWidget {
                       color: Colors.brown,
                     ),
                   ),
-                  const SizedBox(height: 20),
-                  Text(
-                    ' Here the right',
-                    style: TextStyle(
-                      fontSize: 37,
-                      fontWeight: FontWeight.bold,
-                      color: Colors.brown,
+                  SizedBox(height: 20),
+                  Padding(
+                    padding: EdgeInsets.only(
+                      left: 0,
+                    ),
+                    child: Text(
+                      ' Here the right',
+                      style: TextStyle(
+                        fontSize: 37,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.brown,
+                      ),
                     ),
                   ),
                   Text(
@@ -206,27 +251,26 @@ class ThirdScreen extends StatelessWidget {
               ),
             ),
             Positioned(
-              bottom: 200,
-              left: 5,
+              bottom: 160,
               child: Image.asset(
                 'assets/Plastik_sampah.png',
                 fit: BoxFit.contain,
                 width: 200,
               ),
             ),
-            Positioned(
+            const Positioned(
               bottom: 20,
               left: 0,
               right: 0,
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  Icon(Icons.circle, color: Colors.grey),
-                  SizedBox(width: 20),
-                  Icon(Icons.circle, color: Colors.grey),
-                  SizedBox(width: 20),
-                  Icon(Icons.circle, color: Colors.black),
-                  SizedBox(width: 20),
+                  Icon(Icons.circle, color: Colors.grey, size: 10.0),
+                  SizedBox(width: 10),
+                  Icon(Icons.circle, color: Colors.grey, size: 10.0),
+                  SizedBox(width: 10),
+                  Icon(Icons.circle, color: Colors.black, size: 10.0),
+                  SizedBox(width: 10),
                 ],
               ),
             ),
@@ -263,7 +307,7 @@ class _SplashScreenState extends State<SplashScreen>
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Image.asset(
-              'assets/plastik_sampah.png',
+              'assets/storbage_logo.png',
               width: 150, // Sesuaikan ukuran sesuai kebutuhan
               height: 150, // Sesuaikan ukuran sesuai kebutuhan
             ),

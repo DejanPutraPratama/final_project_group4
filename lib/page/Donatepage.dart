@@ -39,9 +39,9 @@ class _DonateScreenState extends State<DonateScreen> {
     });
   }
 
-  Future<void> createData(DonateModel donate) async {
-    await donateData.createData(donate);
-  }
+  // Future<void> createData(DonateModel donate) async {
+  //   await donateData.createData(donate);
+  // }
 
     Future<String?> _uploadImageToFirebase() async {
     if (selectedImage == null) return null;
@@ -54,14 +54,19 @@ class _DonateScreenState extends State<DonateScreen> {
       String downloadUrl = await snapshot.ref.getDownloadURL();
       return downloadUrl;
 
-      print('File uploaded and URL saved to Firestore');
       } catch(e) {
         print('Error uploading image: $e ');
         return null;
       }
     }
 
-  Future<void> addDonation() async {
+  Future<void> addDonation({
+    String? selectedLandfill,
+    String? selectedWasteType,
+    TextEditingController? weightController,
+    XFile? selectedImage,
+  }) async {
+    weightController ??= TextEditingController();
     if (selectedLandfill == null ||
         selectedWasteType == null ||
         weightController.text.isEmpty) {
@@ -226,24 +231,6 @@ class _DonateScreenState extends State<DonateScreen> {
               ),
               const SizedBox(height: 20),
               uploadPhoto(onFileChanged: putImage),
-              // const Text(
-              //   'Upload Photo',
-              //   style: TextStyle(
-              //     fontWeight: FontWeight.bold,
-              //     fontSize: 15
-              //   ),
-              // ),
-              // const SizedBox(height: 10),
-              // Container(
-              //   height: 205,
-              //   width: double.infinity,
-              //   color: Colors.grey[300],
-              //   child: Icon(
-              //     Icons.camera_alt,
-              //     size: 50,
-              //     color: Colors.grey[700],
-              //   ),
-              // ),
               const SizedBox(height: 30),
               CustomButton(
                 label: "Donate",

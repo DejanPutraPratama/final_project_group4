@@ -204,8 +204,9 @@ class _DetailProfileState extends State<DetailProfile> {
                     Row(
                       children: [
                         RadioMenuButton(
-                            style: const ButtonStyle(
-                                overlayColor: WidgetStateColor.transparent),
+                            style: ButtonStyle(
+                                overlayColor: MaterialStateProperty.all(Colors.transparent)
+                              ),
                             value: Gender.male,
                             groupValue: gender,
                             onChanged: (value) {
@@ -217,8 +218,9 @@ class _DetailProfileState extends State<DetailProfile> {
                         RadioMenuButton(
                             value: Gender.female,
                             groupValue: gender,
-                            style: const ButtonStyle(
-                                overlayColor: WidgetStateColor.transparent),
+                            style: ButtonStyle(
+                                overlayColor: MaterialStateProperty.all(Colors.transparent)
+                              ),
                             onChanged: (value) {
                               setState(() {
                                 gender = value;
@@ -226,8 +228,9 @@ class _DetailProfileState extends State<DetailProfile> {
                             },
                             child: const Text('Female')),
                         RadioMenuButton(
-                          style: const ButtonStyle(
-                              overlayColor: WidgetStateColor.transparent),
+                          style: ButtonStyle(
+                              overlayColor: MaterialStateProperty.all(Colors.transparent)
+                            ),
                           value: Gender.others,
                           groupValue: gender,
                           onChanged: (value) {

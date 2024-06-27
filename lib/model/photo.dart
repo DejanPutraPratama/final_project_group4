@@ -30,7 +30,7 @@ class _UploadPhotoState extends State<uploadPhoto> {
         _imageFile = File(pickedFile.path);
       });
       widget.onFileChanged(_imageFile!);
-      // await _uploadImageToFirebase();
+      await _uploadImageToFirebase();
     }
   }
 
@@ -41,33 +41,32 @@ class _UploadPhotoState extends State<uploadPhoto> {
         _imageFile = File(pickedFile.path);
       });
       widget.onFileChanged(_imageFile!);
-      // await _uploadImageToFirebase();
+      await _uploadImageToFirebase();
     }
   }
   
-  // Future<void> _uploadImageToFirebase() async {
-  //   if (_imageFile == null) return;
+  Future<void> _uploadImageToFirebase() async {
+    if (_imageFile == null) return;
 
-  //   try {
-  //     String fileName = 'photo/${DateTime.now().millisecondsSinceEpoch.toString()}.png';
-  //     Reference storageReference = FirebaseStorage.instance.ref().child(fileName);
-  //     UploadTask uploadTask = storageReference.putFile(_imageFile!);
-  //     TaskSnapshot snapshot = await uploadTask;
-  //     String downloadUrl = await snapshot.ref.getDownloadURL();
+    try {
+      String fileName = 'photo/${DateTime.now().millisecondsSinceEpoch.toString()}.png';
+      Reference storageReference = FirebaseStorage.instance.ref().child(fileName);
+      UploadTask uploadTask = storageReference.putFile(_imageFile!);
+      TaskSnapshot snapshot = await uploadTask;
+      String downloadUrl = await snapshot.ref.getDownloadURL();
 
-  //     // Save image link to Firestore
-  //     await FirebaseFirestore.instance.collection('users').add({
-  //       'photoUrl': downloadUrl,
-  //       'uploadedAt': Timestamp.now(),
-  //     });
+      // Save image link to Firestore
+      await FirebaseFirestore.instance.collection('users').add({
+        'photoUrl': downloadUrl,
+        'uploadedAt': Timestamp.now(),
+      });
 
-  //     print('File uploaded and URL saved to Firestore');
-  //     } catch(e) {
-  //       print('Error uploading image: $e ');
-  //     }
-  //   }
+      print('File uploaded and URL saved to Firestore');
+      } catch(e) {
+        print('Error uploading image: $e ');
+      }
+    }
   
-
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -84,27 +83,26 @@ class _UploadPhotoState extends State<uploadPhoto> {
             ),
           ),
           const SizedBox(height: 10),
-          Stack(
-            children: [
-              Container(
-                width: double.infinity,
-                height: 205,
-                color: Colors.grey[300],
-                child: _imageFile == null 
-                ? Icon(
-                  Icons.camera_alt,
-                  size: 50,
-                  color: Colors.grey[700],
-                ) : Image.file(
-                  _imageFile!,
-                  width: double.infinity,
-                  height: 205,
-                  fit: BoxFit.cover,
-                ),
+          if (_imageFile != null) 
+            Container(
+              width: double.infinity,
+              color: Colors.grey[300],
+              child: Image.file(
+                _imageFile!,
+                fit: BoxFit.cover,
               ),
-            ],
-          ),
+            ),
           if (_imageFile == null)
+          Container(
+            width: double.infinity,
+            height: 205,
+            color: Colors.grey[300],
+            child: Icon(
+              Icons.camera_alt,
+              size: 50,
+              color: Colors.grey[700],
+            ),
+          ),
             GestureDetector(
               onTap: _pickImageFromGallery,
               child: IntrinsicWidth(
@@ -129,7 +127,32 @@ class _UploadPhotoState extends State<uploadPhoto> {
                   ),
                 ),
               ),
-            )
+            ),
+            GestureDetector(
+              onTap: _pickImageFromCamera,
+              child: IntrinsicWidth(
+                child: Padding(
+                  padding: const EdgeInsets.only(top: 20),
+                  child: Container(
+                    padding: const EdgeInsets.symmetric(
+                      vertical: 10,
+                      horizontal: 30,
+                    ),
+                    decoration: BoxDecoration(
+                      border: Border.all(
+                        color: Colors.black,
+                      ),
+                      borderRadius: BorderRadius.circular(10),
+                    ),
+                    child: const Center(
+                      child: Text(
+                        'Ambil Foto melalui Kamera'
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+            ),
         ],
       ),
     );
