@@ -185,9 +185,7 @@ class ThirdScreen extends StatelessWidget {
           context,
           PageRouteBuilder(
               pageBuilder: (context, animation, secondaryAnimation) =>
-                  LoginScreen(
-                    hasLogOut: false,
-                  ),
+                  LoginScreen(hasLogOut: false),
               transitionsBuilder:
                   (context, animation, secondaryAnimation, child) {
                 const begin = Offset(1.0, 0.0);
