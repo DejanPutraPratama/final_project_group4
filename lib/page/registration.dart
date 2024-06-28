@@ -565,9 +565,9 @@ class _NextRegistrationState extends State<NextRegistration> {
                 CustomButton(
                   label: "Register",
                   onPressed: () async {
-                        if (_password.text == _confirmPassword.text) {
-                          await _signup(widget.regisInfo);
-                        }
+                    if (_password.text == _confirmPassword.text) {
+                      await _signup(widget.regisInfo);
+                    }
                   },
                 ),
               ],
@@ -587,6 +587,7 @@ class _NextRegistrationState extends State<NextRegistration> {
       final userInfo = FirebaseAuth.instance.currentUser;
       Map<String, dynamic> newUserData = {
         'id': userInfo!.uid,
+        'profilePhotoUrl': null,
         'fullName': regisInfo.fullName,
         'birthdate': regisInfo.birthDate,
         'mobileNumber': regisInfo.mobileNumber,
