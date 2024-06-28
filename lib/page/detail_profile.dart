@@ -25,6 +25,7 @@ class DetailProfile extends StatefulWidget {
 
 class _DetailProfileState extends State<DetailProfile> {
   Database database = Database();
+  String? profilePhotoUrl;
   TextEditingController namecontroller = TextEditingController();
   TextEditingController daycontroller = TextEditingController();
   TextEditingController monthcontroller = TextEditingController();
@@ -71,6 +72,7 @@ class _DetailProfileState extends State<DetailProfile> {
       builder: (context, snapshot) {
         if (snapshot.hasData) {
           userData = snapshot.data;
+          profilePhotoUrl = userData['profilePhotoUrl'];
           namecontroller.text = userData['fullName'];
           DateTime birthdate = DateTime.parse(userData['birthdate']);
           newBirthDate = userData['birthdate'];
@@ -92,7 +94,8 @@ class _DetailProfileState extends State<DetailProfile> {
                           'Yes, I do',
                           'No, delete it',
                           await database.updateUser(widget.userId, {
-                            'fullName': namecontroller.text,
+                            'profilePhotoUrl'
+                                'fullName': namecontroller.text,
                             'birthdate': newBirthDate,
                             'gender': selectedGender,
                             'mobileNumber': mobilecontroller.text,
@@ -137,8 +140,7 @@ class _DetailProfileState extends State<DetailProfile> {
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.spaceAround,
                         children: [
-                          haveImage(
-                              'https://1.bp.blogspot.com/-8XJ_-WfmIvI/VE8xSs1ZwzI/AAAAAAAABt0/bOgv9sX_6EI/s1600/Gambar%2BTopeng%2BTradisional%2BBali%2BWanita%2BSeni%2BBudaya%2BIndonesia.jpg'),
+                          haveImage(profilePhotoUrl),
                           Icon(
                             Icons.arrow_forward_rounded,
                             size: 50,
@@ -426,7 +428,17 @@ class _DetailProfileState extends State<DetailProfile> {
                             shape: RoundedRectangleBorder(
                                 borderRadius: BorderRadius.circular(10))),
                         onPressed: () async {
+                          String fileName = 'users/${widget.userId}.png';
+                          Reference storageReference =
+                              FirebaseStorage.instance.ref().child(fileName);
+                          UploadTask uploadTask =
+                              storageReference.putFile(File(theImage!.path));
+                          TaskSnapshot snapshot = await uploadTask;
+                          String downloadUrl =
+                              await snapshot.ref.getDownloadURL();
+                          profilePhotoUrl = downloadUrl;
                           await database.updateUser(widget.userId, {
+                            'profilePhotoUrl': profilePhotoUrl,
                             'fullName': namecontroller.text,
                             'birthdate': newBirthDate,
                             'gender': selectedGender,
@@ -474,15 +486,23 @@ class _DetailProfileState extends State<DetailProfile> {
     }
   }
 
-  Widget haveImage(String imageSrc) {
-    return ClipRRect(
-      borderRadius: BorderRadius.circular(50),
-      child: Image.network(
-        imageSrc,
-        width: 100,
-        height: 100,
-        fit: BoxFit.cover,
-      ),
-    );
+  Widget haveImage(String? imageSrc) {
+    if (imageSrc != null) {
+      return ClipRRect(
+        borderRadius: BorderRadius.circular(50),
+        child: Image.network(
+          imageSrc,
+          width: 100,
+          height: 100,
+          fit: BoxFit.cover,
+        ),
+      );
+    } else {
+      return const CircleAvatar(
+        radius: 50,
+        backgroundColor: Colors.grey,
+        child: Icon(Icons.camera_alt),
+      );
+    }
   }
 }

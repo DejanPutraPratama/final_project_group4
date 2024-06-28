@@ -96,12 +96,7 @@ class _ProfilePageState extends State<ProfilePage> {
                               height: 250,
                               child: Row(
                                 children: [
-                                  const CircleAvatar(
-                                    backgroundColor: Colors.grey,
-                                    foregroundColor: Colors.black,
-                                    radius: 35,
-                                    child: Icon(Icons.camera_enhance),
-                                  ),
+                                  haveImage(userData['profilePhotoUrl']),
                                   const SizedBox(
                                     width: 10,
                                   ),
@@ -110,7 +105,7 @@ class _ProfilePageState extends State<ProfilePage> {
                                         CrossAxisAlignment.start,
                                     mainAxisSize: MainAxisSize.min,
                                     children: [
-                                      Text(snapshot.data['fullName'],
+                                      Text(userData['fullName'],
                                           style: GoogleFonts.getFont(
                                             'Poppins',
                                             textStyle: TextStyle(
@@ -228,6 +223,26 @@ class _ProfilePageState extends State<ProfilePage> {
             );
           }
         });
+  }
+
+  Widget haveImage(String? imageSrc) {
+    if (imageSrc != null) {
+      return ClipRRect(
+        borderRadius: BorderRadius.circular(50),
+        child: Image.network(
+          imageSrc,
+          width: 100,
+          height: 100,
+          fit: BoxFit.cover,
+        ),
+      );
+    } else {
+      return const CircleAvatar(
+        radius: 50,
+        backgroundColor: Colors.grey,
+        child: Icon(Icons.camera_alt),
+      );
+    }
   }
 
   Widget optionList(
