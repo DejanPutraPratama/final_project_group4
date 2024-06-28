@@ -35,7 +35,7 @@ class FirstScreen extends StatelessWidget {
         );
       },
       child: Scaffold(
-        backgroundColor: Color(0xFFEAF0DF),
+        backgroundColor: const Color(0xFFEAF0DF),
         body: Stack(
           children: [
             const Positioned(
@@ -118,7 +118,7 @@ class SecondScreen extends StatelessWidget {
         );
       },
       child: Scaffold(
-        backgroundColor: Color(0xFFEAF0DF),
+        backgroundColor: const Color(0xFFEAF0DF),
         body: Stack(
           children: [
             const Positioned(
@@ -201,7 +201,7 @@ class ThirdScreen extends StatelessWidget {
         );
       },
       child: Scaffold(
-        backgroundColor: Color(0xFFEAF0DF),
+        backgroundColor: const Color(0xFFEAF0DF),
         body: Stack(
           children: [
             const Positioned(
@@ -315,7 +315,7 @@ class _SplashScreenState extends State<SplashScreen>
         ),
       ),
       backgroundColor:
-          Color(0xFFEAF0DF), // Warna latar belakang sesuai dengan gambar
+          const Color(0xFFEAF0DF), // Warna latar belakang sesuai dengan gambar
     );
   }
 }

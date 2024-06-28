@@ -1,13 +1,10 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:final_project_group4/controller/database.dart';
-import 'package:final_project_group4/model/userModel.dart';
 import 'package:final_project_group4/navbar/navbar_controller.dart';
 import 'package:final_project_group4/page/Donatepage.dart';
 import 'package:final_project_group4/services/UserPointService.dart';
 import 'package:final_project_group4/utils/custom_colors.dart';
 import 'package:final_project_group4/widget/custom_widgets.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -221,7 +218,9 @@ class _HomePageState extends State<HomePage> {
                                           context,
                                           MaterialPageRoute(
                                               builder: (context) =>
-                                                  DonateScreen()));
+                                                  DonateScreen(
+                                                    haveNavbar: true,
+                                                  )));
                                     },
                                     style: ElevatedButton.styleFrom(
                                         padding: const EdgeInsets.symmetric(
@@ -383,7 +382,8 @@ class _HomePageState extends State<HomePage> {
             ),
           );
         } else {
-          return Scaffold(body: Center(child: CircularProgressIndicator()));
+          return const Scaffold(
+              body: Center(child: CircularProgressIndicator()));
         }
       },
     );

@@ -3,7 +3,6 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
@@ -15,7 +14,7 @@ class uploadPhoto extends StatefulWidget {
     required this.onFileChanged,
   });
 
-  @override 
+  @override
   State<uploadPhoto> createState() => _UploadPhotoState();
 }
 
@@ -44,13 +43,15 @@ class _UploadPhotoState extends State<uploadPhoto> {
       await _uploadImageToFirebase();
     }
   }
-  
+
   Future<void> _uploadImageToFirebase() async {
     if (_imageFile == null) return;
 
     try {
-      String fileName = 'photo/${DateTime.now().millisecondsSinceEpoch.toString()}.png';
-      Reference storageReference = FirebaseStorage.instance.ref().child(fileName);
+      String fileName =
+          'photo/${DateTime.now().millisecondsSinceEpoch.toString()}.png';
+      Reference storageReference =
+          FirebaseStorage.instance.ref().child(fileName);
       UploadTask uploadTask = storageReference.putFile(_imageFile!);
       TaskSnapshot snapshot = await uploadTask;
       String downloadUrl = await snapshot.ref.getDownloadURL();
@@ -62,11 +63,11 @@ class _UploadPhotoState extends State<uploadPhoto> {
       });
 
       print('File uploaded and URL saved to Firestore');
-      } catch(e) {
-        print('Error uploading image: $e ');
-      }
+    } catch (e) {
+      print('Error uploading image: $e ');
     }
-  
+  }
+
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -77,13 +78,10 @@ class _UploadPhotoState extends State<uploadPhoto> {
         children: [
           const Text(
             'Upload Photo',
-            style: TextStyle(
-              fontWeight: FontWeight.bold,
-              fontSize: 15
-            ),
+            style: TextStyle(fontWeight: FontWeight.bold, fontSize: 15),
           ),
           const SizedBox(height: 10),
-          if (_imageFile != null) 
+          if (_imageFile != null)
             Container(
               width: double.infinity,
               color: Colors.grey[300],
@@ -93,66 +91,62 @@ class _UploadPhotoState extends State<uploadPhoto> {
               ),
             ),
           if (_imageFile == null)
-          Container(
-            width: double.infinity,
-            height: 205,
-            color: Colors.grey[300],
-            child: Icon(
-              Icons.camera_alt,
-              size: 50,
-              color: Colors.grey[700],
+            Container(
+              width: double.infinity,
+              height: 205,
+              color: Colors.grey[300],
+              child: Icon(
+                Icons.camera_alt,
+                size: 50,
+                color: Colors.grey[700],
+              ),
+            ),
+          GestureDetector(
+            onTap: _pickImageFromGallery,
+            child: IntrinsicWidth(
+              child: Padding(
+                padding: const EdgeInsets.only(top: 20),
+                child: Container(
+                  padding: const EdgeInsets.symmetric(
+                    vertical: 10,
+                    horizontal: 30,
+                  ),
+                  decoration: BoxDecoration(
+                    border: Border.all(
+                      color: Colors.black,
+                    ),
+                    borderRadius: BorderRadius.circular(10),
+                  ),
+                  child: const Center(
+                    child: Text('Pilih di Galeri'),
+                  ),
+                ),
+              ),
             ),
           ),
-            GestureDetector(
-              onTap: _pickImageFromGallery,
-              child: IntrinsicWidth(
-                child: Padding(
-                  padding: const EdgeInsets.only(top: 20),
-                  child: Container(
-                    padding: const EdgeInsets.symmetric(
-                      vertical: 10,
-                      horizontal: 30,
+          GestureDetector(
+            onTap: _pickImageFromCamera,
+            child: IntrinsicWidth(
+              child: Padding(
+                padding: const EdgeInsets.only(top: 20),
+                child: Container(
+                  padding: const EdgeInsets.symmetric(
+                    vertical: 10,
+                    horizontal: 30,
+                  ),
+                  decoration: BoxDecoration(
+                    border: Border.all(
+                      color: Colors.black,
                     ),
-                    decoration: BoxDecoration(
-                      border: Border.all(
-                        color: Colors.black,
-                      ),
-                      borderRadius: BorderRadius.circular(10),
-                    ),
-                    child: const Center(
-                      child: Text(
-                        'Pilih di Galeri'
-                      ),
-                    ),
+                    borderRadius: BorderRadius.circular(10),
+                  ),
+                  child: const Center(
+                    child: Text('Ambil Foto melalui Kamera'),
                   ),
                 ),
               ),
             ),
-            GestureDetector(
-              onTap: _pickImageFromCamera,
-              child: IntrinsicWidth(
-                child: Padding(
-                  padding: const EdgeInsets.only(top: 20),
-                  child: Container(
-                    padding: const EdgeInsets.symmetric(
-                      vertical: 10,
-                      horizontal: 30,
-                    ),
-                    decoration: BoxDecoration(
-                      border: Border.all(
-                        color: Colors.black,
-                      ),
-                      borderRadius: BorderRadius.circular(10),
-                    ),
-                    child: const Center(
-                      child: Text(
-                        'Ambil Foto melalui Kamera'
-                      ),
-                    ),
-                  ),
-                ),
-              ),
-            ),
+          ),
         ],
       ),
     );

@@ -114,7 +114,7 @@ class _RedeemPageState extends State<RedeemPage> {
                       ),
                       textAlign: TextAlign.center,
                     ),
-                    SizedBox(height: 10),
+                    const SizedBox(height: 10),
                     StreamBuilder<QuerySnapshot>(
                       stream: FirebaseFirestore.instance
                           .collection('ewallets')
@@ -136,7 +136,7 @@ class _RedeemPageState extends State<RedeemPage> {
                         return SizedBox(
                           height: 300,
                           child: ListView.builder(
-                            physics: NeverScrollableScrollPhysics(),
+                            physics: const NeverScrollableScrollPhysics(),
                             shrinkWrap: true,
                             itemCount: ewallets.length,
                             itemBuilder: (context, index) {
@@ -145,8 +145,8 @@ class _RedeemPageState extends State<RedeemPage> {
                                 height: 75,
                                 child: Center(
                                   child: ListTile(
-                                    contentPadding:
-                                        EdgeInsets.symmetric(horizontal: 10),
+                                    contentPadding: const EdgeInsets.symmetric(
+                                        horizontal: 10),
                                     leading: Image.network(
                                       ewallet.imageUrl,
                                       width: 40,
@@ -160,7 +160,7 @@ class _RedeemPageState extends State<RedeemPage> {
                                         ),
                                       ),
                                     ),
-                                    trailing: Icon(Icons.arrow_forward),
+                                    trailing: const Icon(Icons.arrow_forward),
                                     onTap: () {
                                       navbarController.hideBottomNav();
                                       Navigator.push(
@@ -185,7 +185,7 @@ class _RedeemPageState extends State<RedeemPage> {
                   ],
                 ),
               ),
-              SizedBox(
+              const SizedBox(
                 height: 100,
               )
             ],
@@ -203,7 +203,7 @@ class _RedeemPageState extends State<RedeemPage> {
         color: Colors.grey[300],
         borderRadius: BorderRadius.circular(10),
       ),
-      padding: EdgeInsets.all(10),
+      padding: const EdgeInsets.all(10),
       child: child,
     );
   }

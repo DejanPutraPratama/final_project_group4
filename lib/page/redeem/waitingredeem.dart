@@ -4,10 +4,10 @@ import 'package:final_project_group4/page/redeem/redeemsuccess.dart';
 class WaitingRedeem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    Future.delayed(Duration(seconds: 5), () {
+    Future.delayed(const Duration(seconds: 5), () {
       Navigator.push(
         context,
-        MaterialPageRoute(builder: (context) => RedeemSuccessPage()),
+        MaterialPageRoute(builder: (context) => const RedeemSuccessPage()),
       );
     });
 

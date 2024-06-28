@@ -1,23 +1,30 @@
-import 'package:firebase_auth/firebase_auth.dart';
+import 'package:final_project_group4/navbar/navbar_navigation.dart';
 import 'package:flutter/material.dart';
 import 'package:final_project_group4/page/history.dart';
 
 class DonateSuccessPage extends StatelessWidget {
-  const DonateSuccessPage({super.key});
+  bool haveNavbar;
+  DonateSuccessPage({super.key, required this.haveNavbar});
 
   @override
   Widget build(BuildContext context) {
-    final userInfo = FirebaseAuth.instance.currentUser;
     return Scaffold(
       backgroundColor: const Color(0xFFE6F0DC),
       appBar: null,
       body: GestureDetector(
         onTap: () {
-          Navigator.push(
-            context,
-            MaterialPageRoute(
-                builder: (context) => HistoryScreen()),
-          );
+          if (haveNavbar == true) {
+            Navigator.pushAndRemoveUntil(
+                context,
+                MaterialPageRoute(builder: (context) => HistoryScreen()),
+                (Route<dynamic> route) => route.isFirst);
+          } else {
+            Navigator.pushAndRemoveUntil(
+                context,
+                MaterialPageRoute(
+                    builder: (context) => const NavbarNavigation()),
+                (Route<dynamic> route) => route.isFirst);
+          }
         },
         child: const Center(
           child: Column(
@@ -33,7 +40,7 @@ class DonateSuccessPage extends StatelessWidget {
                 'Process completed',
                 style: TextStyle(
                   fontSize: 24,
-                  color: Color(0xFF5E3023), 
+                  color: Color(0xFF5E3023),
                 ),
               ),
               SizedBox(height: 20),

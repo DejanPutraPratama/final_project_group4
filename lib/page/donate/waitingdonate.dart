@@ -2,12 +2,19 @@ import 'package:flutter/material.dart';
 import 'package:final_project_group4/page/donate/donatesuccess.dart';
 
 class WaitingDonate extends StatelessWidget {
+  bool haveNavbar;
+
+  WaitingDonate({super.key, required this.haveNavbar});
+
   @override
   Widget build(BuildContext context) {
     Future.delayed(const Duration(seconds: 5), () {
       Navigator.push(
         context,
-        MaterialPageRoute(builder: (context) => const DonateSuccessPage()),
+        MaterialPageRoute(
+            builder: (context) => DonateSuccessPage(
+                  haveNavbar: haveNavbar,
+                )),
       );
     });
 

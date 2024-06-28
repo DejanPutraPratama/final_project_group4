@@ -15,7 +15,7 @@ class _HistoryScreenState extends State<HistoryScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-          leading: GestureDetector(
+        leading: GestureDetector(
           onTap: () {
             navbarController.showBottomNav();
             Navigator.pop(context);
@@ -26,45 +26,45 @@ class _HistoryScreenState extends State<HistoryScreen> {
         centerTitle: true,
       ),
       body: Column(
-          children: [
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              children: [
-                TextButton(
-                  onPressed: () {
-                    setState(() {
-                      showWaste = true;
-                    });
-                  }, 
-                  child: Text(
-                    'Waste',
-                    style: TextStyle(
-                      color: showWaste ? Colors.green : Colors.black,
-                      fontWeight: FontWeight.bold,
-                    ),
+        children: [
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            children: [
+              TextButton(
+                onPressed: () {
+                  setState(() {
+                    showWaste = true;
+                  });
+                },
+                child: Text(
+                  'Waste',
+                  style: TextStyle(
+                    color: showWaste ? Colors.green : Colors.black,
+                    fontWeight: FontWeight.bold,
                   ),
                 ),
-                TextButton(
-                  onPressed: () {
-                    setState(() {
-                      showWaste = false;
-                    });
-                  }, 
-                  child: Text(
-                    'Redeem',
-                    style: TextStyle(
-                      color: showWaste ? Colors.black : Colors.green,
-                      fontWeight: FontWeight.bold,
-                    ),
+              ),
+              TextButton(
+                onPressed: () {
+                  setState(() {
+                    showWaste = false;
+                  });
+                },
+                child: Text(
+                  'Redeem',
+                  style: TextStyle(
+                    color: showWaste ? Colors.black : Colors.green,
+                    fontWeight: FontWeight.bold,
                   ),
                 ),
-              ],
-            ),
-            Expanded(
-              child: showWaste ? WasteList() : RedeemList(),
-            ),
-          ],
-        ),
+              ),
+            ],
+          ),
+          Expanded(
+            child: showWaste ? WasteList() : RedeemList(),
+          ),
+        ],
+      ),
       backgroundColor: Colors.white,
     );
   }
@@ -75,19 +75,19 @@ class WasteList extends StatelessWidget {
   Widget build(BuildContext context) {
     return ListView(
       children: [
-        ListTile(
+        const ListTile(
           leading: Icon(Icons.delete, color: Colors.green),
           title: Text('Plastic - 1 kg'),
           subtitle: Text('31 Mei 2024 - TPA Rawa Kucing'),
           trailing: Text('Accepted', style: TextStyle(color: Colors.green)),
         ),
-        ListTile(
+        const ListTile(
           leading: Icon(Icons.delete, color: Colors.green),
           title: Text('Plastic - 2 kg'),
           subtitle: Text('11 Mei 2024 - TPA Rawa Kucing'),
           trailing: Text('Rejected', style: TextStyle(color: Colors.red)),
         ),
-        ListTile(
+        const ListTile(
           leading: Icon(Icons.delete, color: Colors.green),
           title: Text('Plastic - 2 kg'),
           subtitle: Text('1 Mei 2024 - TPA Rawa Kucing'),
@@ -103,19 +103,19 @@ class RedeemList extends StatelessWidget {
   Widget build(BuildContext context) {
     return ListView(
       children: [
-        ListTile(
+        const ListTile(
           leading: Icon(Icons.card_giftcard, color: Colors.green),
           title: Text('Voucher - 10 points'),
           subtitle: Text('Redeemed on 20 Mei 2024'),
           trailing: Text('Completed', style: TextStyle(color: Colors.green)),
         ),
-        ListTile(
+        const ListTile(
           leading: Icon(Icons.card_giftcard, color: Colors.green),
           title: Text('Gift Card - 20 points'),
           subtitle: Text('Redeemed on 15 Mei 2024'),
           trailing: Text('Completed', style: TextStyle(color: Colors.green)),
         ),
-        ListTile(
+        const ListTile(
           leading: Icon(Icons.card_giftcard, color: Colors.green),
           title: Text('Coupon - 5 points'),
           subtitle: Text('Redeemed on 5 Mei 2024'),

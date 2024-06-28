@@ -146,19 +146,19 @@ class _RedeemPaymentPageState extends State<RedeemPaymentPage> {
                         ),
                       ],
                     ),
-                    SizedBox(height: 20),
-                    Divider(height: 1, thickness: 1, color: Colors.grey),
-                    SizedBox(height: 20),
+                    const SizedBox(height: 20),
+                    const Divider(height: 1, thickness: 1, color: Colors.grey),
+                    const SizedBox(height: 20),
                     Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 20),
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Text(
+                          const Text(
                             'Phone Number',
                             style: TextStyle(fontSize: 16),
                           ),
-                          SizedBox(height: 8),
+                          const SizedBox(height: 8),
                           TextField(
                             controller: _phoneNumberController,
                             decoration: InputDecoration(
@@ -177,17 +177,17 @@ class _RedeemPaymentPageState extends State<RedeemPaymentPage> {
                         ],
                       ),
                     ),
-                    SizedBox(height: 20),
+                    const SizedBox(height: 20),
                     Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 20),
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Text(
+                          const Text(
                             'Amount',
                             style: TextStyle(fontSize: 16),
                           ),
-                          SizedBox(height: 8),
+                          const SizedBox(height: 8),
                           TextField(
                             controller: _amountController,
                             decoration: InputDecoration(
@@ -206,7 +206,7 @@ class _RedeemPaymentPageState extends State<RedeemPaymentPage> {
                         ],
                       ),
                     ),
-                    SizedBox(height: 20),
+                    const SizedBox(height: 20),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
@@ -226,7 +226,7 @@ class _RedeemPaymentPageState extends State<RedeemPaymentPage> {
                         ),
                       ],
                     ),
-                    SizedBox(height: 40),
+                    const SizedBox(height: 40),
                     ElevatedButton(
                       onPressed: _isButtonEnabled ? _redeemPoints : null,
                       style: ElevatedButton.styleFrom(
@@ -241,10 +241,10 @@ class _RedeemPaymentPageState extends State<RedeemPaymentPage> {
                       ),
                     ),
                     if (_errorMessage != null) ...[
-                      SizedBox(height: 20),
+                      const SizedBox(height: 20),
                       Text(
                         _errorMessage!,
-                        style: TextStyle(color: Colors.red),
+                        style: const TextStyle(color: Colors.red),
                       ),
                     ],
                   ],

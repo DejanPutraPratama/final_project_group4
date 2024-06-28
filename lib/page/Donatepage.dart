@@ -1,22 +1,20 @@
 import 'dart:io';
-import 'package:final_project_group4/navbar/navbar.dart';
-import 'package:final_project_group4/navbar/navbar_navigation.dart';
 import 'package:final_project_group4/widget/button.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:google_fonts/google_fonts.dart';
-import 'package:image_picker/image_picker.dart';
 import 'package:get/get.dart';
 import 'package:final_project_group4/model/donateData.dart';
 import 'package:final_project_group4/model/photo.dart';
-import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_storage/firebase_storage.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:final_project_group4/navbar/navbar_controller.dart';
 import 'package:final_project_group4/page/donate/waitingdonate.dart';
 
 class DonateScreen extends StatefulWidget {
+  bool haveNavbar;
+
+  DonateScreen({super.key, required this.haveNavbar});
+
   @override
   _DonateScreenState createState() => _DonateScreenState();
 }
@@ -48,7 +46,7 @@ class _DonateScreenState extends State<DonateScreen> {
   //   await donateData.createData(donate);
   // }
 
-    Future<String?> _uploadImageToFirebase() async {
+  Future<String?> _uploadImageToFirebase() async {
     if (selectedImage == null) return null;
 
     try {
@@ -61,10 +59,10 @@ class _DonateScreenState extends State<DonateScreen> {
       String downloadUrl = await snapshot.ref.getDownloadURL();
       return downloadUrl;
     } catch (e) {
-        print('Error uploading image: $e ');
-        return null;
-      }
+      print('Error uploading image: $e ');
+      return null;
     }
+  }
 
   Future<void> addDonation({
     required String? selectedLandfill,
@@ -90,8 +88,8 @@ class _DonateScreenState extends State<DonateScreen> {
       String? imageUrl = await _uploadImageToFirebase();
       if (imageUrl == null) {
         Get.snackbar("Error", "Failed to upload image. Try again.",
-          snackPosition: SnackPosition.TOP,
-          backgroundColor: Colors.redAccent.withOpacity(0.1),
+            snackPosition: SnackPosition.TOP,
+            backgroundColor: Colors.redAccent.withOpacity(0.1),
             colorText: Colors.red);
         return;
       }
@@ -104,21 +102,23 @@ class _DonateScreenState extends State<DonateScreen> {
         'UploadedAt': Timestamp.now(),
       }).whenComplete(() {
         Get.snackbar(
-          "Success", 
+          "Success",
           "Your data has been created.",
           snackPosition: SnackPosition.TOP,
           backgroundColor: Colors.green.withOpacity(0.1),
           colorText: Colors.green,
         );
         Navigator.push(
-          context, 
+          context,
           MaterialPageRoute(
-            builder: (context) => WaitingDonate(),
+            builder: (context) => WaitingDonate(
+              haveNavbar: widget.haveNavbar,
+            ),
           ),
         );
       }).catchError((error, StackTrace) {
         Get.snackbar(
-          "Error", 
+          "Error",
           "Something went wrong. Try again.",
           snackPosition: SnackPosition.TOP,
           backgroundColor: Colors.redAccent.withOpacity(0.1),
@@ -130,7 +130,7 @@ class _DonateScreenState extends State<DonateScreen> {
     } catch (e) {
       print(e);
       Get.snackbar(
-        "Error", 
+        "Error",
         "An unexpected error occured. Try again",
         snackPosition: SnackPosition.TOP,
         backgroundColor: Colors.redAccent.withOpacity(0.1),

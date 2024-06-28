@@ -1,7 +1,6 @@
 import 'package:final_project_group4/controller/database.dart';
 import 'package:final_project_group4/navbar/navbar_controller.dart';
 import 'package:final_project_group4/page/detail_profile.dart';
-import 'package:final_project_group4/page/home_page.dart';
 import 'package:final_project_group4/page/login.dart';
 import 'package:final_project_group4/services/UserPointService.dart';
 import 'package:final_project_group4/utils/custom_colors.dart';
@@ -216,7 +215,7 @@ class _ProfilePageState extends State<ProfilePage> {
               ),
             );
           } else {
-            return Scaffold(
+            return const Scaffold(
               body: Center(
                 child: CircularProgressIndicator(),
               ),

@@ -1,9 +1,8 @@
 import 'package:final_project_group4/navbar/navbar.dart';
 import 'package:final_project_group4/navbar/navbar_controller.dart';
 import 'package:final_project_group4/navbar/navbar_model.dart';
-import 'package:final_project_group4/navbar/tab_page.dart';
 import 'package:final_project_group4/page/Donatepage.dart';
-import 'package:final_project_group4/page/detail_profile.dart';
+import 'package:final_project_group4/page/history.dart';
 import 'package:final_project_group4/page/home_page.dart';
 import 'package:final_project_group4/page/profile_page.dart';
 import 'package:final_project_group4/page/redeem/redeem.dart';
@@ -13,7 +12,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 class NavbarNavigation extends StatefulWidget {
-  NavbarNavigation({super.key});
+  const NavbarNavigation({super.key});
   @override
   State<NavbarNavigation> createState() => _NavbarNavigationState();
 }
@@ -40,11 +39,7 @@ class _NavbarNavigationState extends State<NavbarNavigation> {
           navkey: homeNavKey),
       NavbarModel(
           page: RedeemPage(userId: userInfo!.uid), navkey: redeemNavKey),
-      NavbarModel(
-          page: const TabPage(
-            tab: 3,
-          ),
-          navkey: historyNavKey),
+      NavbarModel(page: HistoryScreen(), navkey: historyNavKey),
       NavbarModel(
           page: ProfilePage(userId: userInfo!.uid), navkey: profileNavKey),
     ];
@@ -94,7 +89,7 @@ class _NavbarNavigationState extends State<NavbarNavigation> {
                   }
                 },
               )
-            : SizedBox.shrink()),
+            : const SizedBox.shrink()),
         floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
         floatingActionButton: Obx(
           () => navbarController.isBottomNavVisible.value
@@ -108,7 +103,9 @@ class _NavbarNavigationState extends State<NavbarNavigation> {
                       Navigator.push(
                           context,
                           MaterialPageRoute(
-                              builder: (context) => DonateScreen()));
+                              builder: (context) => DonateScreen(
+                                    haveNavbar: false,
+                                  )));
                     },
                     shape: const CircleBorder(
                         side: BorderSide(width: 0, color: Colors.green)),
@@ -123,7 +120,7 @@ class _NavbarNavigationState extends State<NavbarNavigation> {
                     ),
                   ),
                 )
-              : SizedBox.shrink(),
+              : const SizedBox.shrink(),
         ),
       ),
     );

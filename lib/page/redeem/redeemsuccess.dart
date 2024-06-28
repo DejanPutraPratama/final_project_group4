@@ -2,7 +2,6 @@ import 'package:final_project_group4/navbar/navbar_controller.dart';
 import 'package:final_project_group4/page/redeem/redeem.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:final_project_group4/page/home_page.dart';
 import 'package:get/get.dart';
 
 class RedeemSuccessPage extends StatelessWidget {
@@ -13,7 +12,7 @@ class RedeemSuccessPage extends StatelessWidget {
     final userInfo = FirebaseAuth.instance.currentUser;
     final NavbarController navbarController = Get.find<NavbarController>();
     return Scaffold(
-      backgroundColor: Color(0xFFE6F0DC),
+      backgroundColor: const Color(0xFFE6F0DC),
       appBar: null,
       body: GestureDetector(
         onTap: () {

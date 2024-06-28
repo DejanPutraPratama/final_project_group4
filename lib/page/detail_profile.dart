@@ -1,19 +1,15 @@
 import 'dart:io';
 import 'package:final_project_group4/controller/database.dart';
 import 'package:final_project_group4/navbar/navbar_controller.dart';
-import 'package:final_project_group4/navbar/navbar_navigation.dart';
-import 'package:final_project_group4/page/profile_page.dart';
 import 'package:final_project_group4/utils/custom_colors.dart';
 import 'package:final_project_group4/widget/custom_widgets.dart';
 import 'package:final_project_group4/widget/popup_dialog.dart';
 import 'package:firebase_storage/firebase_storage.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:date_picker_plus/date_picker_plus.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:intl/intl.dart';
 
 class DetailProfile extends StatefulWidget {
   String userId;
@@ -134,14 +130,14 @@ class _DetailProfileState extends State<DetailProfile> {
                 padding: const EdgeInsets.all(25.0),
                 child: Column(
                   children: [
-                    Text('Edit Foto Profile'),
+                    const Text('Edit Foto Profile'),
                     Padding(
                       padding: const EdgeInsets.fromLTRB(0, 10, 0, 20),
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.spaceAround,
                         children: [
                           haveImage(profilePhotoUrl),
-                          Icon(
+                          const Icon(
                             Icons.arrow_forward_rounded,
                             size: 50,
                             color: Colors.grey,
@@ -428,24 +424,36 @@ class _DetailProfileState extends State<DetailProfile> {
                             shape: RoundedRectangleBorder(
                                 borderRadius: BorderRadius.circular(10))),
                         onPressed: () async {
-                          String fileName = 'users/${widget.userId}.png';
-                          Reference storageReference =
-                              FirebaseStorage.instance.ref().child(fileName);
-                          UploadTask uploadTask =
-                              storageReference.putFile(File(theImage!.path));
-                          TaskSnapshot snapshot = await uploadTask;
-                          String downloadUrl =
-                              await snapshot.ref.getDownloadURL();
-                          profilePhotoUrl = downloadUrl;
-                          await database.updateUser(widget.userId, {
-                            'profilePhotoUrl': profilePhotoUrl,
-                            'fullName': namecontroller.text,
-                            'birthdate': newBirthDate,
-                            'gender': selectedGender,
-                            'mobileNumber': mobilecontroller.text,
-                            'address': addresscontroller.text,
-                            'city': selectedCity,
-                          });
+                          if (theImage != null) {
+                            String fileName = 'users/${widget.userId}.png';
+                            Reference storageReference =
+                                FirebaseStorage.instance.ref().child(fileName);
+                            UploadTask uploadTask =
+                                storageReference.putFile(File(theImage!.path));
+                            TaskSnapshot snapshot = await uploadTask;
+                            String downloadUrl =
+                                await snapshot.ref.getDownloadURL();
+                            profilePhotoUrl = downloadUrl;
+                            await database.updateUser(widget.userId, {
+                              'profilePhotoUrl': profilePhotoUrl,
+                              'fullName': namecontroller.text,
+                              'birthdate': newBirthDate,
+                              'gender': selectedGender,
+                              'mobileNumber': mobilecontroller.text,
+                              'address': addresscontroller.text,
+                              'city': selectedCity,
+                            });
+                          } else {
+                            await database.updateUser(widget.userId, {
+                              'profilePhotoUrl': profilePhotoUrl,
+                              'fullName': namecontroller.text,
+                              'birthdate': newBirthDate,
+                              'gender': selectedGender,
+                              'mobileNumber': mobilecontroller.text,
+                              'address': addresscontroller.text,
+                              'city': selectedCity,
+                            });
+                          }
                           Navigator.pop(context);
                           navbarController.showBottomNav();
                         },
@@ -456,7 +464,7 @@ class _DetailProfileState extends State<DetailProfile> {
             ),
           );
         } else {
-          return Scaffold(
+          return const Scaffold(
             body: Center(
               child: CircularProgressIndicator(),
             ),

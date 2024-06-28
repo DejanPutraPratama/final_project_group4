@@ -47,7 +47,7 @@ class CustomWidgets {
           border: Border.all(color: Colors.black12, width: 3),
           borderRadius: BorderRadius.circular(20)),
       child: Padding(
-          padding: EdgeInsets.only(
+          padding: const EdgeInsets.only(
             top: 5,
             left: 15,
           ),
