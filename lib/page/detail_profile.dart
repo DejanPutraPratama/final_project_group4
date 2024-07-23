@@ -84,23 +84,25 @@ class _DetailProfileState extends State<DetailProfile> {
               leading: GestureDetector(
                 onTap: () async {
                   await popUpDialog(
-                          'Do you want to save the data changes first?',
-                          '',
-                          context,
-                          'Yes, I do',
-                          'No, delete it',
-                          await database.updateUser(widget.userId, {
-                            'profilePhotoUrl'
-                                'fullName': namecontroller.text,
-                            'birthdate': newBirthDate,
-                            'gender': selectedGender,
-                            'mobileNumber': mobilecontroller.text,
-                            'address': addresscontroller.text,
-                            'city': selectedCity,
-                          }))
-                      .then((_) {
+                      'Do you want to save the data changes first?',
+                      '',
+                      context,
+                      'Yes, I do',
+                      'No, delete it', () async {
+                    await database.updateUser(widget.userId, {
+                      'profilePhotoUrl': profilePhotoUrl,
+                      'fullName': namecontroller.text,
+                      'birthdate': newBirthDate,
+                      'gender': selectedGender,
+                      'mobileNumber': mobilecontroller.text,
+                      'address': addresscontroller.text,
+                      'city': selectedCity,
+                    }).then((_) {
+                      Navigator.pop(context);
+                      navbarController.showBottomNav();
+                    });
+                  }, () {
                     Navigator.pop(context);
-                    navbarController.showBottomNav();
                   });
                 },
                 child: Row(
@@ -192,7 +194,7 @@ class _DetailProfileState extends State<DetailProfile> {
                                                   minDate: DateTime(1950, 1, 1),
                                                   selectedDate: birthdate,
                                                   maxDate:
-                                                      DateTime(2018, 12, 31),
+                                                      DateTime(2024, 12, 31),
                                                 );
                                                 if (date != null) {
                                                   String day =
@@ -229,7 +231,7 @@ class _DetailProfileState extends State<DetailProfile> {
                                                   context: context,
                                                   minDate: DateTime(1950, 1, 1),
                                                   maxDate:
-                                                      DateTime(2018, 12, 31),
+                                                      DateTime(2024, 12, 31),
                                                 );
                                                 if (date != null) {
                                                   String day =
@@ -265,7 +267,7 @@ class _DetailProfileState extends State<DetailProfile> {
                                                   context: context,
                                                   minDate: DateTime(1950, 1, 1),
                                                   maxDate:
-                                                      DateTime(2018, 12, 31),
+                                                      DateTime(2024, 12, 31),
                                                 );
 
                                                 if (date != null) {

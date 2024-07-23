@@ -8,7 +8,8 @@ Future<Widget?> popUpDialog(
   BuildContext context,
   String confirmText,
   String cancelText,
-  Future? onTapYes,
+  Function()? onTapYes,
+  Function()? onTapNo,
 ) async {
   CustomColors customColors = CustomColors();
   return await showModalBottomSheet(
@@ -53,8 +54,8 @@ Future<Widget?> popUpDialog(
                               elevation: 0,
                               backgroundColor: customColors.darkGreen,
                               foregroundColor: Colors.white),
-                          onPressed: () async {
-                            await onTapYes;
+                          onPressed: () {
+                            onTapYes!();
                             Navigator.pop(context);
                           },
                           child: Text(confirmText)),
@@ -68,6 +69,7 @@ Future<Widget?> popUpDialog(
                               backgroundColor: customColors.redText,
                               foregroundColor: Colors.white),
                           onPressed: () {
+                            onTapNo!();
                             Navigator.pop(context);
                           },
                           child: Text(cancelText)),

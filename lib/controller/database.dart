@@ -8,6 +8,13 @@ class Database {
         .set(donatedetails);
   }
 
+  Future setInitialPoint(String id, Map<String, dynamic> userDetails) async {
+    return await FirebaseFirestore.instance
+        .collection('points')
+        .doc(id)
+        .set(userDetails);
+  }
+
   Future addUser(String id, Map<String, dynamic> userDetails) async {
     return await FirebaseFirestore.instance
         .collection('users')

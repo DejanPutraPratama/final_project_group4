@@ -19,4 +19,11 @@ class UserPointsService {
       return 0;
     }
   }
+
+  Future addUserPoints(String userId, Map<String, dynamic> addedPoints) async {
+    return await FirebaseFirestore.instance
+        .collection('points')
+        .doc(userId)
+        .update(addedPoints);
+  }
 }

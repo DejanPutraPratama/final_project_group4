@@ -1,7 +1,10 @@
+import 'dart:ffi';
+
 import 'package:final_project_group4/controller/database.dart';
 import 'package:final_project_group4/navbar/navbar_controller.dart';
 import 'package:final_project_group4/page/Donatepage.dart';
 import 'package:final_project_group4/services/UserPointService.dart';
+import 'package:final_project_group4/services/waste_services.dart';
 import 'package:final_project_group4/utils/custom_colors.dart';
 import 'package:final_project_group4/widget/custom_widgets.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -23,6 +26,8 @@ class _HomePageState extends State<HomePage> {
   final userInfo = FirebaseAuth.instance.currentUser;
   int _userPoints = 0;
   final UserPointsService _userPointsService = UserPointsService();
+  final WasteServices _wasteServices = WasteServices();
+  double userWastedWeight = 0;
   var userData;
 
   @override
@@ -30,6 +35,7 @@ class _HomePageState extends State<HomePage> {
     super.initState();
     _loadUserPoints();
     _loadUserData();
+    _loadWastedData();
   }
 
   Future<void> _loadUserPoints() async {
@@ -47,9 +53,16 @@ class _HomePageState extends State<HomePage> {
     });
   }
 
+  Future _loadWastedData() async {
+    await _wasteServices.getWastedWeight(widget.userId).then((value) {
+      userWastedWeight = value;
+    });
+  }
+
   Future _onPullRefresh() async {
     await _loadUserData();
     await _loadUserPoints();
+    await _loadWastedData();
   }
 
   @override
@@ -180,21 +193,26 @@ class _HomePageState extends State<HomePage> {
                                       Icons.keyboard_arrow_down_rounded),
                                   items: const [
                                     DropdownMenuItem<String>(
-                                      value: 'Jakarta',
-                                      child: Text('Jakarta'),
+                                      value: 'Bank Sampah Jakarta Utara',
+                                      child: Text('Bank Sampah Jakarta Utara'),
                                     ),
                                     DropdownMenuItem<String>(
-                                      value: 'Serang',
-                                      child: Text("Serang"),
+                                      value: 'Bank Sampah Jakarta Selatan',
+                                      child:
+                                          Text("Bank Sampah Jakarta Selatan"),
                                     ),
                                     DropdownMenuItem<String>(
-                                      value: 'Tangerang',
-                                      child: Text("Tangerang"),
+                                      value: 'Bank Sampah Jakarta Barat',
+                                      child: Text("Bank Sampah Jakarta Barat"),
                                     ),
                                     DropdownMenuItem<String>(
-                                      value: 'Yogyakarta',
-                                      child: Text("Yogyakarta"),
-                                    )
+                                      value: 'Bank Sampah Jakarta Timur',
+                                      child: Text("Bank Sampah Jakarta Timur"),
+                                    ),
+                                    DropdownMenuItem<String>(
+                                      value: 'Bank Sampah Jakarta Pusat',
+                                      child: Text("Bank Sampah Jakarta Pusat"),
+                                    ),
                                   ],
                                   onChanged: dropdownCallback),
                             ),
@@ -220,6 +238,7 @@ class _HomePageState extends State<HomePage> {
                                               builder: (context) =>
                                                   DonateScreen(
                                                     haveNavbar: true,
+                                                    landfill: selectedItem,
                                                   )));
                                     },
                                     style: ElevatedButton.styleFrom(
@@ -354,7 +373,8 @@ class _HomePageState extends State<HomePage> {
                                   RichText(
                                       text: TextSpan(children: [
                                     TextSpan(
-                                        text: '15',
+                                        text:
+                                            userWastedWeight.toStringAsFixed(0),
                                         style: GoogleFonts.getFont('Poppins',
                                             textStyle: const TextStyle(
                                                 fontSize: 36,

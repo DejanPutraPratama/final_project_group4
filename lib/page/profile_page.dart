@@ -1,7 +1,8 @@
+import 'dart:io';
+
 import 'package:final_project_group4/controller/database.dart';
 import 'package:final_project_group4/navbar/navbar_controller.dart';
 import 'package:final_project_group4/page/detail_profile.dart';
-import 'package:final_project_group4/page/login.dart';
 import 'package:final_project_group4/services/UserPointService.dart';
 import 'package:final_project_group4/utils/custom_colors.dart';
 import 'package:final_project_group4/widget/custom_widgets.dart';
@@ -177,34 +178,26 @@ class _ProfilePageState extends State<ProfilePage> {
                       ),
                       optionList('Log out', Colors.black, null, () async {
                         await popUpDialog(
-                                'Are you sure you want to Log Out?',
-                                '',
-                                context,
-                                "Yes, I'm sure",
-                                "No, I'm not",
-                                FirebaseAuth.instance.signOut())
-                            .then((_) {
-                          navbarController.hideBottomNav();
-                          loggedOut = true;
-                          Navigator.pushAndRemoveUntil(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (context) => LoginScreen(
-                                        hasLogOut: loggedOut,
-                                      )),
-                              (Route<dynamic> route) => route.isFirst);
-                        });
+                            'Are you sure you want to Log Out?',
+                            'This action will close the app',
+                            context,
+                            "Yes, I'm sure",
+                            "No, I'm not", () async {
+                          await FirebaseAuth.instance.signOut().then((_) {
+                            exit(0);
+                          });
+                        }, () {});
                       }),
                       optionList('Delete Account', customColors.redText, null,
-                          () {
-                        popUpDialog(
-                          'Are you sure you want to delete your account?',
-                          'This action can not be undone, your data will deleted permanently',
-                          context,
-                          "Yes, I'm sure",
-                          "No, I'm not",
-                          null,
-                        );
+                          () async {
+                        await popUpDialog(
+                            'Are you sure you want to delete your account?',
+                            'This action can not be undone, your data will deleted permanently',
+                            context,
+                            "Yes, I'm sure",
+                            "No, I'm not",
+                            () {},
+                            () {});
                       }),
                       const SizedBox(
                         height: 100,
@@ -261,4 +254,9 @@ class _ProfilePageState extends State<ProfilePage> {
       ),
     );
   }
+}
+
+Future dologOut() async {
+  await FirebaseAuth.instance.signOut();
+  // Restart.restartApp();
 }

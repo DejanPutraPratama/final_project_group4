@@ -595,7 +595,12 @@ class _NextRegistrationState extends State<NextRegistration> {
         'city': regisInfo.city,
         'gender': regisInfo.gender,
       };
+      Map<String, dynamic> initialPoints = {
+        'userId': userInfo.uid,
+        'amount': 10000,
+      };
       await database.addUser(userInfo.uid, newUserData);
+      await database.setInitialPoint(userInfo.uid, initialPoints);
       log("User created Succesfully");
       Navigator.push(
         context,

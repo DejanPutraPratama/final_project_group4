@@ -1,30 +1,34 @@
-import 'package:final_project_group4/navbar/navbar_navigation.dart';
+import 'package:final_project_group4/services/UserPointService.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:final_project_group4/page/history.dart';
 
 class DonateSuccessPage extends StatelessWidget {
   bool haveNavbar;
-  DonateSuccessPage({super.key, required this.haveNavbar});
+  String wasteType;
+  int weight;
+  DonateSuccessPage(
+      {super.key,
+      required this.haveNavbar,
+      required this.wasteType,
+      required this.weight});
 
   @override
   Widget build(BuildContext context) {
+    String userId = FirebaseAuth.instance.currentUser!.uid;
+    UserPointsService _userPointsService = UserPointsService();
+    int points = 10000;
     return Scaffold(
       backgroundColor: const Color(0xFFE6F0DC),
       appBar: null,
       body: GestureDetector(
-        onTap: () {
-          if (haveNavbar == true) {
-            Navigator.pushAndRemoveUntil(
-                context,
-                MaterialPageRoute(builder: (context) => HistoryScreen()),
-                (Route<dynamic> route) => route.isFirst);
-          } else {
-            Navigator.pushAndRemoveUntil(
-                context,
-                MaterialPageRoute(
-                    builder: (context) => const NavbarNavigation()),
-                (Route<dynamic> route) => route.isFirst);
-          }
+        onTap: () async {
+          int currentPoints = await _userPointsService.getUserPoints(userId);
+          int gettingPoints = getPoints(wasteType, weight);
+          Map<String, dynamic> updatePoints = {
+            'amount': currentPoints += gettingPoints
+          };
+          await _userPointsService.addUserPoints(userId, updatePoints);
+          Navigator.popUntil(context, (Route<dynamic> route) => route.isFirst);
         },
         child: const Center(
           child: Column(
@@ -61,4 +65,18 @@ class DonateSuccessPage extends StatelessWidget {
       ),
     );
   }
+}
+
+int getPoints(String wasteType, int weight) {
+  int addPoints = 0;
+  if (wasteType == 'Plastic') {
+    addPoints = 1000 * weight;
+  } else if (wasteType == 'Anorganic') {
+    addPoints = 500 * weight;
+  } else if (wasteType == 'Metal') {
+    addPoints = 2000 * weight;
+  } else {
+    addPoints = 200 * weight;
+  }
+  return addPoints;
 }

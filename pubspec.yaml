@@ -61,9 +61,9 @@ dev_dependencies:
 flutter_native_splash: 
   color: "#EAF0DF"
   image: assets/storbage_logo.png
-  android: true
-  ios: true
-  web: true
+  android: false
+  ios: false
+  web: false
   width: 200
 
 # For information on the generic Dart part of this file, see the

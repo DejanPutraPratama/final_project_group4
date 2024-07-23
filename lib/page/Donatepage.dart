@@ -12,8 +12,9 @@ import 'package:final_project_group4/page/donate/waitingdonate.dart';
 
 class DonateScreen extends StatefulWidget {
   bool haveNavbar;
+  String? landfill;
 
-  DonateScreen({super.key, required this.haveNavbar});
+  DonateScreen({super.key, required this.haveNavbar, required this.landfill});
 
   @override
   _DonateScreenState createState() => _DonateScreenState();
@@ -65,25 +66,13 @@ class _DonateScreenState extends State<DonateScreen> {
   }
 
   Future<void> addDonation({
+    required String? userId,
     required String? selectedLandfill,
     required String? selectedWasteType,
     required TextEditingController? weightController,
     File? selectedImage,
   }) async {
     weightController ??= TextEditingController();
-    if (selectedLandfill == null ||
-        selectedWasteType == null ||
-        weightController.text.isEmpty) {
-      // Handle validation error
-      Get.snackbar(
-        "Error",
-        "Please fill in all fields",
-        snackPosition: SnackPosition.TOP,
-        backgroundColor: Colors.redAccent.withOpacity(0.1),
-        colorText: Colors.red,
-      );
-      return;
-    }
     try {
       String? imageUrl = await _uploadImageToFirebase();
       if (imageUrl == null) {
@@ -95,6 +84,7 @@ class _DonateScreenState extends State<DonateScreen> {
       }
 
       await FirebaseFirestore.instance.collection('donate').add({
+        'userId': userId,
         'DestinationLandfill': selectedLandfill,
         'WasteType': selectedWasteType,
         'Weight': double.parse(weightController.text),
@@ -108,11 +98,13 @@ class _DonateScreenState extends State<DonateScreen> {
           backgroundColor: Colors.green.withOpacity(0.1),
           colorText: Colors.green,
         );
-        Navigator.push(
+        Navigator.pushReplacement(
           context,
           MaterialPageRoute(
             builder: (context) => WaitingDonate(
               haveNavbar: widget.haveNavbar,
+              wasteType: selectedWasteType!,
+              weight: int.parse(weightController!.text),
             ),
           ),
         );
@@ -138,6 +130,12 @@ class _DonateScreenState extends State<DonateScreen> {
       );
       // Handle error
     }
+  }
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    selectedLandfill = widget.landfill;
   }
 
   @override
@@ -175,6 +173,7 @@ class _DonateScreenState extends State<DonateScreen> {
                 onChanged: (value) {
                   setState(() {
                     selectedLandfill = value;
+                    print(selectedLandfill);
                   });
                 },
                 items: destinationLandfill.map((landfill) {
@@ -251,12 +250,26 @@ class _DonateScreenState extends State<DonateScreen> {
               CustomButton(
                 label: "Donate",
                 onPressed: () async {
-                  addDonation(
-                    selectedLandfill: selectedLandfill,
-                    selectedWasteType: selectedWasteType,
-                    weightController: weightController,
-                    selectedImage: selectedImage,
-                  );
+                  if (selectedLandfill == null ||
+                      selectedWasteType == null ||
+                      weightController.text.isEmpty) {
+                    // Handle validation error
+                    Get.snackbar(
+                      "Error",
+                      "Please fill in all fields",
+                      snackPosition: SnackPosition.TOP,
+                      backgroundColor: Colors.redAccent.withOpacity(0.1),
+                      colorText: Colors.red,
+                    );
+                  } else {
+                    await addDonation(
+                      userId: userInfo!.uid,
+                      selectedLandfill: selectedLandfill,
+                      selectedWasteType: selectedWasteType,
+                      weightController: weightController,
+                      selectedImage: selectedImage,
+                    );
+                  }
                 },
               ),
             ],

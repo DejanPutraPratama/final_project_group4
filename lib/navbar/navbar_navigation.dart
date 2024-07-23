@@ -105,6 +105,7 @@ class _NavbarNavigationState extends State<NavbarNavigation> {
                           MaterialPageRoute(
                               builder: (context) => DonateScreen(
                                     haveNavbar: false,
+                                    landfill: null,
                                   )));
                     },
                     shape: const CircleBorder(

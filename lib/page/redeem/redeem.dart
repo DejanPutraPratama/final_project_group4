@@ -35,10 +35,7 @@ class _RedeemPageState extends State<RedeemPage> {
   }
 
   Future _onPullRefresh() async {
-    int points = await _userPointsService.getUserPoints(widget.userId);
-    setState(() {
-      _userPoints = points;
-    });
+    await _loadUserPoints();
   }
 
   @override
@@ -61,6 +58,7 @@ class _RedeemPageState extends State<RedeemPage> {
           ),
         ),
         body: SingleChildScrollView(
+          physics: const AlwaysScrollableScrollPhysics(),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
