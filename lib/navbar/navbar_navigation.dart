@@ -1,10 +1,13 @@
+import 'package:final_project_group4/controller/points_controller.dart';
+import 'package:final_project_group4/controller/user_controller.dart';
+import 'package:final_project_group4/controller/waste_controller.dart';
 import 'package:final_project_group4/navbar/navbar.dart';
 import 'package:final_project_group4/navbar/navbar_controller.dart';
 import 'package:final_project_group4/navbar/navbar_model.dart';
-import 'package:final_project_group4/page/Donatepage.dart';
+import 'package:final_project_group4/page/donate/donate_page.dart';
 import 'package:final_project_group4/page/history.dart';
 import 'package:final_project_group4/page/home_page.dart';
-import 'package:final_project_group4/page/profile_page.dart';
+import 'package:final_project_group4/page/profile/profile_page.dart';
 import 'package:final_project_group4/page/redeem/redeem.dart';
 import 'package:final_project_group4/utils/custom_colors.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -18,6 +21,9 @@ class NavbarNavigation extends StatefulWidget {
 }
 
 class _NavbarNavigationState extends State<NavbarNavigation> {
+  final UserController userController = Get.put(UserController());
+  final PointsController pointsController = Get.put(PointsController());
+  final WasteController wasteController = Get.put(WasteController());
   final userInfo = FirebaseAuth.instance.currentUser;
   final homeNavKey = GlobalKey<NavigatorState>();
   final redeemNavKey = GlobalKey<NavigatorState>();
@@ -39,7 +45,7 @@ class _NavbarNavigationState extends State<NavbarNavigation> {
           navkey: homeNavKey),
       NavbarModel(
           page: RedeemPage(userId: userInfo!.uid), navkey: redeemNavKey),
-      NavbarModel(page: HistoryScreen(), navkey: historyNavKey),
+      NavbarModel(page: const HistoryScreen(), navkey: historyNavKey),
       NavbarModel(
           page: ProfilePage(userId: userInfo!.uid), navkey: profileNavKey),
     ];
@@ -52,9 +58,9 @@ class _NavbarNavigationState extends State<NavbarNavigation> {
       onPopInvoked: (value) async {
         if (items[selectedTab].navkey.currentState?.canPop() ?? false) {
           items[selectedTab].navkey.currentState?.pop();
-          return await Future.value(false);
+          return await Future.value();
         } else {
-          return await Future.value(true);
+          return await Future.value();
         }
       },
       child: Scaffold(
@@ -103,7 +109,7 @@ class _NavbarNavigationState extends State<NavbarNavigation> {
                       Navigator.push(
                           context,
                           MaterialPageRoute(
-                              builder: (context) => DonateScreen(
+                              builder: (context) => const DonateScreen(
                                     haveNavbar: false,
                                     landfill: null,
                                   )));

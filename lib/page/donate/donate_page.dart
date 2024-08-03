@@ -1,23 +1,25 @@
+import 'dart:developer';
 import 'dart:io';
+import 'package:final_project_group4/model/photo.dart';
 import 'package:final_project_group4/widget/button.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:get/get.dart';
-import 'package:final_project_group4/model/donateData.dart';
-import 'package:final_project_group4/model/photo.dart';
+import 'package:final_project_group4/model/donate_data.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:final_project_group4/navbar/navbar_controller.dart';
 import 'package:final_project_group4/page/donate/waitingdonate.dart';
 
 class DonateScreen extends StatefulWidget {
-  bool haveNavbar;
-  String? landfill;
+  final bool haveNavbar;
+  final String? landfill;
 
-  DonateScreen({super.key, required this.haveNavbar, required this.landfill});
+  const DonateScreen(
+      {super.key, required this.haveNavbar, required this.landfill});
 
   @override
-  _DonateScreenState createState() => _DonateScreenState();
+  State<DonateScreen> createState() => _DonateScreenState();
 }
 
 class _DonateScreenState extends State<DonateScreen> {
@@ -60,7 +62,6 @@ class _DonateScreenState extends State<DonateScreen> {
       String downloadUrl = await snapshot.ref.getDownloadURL();
       return downloadUrl;
     } catch (e) {
-      print('Error uploading image: $e ');
       return null;
     }
   }
@@ -108,7 +109,7 @@ class _DonateScreenState extends State<DonateScreen> {
             ),
           ),
         );
-      }).catchError((error, StackTrace) {
+      }).catchError((error, stackTrace) {
         Get.snackbar(
           "Error",
           "Something went wrong. Try again.",
@@ -116,11 +117,10 @@ class _DonateScreenState extends State<DonateScreen> {
           backgroundColor: Colors.redAccent.withOpacity(0.1),
           colorText: Colors.red,
         );
-        print(error.toString());
+        log(error.toString());
       });
       // Show success message or perform other actions
     } catch (e) {
-      print(e);
       Get.snackbar(
         "Error",
         "An unexpected error occured. Try again",
@@ -134,13 +134,12 @@ class _DonateScreenState extends State<DonateScreen> {
 
   @override
   void initState() {
-    // TODO: implement initState
+    super.initState();
     selectedLandfill = widget.landfill;
   }
 
   @override
   Widget build(BuildContext context) {
-    final Function(int) onTap;
     return Scaffold(
       appBar: AppBar(
         leading: GestureDetector(
@@ -173,7 +172,6 @@ class _DonateScreenState extends State<DonateScreen> {
                 onChanged: (value) {
                   setState(() {
                     selectedLandfill = value;
-                    print(selectedLandfill);
                   });
                 },
                 items: destinationLandfill.map((landfill) {
@@ -245,7 +243,7 @@ class _DonateScreenState extends State<DonateScreen> {
                 ),
               ),
               const SizedBox(height: 20),
-              uploadPhoto(onFileChanged: putImage),
+              UploadPhoto(onFileChanged: putImage),
               const SizedBox(height: 30),
               CustomButton(
                 label: "Donate",

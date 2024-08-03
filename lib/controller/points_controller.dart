@@ -1,6 +1,22 @@
+import 'dart:developer';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:get/get.dart';
 
-class UserPointsService {
+class PointsController {
+  var userPoints = 0.obs;
+
+  void updatePoints(int newPoints) {
+    userPoints.value = newPoints;
+    userPoints.refresh();
+  }
+
+  Future setInitialPoint(String id, Map<String, dynamic> userDetails) async {
+    return await FirebaseFirestore.instance
+        .collection('points')
+        .doc(id)
+        .set(userDetails);
+  }
+
   Future<int> getUserPoints(String userId) async {
     try {
       var snapshot = await FirebaseFirestore.instance
@@ -15,7 +31,7 @@ class UserPointsService {
         return 0;
       }
     } catch (e) {
-      print("Error fetching user points: $e");
+      log("Error fetching user points: $e");
       return 0;
     }
   }

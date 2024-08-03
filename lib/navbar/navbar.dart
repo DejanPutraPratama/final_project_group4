@@ -61,7 +61,7 @@ class Navbar extends StatelessWidget {
     CustomColors customColors = CustomColors();
     return Expanded(
         child: InkWell(
-      overlayColor: MaterialStateProperty.all(Colors.transparent),
+      overlayColor: WidgetStateProperty.all(Colors.transparent),
       onTap: onTap,
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,

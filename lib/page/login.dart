@@ -1,5 +1,10 @@
 import 'dart:developer';
-import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:final_project_group4/controller/history_controller.dart';
+import 'package:final_project_group4/controller/points_controller.dart';
+import 'package:final_project_group4/controller/user_controller.dart';
+import 'package:final_project_group4/controller/waste_controller.dart';
+import 'package:final_project_group4/model/redeemhistory_model.dart';
+import 'package:final_project_group4/model/wastehistory_model.dart';
 import 'package:final_project_group4/navbar/navbar_controller.dart';
 import 'package:final_project_group4/navbar/navbar_navigation.dart';
 import 'package:final_project_group4/page/home_page.dart';
@@ -7,14 +12,14 @@ import 'package:final_project_group4/page/registration.dart';
 import 'package:final_project_group4/widget/button.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:final_project_group4/auth/auth_service.dart';
+import 'package:final_project_group4/services/auth_service.dart';
 import 'package:email_otp/email_otp.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 
 class LoginScreen extends StatefulWidget {
-  bool hasLogOut;
-  LoginScreen({super.key, required this.hasLogOut});
+  final bool hasLogOut;
+  const LoginScreen({super.key, required this.hasLogOut});
 
   @override
   State<LoginScreen> createState() => _LoginScreenState();
@@ -22,36 +27,19 @@ class LoginScreen extends StatefulWidget {
 
 class _LoginScreenState extends State<LoginScreen> {
   final NavbarController navbarController = Get.put(NavbarController());
+  final UserController userController = Get.put(UserController());
+  final PointsController pointsController = Get.put(PointsController());
+  final WasteController wasteController = Get.put(WasteController());
+  final HistoryController historyController = Get.put(HistoryController());
   final _auth = AuthService();
   final _email = TextEditingController();
   final emailController = TextEditingController();
   final _password = TextEditingController();
   bool _showPassword = false;
-  String? _passwordError;
   String? _resetEmailError;
-  String? _passwordError2;
 
-  Future<void> _login() async {
-    try {
-      UserCredential userCredential =
-          await FirebaseAuth.instance.signInWithEmailAndPassword(
-        email: _email.text,
-        password: _password.text,
-      );
-    } on FirebaseAuthException catch (e) {
-      if (e.code == 'user-not-found') {
-        setState(() {});
-      } else if (e.code == 'wrong-password') {
-        setState(() {
-          _passwordError = 'Password is not matched with the record';
-        });
-      }
-    }
-  }
-
-  Future<void> _resetpassword([DocumentSnapshot? documentSnapshot]) async {
+  Future<void> _resetpassword() async {
     TextEditingController email = TextEditingController();
-    EmailOTP myauth = EmailOTP();
     await showModalBottomSheet(
         isScrollControlled: true,
         context: context,
@@ -119,18 +107,20 @@ class _LoginScreenState extends State<LoginScreen> {
                               );
                               bool otpSent =
                                   await EmailOTP.sendOTP(email: email.text);
-                              if (otpSent) {
-                                ScaffoldMessenger.of(context)
-                                    .showSnackBar(const SnackBar(
-                                  content: Text("OTP dikirim"),
-                                ));
-                                Navigator.pop(ctx);
-                                _SendOTP();
-                              } else {
-                                ScaffoldMessenger.of(context).showSnackBar(
-                                    const SnackBar(
-                                        content: Text(
-                                            "Something wrong I can feel it")));
+                              if (context.mounted) {
+                                if (otpSent) {
+                                  ScaffoldMessenger.of(context)
+                                      .showSnackBar(const SnackBar(
+                                    content: Text("OTP dikirim"),
+                                  ));
+                                  Navigator.pop(ctx);
+                                  _sendOTP();
+                                } else {
+                                  ScaffoldMessenger.of(context).showSnackBar(
+                                      const SnackBar(
+                                          content: Text(
+                                              "Something wrong I can feel it")));
+                                }
                               }
                             }),
                       ],
@@ -143,8 +133,7 @@ class _LoginScreenState extends State<LoginScreen> {
         });
   }
 
-  Future<void> _SendOTP([DocumentSnapshot? documentSnapshot]) async {
-    final TextEditingController otpController;
+  Future<void> _sendOTP() async {
     final TextEditingController otp1controller = TextEditingController();
     final TextEditingController otp2controller = TextEditingController();
     final TextEditingController otp3controller = TextEditingController();
@@ -210,15 +199,19 @@ class _LoginScreenState extends State<LoginScreen> {
                                           otp3controller.text +
                                           otp4controller.text) ==
                                   true) {
-                                ScaffoldMessenger.of(context).showSnackBar(
-                                    const SnackBar(
-                                        content: Text("OTP is verified")));
-                                Navigator.pop(ctx);
-                                _InputNewPassword();
+                                if (context.mounted) {
+                                  ScaffoldMessenger.of(context).showSnackBar(
+                                      const SnackBar(
+                                          content: Text("OTP is verified")));
+                                  Navigator.pop(ctx);
+                                  _inputNewPassword();
+                                }
                               } else {
-                                ScaffoldMessenger.of(context).showSnackBar(
-                                    const SnackBar(
-                                        content: Text("invalid OTP")));
+                                if (context.mounted) {
+                                  ScaffoldMessenger.of(context).showSnackBar(
+                                      const SnackBar(
+                                          content: Text("invalid OTP")));
+                                }
                               }
                             }),
                       ],
@@ -264,7 +257,8 @@ class _LoginScreenState extends State<LoginScreen> {
       await FirebaseAuth.instance
           .sendPasswordResetEmail(email: emailController.text.trim());
     } on FirebaseAuthException catch (e) {
-      print(e);
+      log(e.toString());
+      if (!mounted) return;
       showDialog(
           context: context,
           builder: (context) {
@@ -275,7 +269,7 @@ class _LoginScreenState extends State<LoginScreen> {
     }
   }
 
-  Future<void> _InputNewPassword([DocumentSnapshot? documentSnapshot]) async {
+  Future<void> _inputNewPassword() async {
     await showModalBottomSheet(
         isScrollControlled: true,
         context: context,
@@ -437,7 +431,7 @@ class _LoginScreenState extends State<LoginScreen> {
                   CustomButton(
                       label: "Login",
                       onPressed: () {
-                        _Login();
+                        _login();
                       }),
                   const SizedBox(height: 16),
                   Row(mainAxisAlignment: MainAxisAlignment.center, children: [
@@ -466,37 +460,48 @@ class _LoginScreenState extends State<LoginScreen> {
 
   goToSignup(BuildContext context) => Navigator.push(
         context,
-        MaterialPageRoute(builder: (context) => const Registrartion()),
+        MaterialPageRoute(builder: (context) => const Registration()),
       );
 
-  _Login() async {
+  _login() async {
     final user =
         await _auth.loginUserWithEmailAndPassword(_email.text, _password.text);
 
     if (user != null) {
-      final userId = FirebaseAuth.instance.currentUser;
-      print(userId!.uid);
+      final userId = FirebaseAuth.instance.currentUser!.uid;
       log("User Logged In");
+      log("User ID: $userId");
+      log("Getting user data...");
+      var userData = await userController.getDataUser(userId);
+      var userPoints = await pointsController.getUserPoints(userId);
+      var wastedByUser = await wasteController.getWastedWeight(userId);
+      List<WasteHistoryModel> wastedHistoryList =
+          await historyController.getUserWasteHistory(userId);
+      List<RedeemHistoryModel> redeemHistoryList =
+          await historyController.getUserRedeemHistory(userId);
 
-      if (userId != null) {
-        log("User ID: $userId");
-        navbarController.showBottomNav();
-        if (widget.hasLogOut) {
-          Navigator.pushReplacement(
-            context,
-            MaterialPageRoute(
-                builder: (context) => HomePage(
-                      userId: userId.uid,
-                    )),
-          );
-        } else {
-          Navigator.pushReplacement(
-            context,
-            MaterialPageRoute(builder: (context) => NavbarNavigation()),
-          );
-        }
+      userController.updateUsername(userData.data()['fullName']);
+      userController.updatePhotoUrl(userData.data()['profilePhotoUrl']);
+      pointsController.updatePoints(userPoints);
+      wasteController.updateWeight(wastedByUser);
+      historyController.updateWasteList(wastedHistoryList);
+      historyController.updateRedeemList(redeemHistoryList);
+
+      navbarController.showBottomNav();
+      if (!mounted) return;
+      if (widget.hasLogOut) {
+        Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(
+              builder: (context) => HomePage(
+                    userId: userId,
+                  )),
+        );
       } else {
-        log("Tidak ada user ID masbro");
+        Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(builder: (context) => const NavbarNavigation()),
+        );
       }
     }
   }

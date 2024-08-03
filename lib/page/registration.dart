@@ -1,31 +1,28 @@
 import 'dart:developer';
-import 'package:final_project_group4/controller/database.dart';
-import 'package:final_project_group4/model/userModel.dart';
+import 'package:final_project_group4/controller/points_controller.dart';
+import 'package:final_project_group4/controller/user_controller.dart';
+import 'package:final_project_group4/model/user_model.dart';
 import 'package:final_project_group4/page/login.dart';
-import 'package:final_project_group4/widget/radioButton.dart';
+import 'package:final_project_group4/widget/custom_radiobutton.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:final_project_group4/auth/auth_service.dart';
+import 'package:final_project_group4/services/auth_service.dart';
 import 'package:final_project_group4/widget/button.dart';
 import 'package:final_project_group4/widget/textfield.dart';
-import 'package:flutter/widgets.dart';
-import 'package:final_project_group4/widget/birthForm.dart';
+import 'package:final_project_group4/widget/birthform.dart';
 import 'package:intl/intl.dart';
 
-class Registrartion extends StatefulWidget {
-  const Registrartion({super.key});
+class Registration extends StatefulWidget {
+  const Registration({super.key});
 
   @override
-  _RegistrationState createState() => _RegistrationState();
+  State<Registration> createState() => _RegistrationState();
 }
 
-class _RegistrationState extends State<Registrartion> {
+class _RegistrationState extends State<Registration> {
   final _formkey = GlobalKey<FormState>();
   final userInfo = FirebaseAuth.instance.currentUser;
-  final CollectionReference _users =
-      FirebaseFirestore.instance.collection('users');
   final TextEditingController _fullNameController = TextEditingController();
   final TextEditingController dateController = TextEditingController();
   final TextEditingController _addressController = TextEditingController();
@@ -76,7 +73,7 @@ class _RegistrationState extends State<Registrartion> {
                             Navigator.pushReplacement(
                               context,
                               MaterialPageRoute(
-                                  builder: (context) => LoginScreen(
+                                  builder: (context) => const LoginScreen(
                                         hasLogOut: false,
                                       )),
                             );
@@ -183,7 +180,7 @@ class _RegistrationState extends State<Registrartion> {
                           ),
                         ),
                       ),
-                      GenderSelectionScreen(
+                      CustomRadioButton(
                         onChanged: (String? gender) {
                           setState(() {
                             selectedGender = gender;
@@ -293,11 +290,10 @@ class _RegistrationState extends State<Registrartion> {
                     final String mobileNumber = _mobileNumberController.text;
                     final String address = _addressController.text;
                     final String city = selectedCity ?? '';
-                    String gender = '';
                     if (selectedGender == null) {
                       // Menampilkan pesan error jika gender belum dipilih
                       ScaffoldMessenger.of(context).showSnackBar(
-                        SnackBar(content: Text('Please select a gender')),
+                        const SnackBar(content: Text('Please select a gender')),
                       );
                       return;
                     }
@@ -310,12 +306,12 @@ class _RegistrationState extends State<Registrartion> {
                       Timestamp birthDateTimestamp = Timestamp.fromDate(
                           DateFormat('yyyy-MM-dd').parse(birthDate));
 
-                      print("Full Name: $fullName");
-                      print("birth Date: $birthDateTimestamp");
-                      print("Mobile Number: $mobileNumber");
-                      print("Address: $address");
-                      print("City: $city");
-                      print("Gender: $selectedGender");
+                      log("Full Name: $fullName");
+                      log("birth Date: $birthDateTimestamp");
+                      log("Mobile Number: $mobileNumber");
+                      log("Address: $address");
+                      log("City: $city");
+                      log("Gender: $selectedGender");
                       // await _users.add({
                       //   'fullName': fullName,
                       //   'birth Date': birthDateTimestamp,
@@ -353,17 +349,16 @@ class _RegistrationState extends State<Registrartion> {
 }
 
 class NextRegistration extends StatefulWidget {
-  UserModel regisInfo;
-  NextRegistration({super.key, required this.regisInfo});
+  final UserModel regisInfo;
+  const NextRegistration({super.key, required this.regisInfo});
 
   @override
-  _NextRegistrationState createState() => _NextRegistrationState();
+  State<NextRegistration> createState() => _NextRegistrationState();
 }
 
 class _NextRegistrationState extends State<NextRegistration> {
-  Database database = Database();
-  final _formkey = GlobalKey<FormState>();
-  final _firestore = FirebaseFirestore.instance;
+  UserController userController = UserController();
+  PointsController pointsController = PointsController();
   final AuthService _auth = AuthService();
   final _email = TextEditingController();
   final _password = TextEditingController();
@@ -403,7 +398,7 @@ class _NextRegistrationState extends State<NextRegistration> {
                             Navigator.pushReplacement(
                               context,
                               MaterialPageRoute(
-                                  builder: (context) => const Registrartion()),
+                                  builder: (context) => const Registration()),
                             );
                           },
                           icon: const Icon(Icons.chevron_left,
@@ -579,15 +574,15 @@ class _NextRegistrationState extends State<NextRegistration> {
   }
 
   _signup(UserModel regisInfo) async {
-    final User = await _auth.createUserWithEmailAndPassword(
+    final user = await _auth.createUserWithEmailAndPassword(
       _email.text,
       _password.text,
     );
-    if (User != null) {
+    if (user != null) {
       final userInfo = FirebaseAuth.instance.currentUser;
       Map<String, dynamic> newUserData = {
         'id': userInfo!.uid,
-        'profilePhotoUrl': null,
+        'profilePhotoUrl': '',
         'fullName': regisInfo.fullName,
         'birthdate': regisInfo.birthDate,
         'mobileNumber': regisInfo.mobileNumber,
@@ -599,13 +594,14 @@ class _NextRegistrationState extends State<NextRegistration> {
         'userId': userInfo.uid,
         'amount': 10000,
       };
-      await database.addUser(userInfo.uid, newUserData);
-      await database.setInitialPoint(userInfo.uid, initialPoints);
+      await userController.addUser(userInfo.uid, newUserData);
+      await pointsController.setInitialPoint(userInfo.uid, initialPoints);
       log("User created Succesfully");
+      if (!mounted) return;
       Navigator.push(
         context,
         MaterialPageRoute(
-            builder: (context) => LoginScreen(
+            builder: (context) => const LoginScreen(
                   hasLogOut: false,
                 )),
       );
@@ -631,7 +627,7 @@ class ConfirmationPage extends StatelessWidget {
   goToLogin(BuildContext context) => Navigator.push(
         context,
         MaterialPageRoute(
-            builder: (context) => LoginScreen(
+            builder: (context) => const LoginScreen(
                   hasLogOut: false,
                 )),
       );

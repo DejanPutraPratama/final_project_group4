@@ -4,7 +4,7 @@ import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:final_project_group4/model/ewalletmodel.dart';
 import 'package:flutter/services.dart';
-import 'package:final_project_group4/services/RedeemService.dart';
+import 'package:final_project_group4/services/redeem_service.dart';
 import 'waitingredeem.dart';
 
 class RedeemPaymentPage extends StatefulWidget {
@@ -19,7 +19,7 @@ class RedeemPaymentPage extends StatefulWidget {
       required this.userId});
 
   @override
-  _RedeemPaymentPageState createState() => _RedeemPaymentPageState();
+  State<RedeemPaymentPage> createState() => _RedeemPaymentPageState();
 }
 
 class _RedeemPaymentPageState extends State<RedeemPaymentPage> {
@@ -69,9 +69,10 @@ class _RedeemPaymentPageState extends State<RedeemPaymentPage> {
           amount: amount,
         );
 
+        if (!mounted) return;
         Navigator.pushReplacement(
           context,
-          MaterialPageRoute(builder: (context) => WaitingRedeem()),
+          MaterialPageRoute(builder: (context) => const WaitingRedeem()),
         );
       } catch (e) {
         setState(() {

@@ -1,13 +1,19 @@
+import 'package:final_project_group4/controller/history_controller.dart';
+import 'package:final_project_group4/controller/points_controller.dart';
+import 'package:final_project_group4/controller/waste_controller.dart';
+import 'package:final_project_group4/model/wastehistory_model.dart';
 import 'package:final_project_group4/navbar/navbar_controller.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:final_project_group4/page/donate/donatesuccess.dart';
+import 'package:get/get.dart';
 
 class WaitingDonate extends StatelessWidget {
-  bool haveNavbar;
-  String wasteType;
-  int weight;
+  final bool haveNavbar;
+  final String wasteType;
+  final int weight;
 
-  WaitingDonate(
+  const WaitingDonate(
       {super.key,
       required this.haveNavbar,
       required this.wasteType,
@@ -15,18 +21,35 @@ class WaitingDonate extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    Future.delayed(const Duration(seconds: 5), () {
+    PointsController pointsController = Get.find<PointsController>();
+    WasteController wasteController = Get.find<WasteController>();
+    HistoryController historyController = Get.find<HistoryController>();
+    String userId = FirebaseAuth.instance.currentUser!.uid;
+    Future.delayed(const Duration(seconds: 5), () async {
       NavbarController navbarController = NavbarController();
       navbarController.showBottomNav();
-      Navigator.pushReplacement(
-        context,
-        MaterialPageRoute(
-            builder: (context) => DonateSuccessPage(
-                  haveNavbar: haveNavbar,
-                  wasteType: wasteType,
-                  weight: weight,
-                )),
-      );
+      int currentPoints = await pointsController.getUserPoints(userId);
+      int gettingPoints = getPoints(wasteType, weight);
+      Map<String, dynamic> updatePoints = {
+        'amount': currentPoints += gettingPoints
+      };
+      double updateWeight = wasteController.wasteWeight.value + weight;
+      List<WasteHistoryModel> newList =
+          await historyController.getUserWasteHistory(userId);
+      await pointsController.addUserPoints(userId, updatePoints).then((_) {
+        pointsController.updatePoints(currentPoints);
+        wasteController.updateWeight(updateWeight);
+        historyController.updateWasteList(newList);
+      });
+      if (context.mounted) {
+        Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(
+              builder: (context) => DonateSuccessPage(
+                    haveNavbar: haveNavbar,
+                  )),
+        );
+      }
     });
 
     return const Scaffold(
@@ -62,4 +85,18 @@ class WaitingDonate extends StatelessWidget {
       ),
     );
   }
+}
+
+int getPoints(String wasteType, int weight) {
+  int addPoints = 0;
+  if (wasteType == 'Plastic') {
+    addPoints = 1000 * weight;
+  } else if (wasteType == 'Anorganic') {
+    addPoints = 500 * weight;
+  } else if (wasteType == 'Metal') {
+    addPoints = 2000 * weight;
+  } else {
+    addPoints = 200 * weight;
+  }
+  return addPoints;
 }

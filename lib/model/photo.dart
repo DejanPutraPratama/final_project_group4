@@ -1,24 +1,23 @@
+import 'dart:developer';
 import 'dart:io';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
-class uploadPhoto extends StatefulWidget {
+class UploadPhoto extends StatefulWidget {
   final Function(File) onFileChanged;
 
-  const uploadPhoto({
+  const UploadPhoto({
     super.key,
     required this.onFileChanged,
   });
 
   @override
-  State<uploadPhoto> createState() => _UploadPhotoState();
+  State<UploadPhoto> createState() => _UploadPhotoState();
 }
 
-class _UploadPhotoState extends State<uploadPhoto> {
+class _UploadPhotoState extends State<UploadPhoto> {
   final ImagePicker _picker = ImagePicker();
   File? _imageFile;
 
@@ -62,9 +61,9 @@ class _UploadPhotoState extends State<uploadPhoto> {
         'uploadedAt': Timestamp.now(),
       });
 
-      print('File uploaded and URL saved to Firestore');
+      log('File uploaded and URL saved to Firestore');
     } catch (e) {
-      print('Error uploading image: $e ');
+      log('Error uploading image: $e ');
     }
   }
 

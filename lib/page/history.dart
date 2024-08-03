@@ -1,8 +1,13 @@
+import 'package:final_project_group4/controller/history_controller.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
+import 'package:get/get.dart';
 
 class HistoryScreen extends StatefulWidget {
+  const HistoryScreen({super.key});
+
   @override
-  _HistoryScreenState createState() => _HistoryScreenState();
+  State<HistoryScreen> createState() => _HistoryScreenState();
 }
 
 class _HistoryScreenState extends State<HistoryScreen> {
@@ -51,7 +56,7 @@ class _HistoryScreenState extends State<HistoryScreen> {
             ],
           ),
           Expanded(
-            child: showWaste ? WasteList() : RedeemList(),
+            child: showWaste ? const WasteList() : const RedeemList(),
           ),
         ],
       ),
@@ -61,57 +66,48 @@ class _HistoryScreenState extends State<HistoryScreen> {
 }
 
 class WasteList extends StatelessWidget {
+  const WasteList({super.key});
+
   @override
   Widget build(BuildContext context) {
-    return ListView(
-      children: [
-        const ListTile(
-          leading: Icon(Icons.delete, color: Colors.green),
-          title: Text('Plastic - 1 kg'),
-          subtitle: Text('31 Mei 2024 - TPA Rawa Kucing'),
-          trailing: Text('Accepted', style: TextStyle(color: Colors.green)),
-        ),
-        const ListTile(
-          leading: Icon(Icons.delete, color: Colors.green),
-          title: Text('Plastic - 2 kg'),
-          subtitle: Text('11 Mei 2024 - TPA Rawa Kucing'),
-          trailing: Text('Rejected', style: TextStyle(color: Colors.red)),
-        ),
-        const ListTile(
-          leading: Icon(Icons.delete, color: Colors.green),
-          title: Text('Plastic - 2 kg'),
-          subtitle: Text('1 Mei 2024 - TPA Rawa Kucing'),
-          trailing: Text('In Progress', style: TextStyle(color: Colors.grey)),
-        ),
-      ],
-    );
+    final HistoryController historyController = Get.find<HistoryController>();
+    return Obx(() => ListView.builder(
+        itemCount: historyController.wasteHistoryList.length,
+        itemBuilder: (context, index) {
+          String dateUploaded = DateFormat('yyyy-MMMM-dd')
+              .format(historyController.wasteHistoryList[index].uploadedAt);
+          return ListTile(
+            leading: const Icon(Icons.delete, color: Colors.green),
+            title: Text(
+                '${historyController.wasteHistoryList[index].wasteType} - ${historyController.wasteHistoryList[index].wasteWeight.toStringAsFixed(0)} kg'),
+            subtitle: Text(
+                '$dateUploaded\n${historyController.wasteHistoryList[index].destinationLandfill}'),
+            trailing:
+                const Text('Accepted', style: TextStyle(color: Colors.green)),
+          );
+        }));
   }
 }
 
 class RedeemList extends StatelessWidget {
+  const RedeemList({super.key});
+
   @override
   Widget build(BuildContext context) {
-    return ListView(
-      children: [
-        const ListTile(
-          leading: Icon(Icons.card_giftcard, color: Colors.green),
-          title: Text('Voucher - 10 points'),
-          subtitle: Text('Redeemed on 20 Mei 2024'),
-          trailing: Text('Completed', style: TextStyle(color: Colors.green)),
-        ),
-        const ListTile(
-          leading: Icon(Icons.card_giftcard, color: Colors.green),
-          title: Text('Gift Card - 20 points'),
-          subtitle: Text('Redeemed on 15 Mei 2024'),
-          trailing: Text('Completed', style: TextStyle(color: Colors.green)),
-        ),
-        const ListTile(
-          leading: Icon(Icons.card_giftcard, color: Colors.green),
-          title: Text('Coupon - 5 points'),
-          subtitle: Text('Redeemed on 5 Mei 2024'),
-          trailing: Text('Completed', style: TextStyle(color: Colors.green)),
-        ),
-      ],
-    );
+    HistoryController historyController = Get.find<HistoryController>();
+    return Obx(() => ListView.builder(
+        itemCount: historyController.redeemHistoryList.length,
+        itemBuilder: (context, index) {
+          String dateUploaded = DateFormat('yyyy-MMMM-dd')
+              .format(historyController.redeemHistoryList[index].timestamp);
+          return ListTile(
+            leading: const Icon(Icons.delete, color: Colors.green),
+            title: Text(
+                '${historyController.redeemHistoryList[index].payment} - ${historyController.redeemHistoryList[index].amount} points'),
+            subtitle: Text(dateUploaded),
+            trailing:
+                const Text('Completed', style: TextStyle(color: Colors.green)),
+          );
+        }));
   }
 }

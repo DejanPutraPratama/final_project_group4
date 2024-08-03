@@ -1,5 +1,5 @@
 import 'dart:io';
-import 'package:final_project_group4/controller/database.dart';
+import 'package:final_project_group4/controller/user_controller.dart';
 import 'package:final_project_group4/navbar/navbar_controller.dart';
 import 'package:final_project_group4/utils/custom_colors.dart';
 import 'package:final_project_group4/widget/custom_widgets.dart';
@@ -12,16 +12,16 @@ import 'package:date_picker_plus/date_picker_plus.dart';
 import 'package:image_picker/image_picker.dart';
 
 class DetailProfile extends StatefulWidget {
-  String userId;
-  DetailProfile({super.key, required this.userId});
+  final String userId;
+  const DetailProfile({super.key, required this.userId});
 
   @override
   State<DetailProfile> createState() => _DetailProfileState();
 }
 
 class _DetailProfileState extends State<DetailProfile> {
-  Database database = Database();
-  String? profilePhotoUrl;
+  UserController userController = Get.find<UserController>();
+  String profilePhotoUrl = '';
   TextEditingController namecontroller = TextEditingController();
   TextEditingController daycontroller = TextEditingController();
   TextEditingController monthcontroller = TextEditingController();
@@ -43,28 +43,16 @@ class _DetailProfileState extends State<DetailProfile> {
   ImagePicker picker = ImagePicker();
   XFile? theImage;
   Reference storageRef = FirebaseStorage.instance.ref();
-  var userData;
-
-  @override
-  void initState() {
-    super.initState();
-    _loadUserData();
-  }
-
-  Future _loadUserData() async {
-    await database.getDataUser(widget.userId).then((value) {
-      userData = value.data();
-    });
-  }
 
   @override
   Widget build(BuildContext context) {
     CustomColors customColors = CustomColors();
     CustomWidgets customWidgets = CustomWidgets();
     double deviceWidth = MediaQuery.of(context).size.width;
+    dynamic userData;
 
     return FutureBuilder(
-      future: database.getDataUser(widget.userId),
+      future: userController.getDataUser(widget.userId),
       builder: (context, snapshot) {
         if (snapshot.hasData) {
           userData = snapshot.data;
@@ -89,7 +77,7 @@ class _DetailProfileState extends State<DetailProfile> {
                       context,
                       'Yes, I do',
                       'No, delete it', () async {
-                    await database.updateUser(widget.userId, {
+                    await userController.updateUser(widget.userId, {
                       'profilePhotoUrl': profilePhotoUrl,
                       'fullName': namecontroller.text,
                       'birthdate': newBirthDate,
@@ -98,11 +86,14 @@ class _DetailProfileState extends State<DetailProfile> {
                       'address': addresscontroller.text,
                       'city': selectedCity,
                     }).then((_) {
+                      userController.updateUsername(namecontroller.text);
+                      userController.updatePhotoUrl(profilePhotoUrl);
                       Navigator.pop(context);
                       navbarController.showBottomNav();
                     });
                   }, () {
                     Navigator.pop(context);
+                    navbarController.showBottomNav();
                   });
                 },
                 child: Row(
@@ -436,7 +427,7 @@ class _DetailProfileState extends State<DetailProfile> {
                             String downloadUrl =
                                 await snapshot.ref.getDownloadURL();
                             profilePhotoUrl = downloadUrl;
-                            await database.updateUser(widget.userId, {
+                            await userController.updateUser(widget.userId, {
                               'profilePhotoUrl': profilePhotoUrl,
                               'fullName': namecontroller.text,
                               'birthdate': newBirthDate,
@@ -446,7 +437,7 @@ class _DetailProfileState extends State<DetailProfile> {
                               'city': selectedCity,
                             });
                           } else {
-                            await database.updateUser(widget.userId, {
+                            await userController.updateUser(widget.userId, {
                               'profilePhotoUrl': profilePhotoUrl,
                               'fullName': namecontroller.text,
                               'birthdate': newBirthDate,
@@ -456,8 +447,12 @@ class _DetailProfileState extends State<DetailProfile> {
                               'city': selectedCity,
                             });
                           }
-                          Navigator.pop(context);
-                          navbarController.showBottomNav();
+                          if (context.mounted) {
+                            Navigator.pop(context);
+                            navbarController.showBottomNav();
+                          }
+                          userController.updateUsername(namecontroller.text);
+                          userController.updatePhotoUrl(profilePhotoUrl);
                         },
                         child: const Text('Update')),
                   ],
@@ -496,8 +491,8 @@ class _DetailProfileState extends State<DetailProfile> {
     }
   }
 
-  Widget haveImage(String? imageSrc) {
-    if (imageSrc != null) {
+  Widget haveImage(String imageSrc) {
+    if (imageSrc.isNotEmpty) {
       return ClipRRect(
         borderRadius: BorderRadius.circular(50),
         child: Image.network(

@@ -15,8 +15,8 @@ class DonateModel {
     required this.weight,
   });
 
-  toJson(){
-    return{
+  toJson() {
+    return {
       "destinationLandfill": destinationLandfill,
       "wasteType": wasteType,
       "weight": weight,
@@ -29,19 +29,21 @@ class DonateDatabase extends GetxController {
 
   final _db = FirebaseFirestore.instance;
 
-  createData(DonateModel donate) async{
-    await _db.collection("donate").add(donate.toJson()).whenComplete(
-      () => Get.snackbar("Succes", "Your data has been created.",
-      snackPosition: SnackPosition.BOTTOM,
-      backgroundColor: Colors.green.withOpacity(0.1),
-      colorText: Colors.green),
-    )
-    .catchError((error, StackTrace) {
+  createData(DonateModel donate) async {
+    await _db
+        .collection("donate")
+        .add(donate.toJson())
+        .whenComplete(
+          () => Get.snackbar("Succes", "Your data has been created.",
+              snackPosition: SnackPosition.BOTTOM,
+              backgroundColor: Colors.green.withOpacity(0.1),
+              colorText: Colors.green),
+        )
+        .catchError((error, stackTrace) {
       Get.snackbar("Error", "Something went wrong. Try again",
-      snackPosition: SnackPosition.BOTTOM,
-      backgroundColor: Colors.redAccent.withOpacity(0.1),
-      colorText: Colors.red);
-    print(error.toString());
+          snackPosition: SnackPosition.BOTTOM,
+          backgroundColor: Colors.redAccent.withOpacity(0.1),
+          colorText: Colors.red);
     });
   }
 }

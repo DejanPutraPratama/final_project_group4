@@ -1,6 +1,15 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
+import 'dart:developer';
 
-class WasteServices {
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:get/get.dart';
+
+class WasteController extends GetxController {
+  var wasteWeight = 0.0.obs;
+
+  void updateWeight(double weight) {
+    wasteWeight.value = weight;
+  }
+
   Future<double> getWastedWeight(String userId) async {
     double weight = 0;
     try {
@@ -18,7 +27,7 @@ class WasteServices {
         return weight;
       }
     } catch (e) {
-      print("Error fetching user Wasted Weight: $e");
+      log("Error fetching user Wasted Weight: $e");
       return 0;
     }
   }

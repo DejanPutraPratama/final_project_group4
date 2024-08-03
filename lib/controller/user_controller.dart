@@ -1,18 +1,16 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:get/get.dart';
 
-class Database {
-  Future addDonate(Map<String, dynamic> donatedetails, String id) async {
-    return await FirebaseFirestore.instance
-        .collection('donate')
-        .doc(id)
-        .set(donatedetails);
+class UserController extends GetxController {
+  RxString userName = ''.obs;
+  RxString photoUrl = ''.obs;
+
+  void updateUsername(String name) {
+    userName.value = name;
   }
 
-  Future setInitialPoint(String id, Map<String, dynamic> userDetails) async {
-    return await FirebaseFirestore.instance
-        .collection('points')
-        .doc(id)
-        .set(userDetails);
+  void updatePhotoUrl(String url) {
+    photoUrl.value = url;
   }
 
   Future addUser(String id, Map<String, dynamic> userDetails) async {

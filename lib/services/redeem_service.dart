@@ -1,7 +1,12 @@
+import 'dart:developer';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:final_project_group4/controller/points_controller.dart';
+import 'package:get/get.dart';
 
 class RedeemService {
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
+  final PointsController pointsController = Get.find<PointsController>();
 
   Future<void> redeemPoints({
     required String userId,
@@ -35,7 +40,7 @@ class RedeemService {
       await snapshot.reference.update({
         'amount': newPoints,
         'updated_at': FieldValue.serverTimestamp(),
-      });
+      }).then((value) => pointsController.updatePoints(newPoints));
 
       // Redeem collection
       await _firestore.collection('redeems').add({
@@ -46,7 +51,7 @@ class RedeemService {
         'timestamp': FieldValue.serverTimestamp(),
       });
     } catch (e) {
-      print('Error redeeming points: $e');
+      log('Error redeeming points: $e');
       throw Exception('Failed to redeem points. Please try again later.');
     }
   }
