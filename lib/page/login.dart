@@ -1,5 +1,6 @@
 import 'dart:developer';
 import 'package:final_project_group4/controller/history_controller.dart';
+import 'package:final_project_group4/controller/loading_controller.dart';
 import 'package:final_project_group4/controller/points_controller.dart';
 import 'package:final_project_group4/controller/user_controller.dart';
 import 'package:final_project_group4/controller/waste_controller.dart';
@@ -7,7 +8,6 @@ import 'package:final_project_group4/model/redeemhistory_model.dart';
 import 'package:final_project_group4/model/wastehistory_model.dart';
 import 'package:final_project_group4/navbar/navbar_controller.dart';
 import 'package:final_project_group4/navbar/navbar_navigation.dart';
-import 'package:final_project_group4/page/home_page.dart';
 import 'package:final_project_group4/page/registration.dart';
 import 'package:final_project_group4/widget/button.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -16,21 +16,22 @@ import 'package:final_project_group4/services/auth_service.dart';
 import 'package:email_otp/email_otp.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class LoginScreen extends StatefulWidget {
-  final bool hasLogOut;
-  const LoginScreen({super.key, required this.hasLogOut});
+  const LoginScreen({super.key});
 
   @override
   State<LoginScreen> createState() => _LoginScreenState();
 }
 
 class _LoginScreenState extends State<LoginScreen> {
-  final NavbarController navbarController = Get.put(NavbarController());
-  final UserController userController = Get.put(UserController());
-  final PointsController pointsController = Get.put(PointsController());
-  final WasteController wasteController = Get.put(WasteController());
-  final HistoryController historyController = Get.put(HistoryController());
+  final NavbarController navbarController = Get.find<NavbarController>();
+  final UserController userController = Get.find<UserController>();
+  final PointsController pointsController = Get.find<PointsController>();
+  final WasteController wasteController = Get.find<WasteController>();
+  final HistoryController historyController = Get.find<HistoryController>();
+  final LoadingController loadingController = LoadingController();
   final _auth = AuthService();
   final _email = TextEditingController();
   final emailController = TextEditingController();
@@ -464,11 +465,14 @@ class _LoginScreenState extends State<LoginScreen> {
       );
 
   _login() async {
+    loadingController.showLoadingDialog();
+    final SharedPreferences prefs = await SharedPreferences.getInstance();
     final user =
         await _auth.loginUserWithEmailAndPassword(_email.text, _password.text);
 
     if (user != null) {
       final userId = FirebaseAuth.instance.currentUser!.uid;
+      prefs.setString('userId', userId);
       log("User Logged In");
       log("User ID: $userId");
       log("Getting user data...");
@@ -489,20 +493,11 @@ class _LoginScreenState extends State<LoginScreen> {
 
       navbarController.showBottomNav();
       if (!mounted) return;
-      if (widget.hasLogOut) {
-        Navigator.pushReplacement(
-          context,
-          MaterialPageRoute(
-              builder: (context) => HomePage(
-                    userId: userId,
-                  )),
-        );
-      } else {
-        Navigator.pushReplacement(
-          context,
-          MaterialPageRoute(builder: (context) => const NavbarNavigation()),
-        );
-      }
+      loadingController.closeLoadingDialog();
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(builder: (context) => const NavbarNavigation()),
+      );
     }
   }
 }

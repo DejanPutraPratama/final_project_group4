@@ -10,11 +10,11 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class ProfilePage extends StatelessWidget {
   final String userId;
   ProfilePage({super.key, required this.userId});
-
   final UserController userController = Get.find<UserController>();
   final PointsController pointsController = Get.find<PointsController>();
   final NavbarController navbarController = Get.find<NavbarController>();
@@ -143,6 +143,9 @@ class ProfilePage extends StatelessWidget {
                   context,
                   "Yes, I'm sure",
                   "No, I'm not", () async {
+                final SharedPreferences prefs =
+                    await SharedPreferences.getInstance();
+                prefs.remove('userId');
                 await FirebaseAuth.instance.signOut().then((_) {
                   exit(0);
                 });

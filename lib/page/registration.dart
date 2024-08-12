@@ -1,4 +1,5 @@
 import 'dart:developer';
+import 'package:final_project_group4/controller/loading_controller.dart';
 import 'package:final_project_group4/controller/points_controller.dart';
 import 'package:final_project_group4/controller/user_controller.dart';
 import 'package:final_project_group4/model/user_model.dart';
@@ -73,9 +74,7 @@ class _RegistrationState extends State<Registration> {
                             Navigator.pushReplacement(
                               context,
                               MaterialPageRoute(
-                                  builder: (context) => const LoginScreen(
-                                        hasLogOut: false,
-                                      )),
+                                  builder: (context) => const LoginScreen()),
                             );
                           },
                           icon: const Icon(Icons.chevron_left,
@@ -357,6 +356,7 @@ class NextRegistration extends StatefulWidget {
 }
 
 class _NextRegistrationState extends State<NextRegistration> {
+  LoadingController loadingController = LoadingController();
   UserController userController = UserController();
   PointsController pointsController = PointsController();
   final AuthService _auth = AuthService();
@@ -574,6 +574,7 @@ class _NextRegistrationState extends State<NextRegistration> {
   }
 
   _signup(UserModel regisInfo) async {
+    loadingController.showLoadingDialog();
     final user = await _auth.createUserWithEmailAndPassword(
       _email.text,
       _password.text,
@@ -592,18 +593,16 @@ class _NextRegistrationState extends State<NextRegistration> {
       };
       Map<String, dynamic> initialPoints = {
         'userId': userInfo.uid,
-        'amount': 10000,
+        'amount': 0,
       };
       await userController.addUser(userInfo.uid, newUserData);
       await pointsController.setInitialPoint(userInfo.uid, initialPoints);
       log("User created Succesfully");
+      loadingController.closeLoadingDialog();
       if (!mounted) return;
       Navigator.push(
         context,
-        MaterialPageRoute(
-            builder: (context) => const LoginScreen(
-                  hasLogOut: false,
-                )),
+        MaterialPageRoute(builder: (context) => const LoginScreen()),
       );
     }
   }
@@ -626,9 +625,6 @@ class ConfirmationPage extends StatelessWidget {
 
   goToLogin(BuildContext context) => Navigator.push(
         context,
-        MaterialPageRoute(
-            builder: (context) => const LoginScreen(
-                  hasLogOut: false,
-                )),
+        MaterialPageRoute(builder: (context) => const LoginScreen()),
       );
 }

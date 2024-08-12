@@ -1,6 +1,3 @@
-import 'package:final_project_group4/controller/points_controller.dart';
-import 'package:final_project_group4/controller/user_controller.dart';
-import 'package:final_project_group4/controller/waste_controller.dart';
 import 'package:final_project_group4/navbar/navbar.dart';
 import 'package:final_project_group4/navbar/navbar_controller.dart';
 import 'package:final_project_group4/navbar/navbar_model.dart';
@@ -21,9 +18,6 @@ class NavbarNavigation extends StatefulWidget {
 }
 
 class _NavbarNavigationState extends State<NavbarNavigation> {
-  final UserController userController = Get.put(UserController());
-  final PointsController pointsController = Get.put(PointsController());
-  final WasteController wasteController = Get.put(WasteController());
   final userInfo = FirebaseAuth.instance.currentUser;
   final homeNavKey = GlobalKey<NavigatorState>();
   final redeemNavKey = GlobalKey<NavigatorState>();

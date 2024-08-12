@@ -1,6 +1,7 @@
 import 'package:final_project_group4/page/login.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({super.key});
@@ -15,25 +16,29 @@ class FirstScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: () {
-        Navigator.pushReplacement(
-          context,
-          PageRouteBuilder(
-              pageBuilder: (context, animation, secondaryAnimation) =>
-                  const SecondScreen(),
-              transitionsBuilder:
-                  (context, animation, secondaryAnimation, child) {
-                const begin = Offset(1.0, 0.0);
-                const end = Offset.zero;
-                const curve = Curves.easeInOut;
+      onTap: () async {
+        final SharedPreferences prefs = await SharedPreferences.getInstance();
+        prefs.setBool('hasSplash', false);
+        if (context.mounted) {
+          Navigator.pushReplacement(
+            context,
+            PageRouteBuilder(
+                pageBuilder: (context, animation, secondaryAnimation) =>
+                    const SecondScreen(),
+                transitionsBuilder:
+                    (context, animation, secondaryAnimation, child) {
+                  const begin = Offset(1.0, 0.0);
+                  const end = Offset.zero;
+                  const curve = Curves.easeInOut;
 
-                var tween = Tween(begin: begin, end: end)
-                    .chain(CurveTween(curve: curve));
+                  var tween = Tween(begin: begin, end: end)
+                      .chain(CurveTween(curve: curve));
 
-                return SlideTransition(
-                    position: animation.drive(tween), child: child);
-              }),
-        );
+                  return SlideTransition(
+                      position: animation.drive(tween), child: child);
+                }),
+          );
+        }
       },
       child: Scaffold(
         backgroundColor: const Color(0xFFEAF0DF),
@@ -190,7 +195,7 @@ class ThirdScreen extends StatelessWidget {
           context,
           PageRouteBuilder(
               pageBuilder: (context, animation, secondaryAnimation) =>
-                  const LoginScreen(hasLogOut: false),
+                  const LoginScreen(),
               transitionsBuilder:
                   (context, animation, secondaryAnimation, child) {
                 const begin = Offset(1.0, 0.0);

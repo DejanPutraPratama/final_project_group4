@@ -35,6 +35,7 @@ class HistoryController {
                   snapshot.docs[i].data()['DestinationLandfill'],
               uploadedAt: snapshot.docs[i].data()['UploadedAt'].toDate()));
         }
+        historyList.sort((a, b) => b.uploadedAt.compareTo(a.uploadedAt));
         return historyList;
       } else {
         return historyList;
@@ -60,6 +61,7 @@ class HistoryController {
               payment: snapshot.docs[i].data()['payment method'],
               timestamp: snapshot.docs[i].data()['timestamp'].toDate()));
         }
+        historyList.sort((a, b) => b.timestamp.compareTo(a.timestamp));
         return historyList;
       } else {
         return historyList;

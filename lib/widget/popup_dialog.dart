@@ -55,8 +55,8 @@ Future<Widget?> popUpDialog(
                               backgroundColor: customColors.darkGreen,
                               foregroundColor: Colors.white),
                           onPressed: () {
-                            onTapYes!();
                             Navigator.pop(context);
+                            onTapYes!();
                           },
                           child: Text(confirmText)),
                       ElevatedButton(

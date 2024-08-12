@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'package:final_project_group4/controller/loading_controller.dart';
 import 'package:final_project_group4/controller/user_controller.dart';
 import 'package:final_project_group4/navbar/navbar_controller.dart';
 import 'package:final_project_group4/utils/custom_colors.dart';
@@ -48,6 +49,7 @@ class _DetailProfileState extends State<DetailProfile> {
   Widget build(BuildContext context) {
     CustomColors customColors = CustomColors();
     CustomWidgets customWidgets = CustomWidgets();
+    LoadingController loadingController = LoadingController();
     double deviceWidth = MediaQuery.of(context).size.width;
     dynamic userData;
 
@@ -77,20 +79,44 @@ class _DetailProfileState extends State<DetailProfile> {
                       context,
                       'Yes, I do',
                       'No, delete it', () async {
-                    await userController.updateUser(widget.userId, {
-                      'profilePhotoUrl': profilePhotoUrl,
-                      'fullName': namecontroller.text,
-                      'birthdate': newBirthDate,
-                      'gender': selectedGender,
-                      'mobileNumber': mobilecontroller.text,
-                      'address': addresscontroller.text,
-                      'city': selectedCity,
-                    }).then((_) {
-                      userController.updateUsername(namecontroller.text);
-                      userController.updatePhotoUrl(profilePhotoUrl);
+                    loadingController.showLoadingDialog();
+                    if (theImage != null) {
+                      String fileName = 'users/${widget.userId}.png';
+                      Reference storageReference =
+                          FirebaseStorage.instance.ref().child(fileName);
+                      UploadTask uploadTask =
+                          storageReference.putFile(File(theImage!.path));
+                      TaskSnapshot snapshot = await uploadTask;
+                      String downloadUrl = await snapshot.ref.getDownloadURL();
+                      profilePhotoUrl = downloadUrl;
+                      await userController.updateUser(widget.userId, {
+                        'profilePhotoUrl': profilePhotoUrl,
+                        'fullName': namecontroller.text,
+                        'birthdate': newBirthDate,
+                        'gender': selectedGender,
+                        'mobileNumber': mobilecontroller.text,
+                        'address': addresscontroller.text,
+                        'city': selectedCity,
+                      }).then((_) {
+                        userController.updatePhotoUrl(profilePhotoUrl);
+                      });
+                    } else {
+                      await userController.updateUser(widget.userId, {
+                        'profilePhotoUrl': profilePhotoUrl,
+                        'fullName': namecontroller.text,
+                        'birthdate': newBirthDate,
+                        'gender': selectedGender,
+                        'mobileNumber': mobilecontroller.text,
+                        'address': addresscontroller.text,
+                        'city': selectedCity,
+                      });
+                    }
+                    userController.updateUsername(namecontroller.text);
+                    loadingController.closeLoadingDialog();
+                    if (context.mounted) {
                       Navigator.pop(context);
-                      navbarController.showBottomNav();
-                    });
+                    }
+                    navbarController.showBottomNav();
                   }, () {
                     Navigator.pop(context);
                     navbarController.showBottomNav();
@@ -417,6 +443,7 @@ class _DetailProfileState extends State<DetailProfile> {
                             shape: RoundedRectangleBorder(
                                 borderRadius: BorderRadius.circular(10))),
                         onPressed: () async {
+                          loadingController.showLoadingDialog();
                           if (theImage != null) {
                             String fileName = 'users/${widget.userId}.png';
                             Reference storageReference =
@@ -453,6 +480,7 @@ class _DetailProfileState extends State<DetailProfile> {
                           }
                           userController.updateUsername(namecontroller.text);
                           userController.updatePhotoUrl(profilePhotoUrl);
+                          loadingController.closeLoadingDialog();
                         },
                         child: const Text('Update')),
                   ],

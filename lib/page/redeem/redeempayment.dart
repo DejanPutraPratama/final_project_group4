@@ -1,3 +1,4 @@
+import 'package:final_project_group4/controller/loading_controller.dart';
 import 'package:final_project_group4/navbar/navbar_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -28,6 +29,7 @@ class _RedeemPaymentPageState extends State<RedeemPaymentPage> {
   final _amountController = TextEditingController();
   String? _errorMessage;
   final RedeemService _redeemService = RedeemService();
+  LoadingController loadingController = LoadingController();
 
   final NavbarController navbarController = Get.find<NavbarController>();
 
@@ -62,12 +64,17 @@ class _RedeemPaymentPageState extends State<RedeemPaymentPage> {
       });
 
       try {
-        await _redeemService.redeemPoints(
+        loadingController.showLoadingDialog();
+        await _redeemService
+            .redeemPoints(
           userId: widget.userId,
           phoneNumber: _phoneNumberController.text,
           paymentMethod: widget.ewallet.name,
           amount: amount,
-        );
+        )
+            .whenComplete(() {
+          loadingController.closeLoadingDialog();
+        });
 
         if (!mounted) return;
         Navigator.pushReplacement(

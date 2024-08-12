@@ -1,5 +1,6 @@
 import 'dart:developer';
 import 'dart:io';
+import 'package:final_project_group4/controller/loading_controller.dart';
 import 'package:final_project_group4/model/photo.dart';
 import 'package:final_project_group4/widget/button.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -26,6 +27,7 @@ class _DonateScreenState extends State<DonateScreen> {
   final userInfo = FirebaseAuth.instance.currentUser;
   String? selectedLandfill;
   String? selectedWasteType;
+  LoadingController loadingController = LoadingController();
   final List<String> destinationLandfill = [
     'Bank Sampah Jakarta Utara',
     'Bank Sampah Jakarta Selatan',
@@ -73,6 +75,7 @@ class _DonateScreenState extends State<DonateScreen> {
     required TextEditingController? weightController,
     File? selectedImage,
   }) async {
+    loadingController.showLoadingDialog();
     weightController ??= TextEditingController();
     try {
       String? imageUrl = await _uploadImageToFirebase();
@@ -92,6 +95,7 @@ class _DonateScreenState extends State<DonateScreen> {
         'photoUrl': imageUrl,
         'UploadedAt': Timestamp.now(),
       }).whenComplete(() {
+        loadingController.closeLoadingDialog();
         Get.snackbar(
           "Success",
           "Your data has been created.",
