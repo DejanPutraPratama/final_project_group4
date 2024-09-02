@@ -1,12 +1,18 @@
 import 'dart:io';
+import 'package:final_project_group4/controller/loading_controller.dart';
 import 'package:final_project_group4/controller/points_controller.dart';
+import 'package:final_project_group4/controller/theme_controller.dart';
 import 'package:final_project_group4/controller/user_controller.dart';
+import 'package:final_project_group4/controller/waste_controller.dart';
 import 'package:final_project_group4/navbar/navbar_controller.dart';
+import 'package:final_project_group4/page/privacy_policy.dart';
 import 'package:final_project_group4/page/profile/detail_profile.dart';
+import 'package:final_project_group4/page/reauthentication.dart';
+import 'package:final_project_group4/page/terms_conditions.dart';
+import 'package:final_project_group4/services/auth_service.dart';
 import 'package:final_project_group4/utils/custom_colors.dart';
 import 'package:final_project_group4/widget/custom_widgets.dart';
 import 'package:final_project_group4/widget/popup_dialog.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -18,6 +24,9 @@ class ProfilePage extends StatelessWidget {
   final UserController userController = Get.find<UserController>();
   final PointsController pointsController = Get.find<PointsController>();
   final NavbarController navbarController = Get.find<NavbarController>();
+  final ThemeController themeController = Get.find<ThemeController>();
+  final WasteController wasteController = WasteController();
+  final LoadingController loadingController = LoadingController();
 
   @override
   Widget build(BuildContext context) {
@@ -25,6 +34,7 @@ class ProfilePage extends StatelessWidget {
     final CustomColors customColors = CustomColors();
     double deviceWidth = MediaQuery.sizeOf(context).width;
     double deviceHeight = MediaQuery.sizeOf(context).height;
+    AuthService authService = AuthService();
     return Scaffold(
       body: SingleChildScrollView(
         child: Column(
@@ -125,14 +135,29 @@ class ProfilePage extends StatelessWidget {
                             userId: userId,
                           )));
             }),
-            optionList('Dark Mode', Colors.black, null, () {}),
+            Obx(
+              () => optionList(
+                  themeController.themeMode.value == ThemeMode.light
+                      ? 'Turn on Dark Mode'
+                      : 'Back to Light Mode',
+                  themeController.themeMode.value == ThemeMode.light
+                      ? Colors.black
+                      : Colors.white,
+                  null, () {
+                themeController.switchTheme();
+              }),
+            ),
             const SizedBox(
               height: 10,
             ),
             optionList('Terms & Conditions', Colors.black,
-                const Icon(Icons.chevron_right_rounded), () {}),
-            optionList('Personal Policy', Colors.black,
-                const Icon(Icons.chevron_right_rounded), () {}),
+                const Icon(Icons.chevron_right_rounded), () {
+              Get.to(const TermsConditions());
+            }),
+            optionList('Privacy Policy', Colors.black,
+                const Icon(Icons.chevron_right_rounded), () {
+              Get.to(const PrivacyPolicy());
+            }),
             const SizedBox(
               height: 10,
             ),
@@ -146,7 +171,7 @@ class ProfilePage extends StatelessWidget {
                 final SharedPreferences prefs =
                     await SharedPreferences.getInstance();
                 prefs.remove('userId');
-                await FirebaseAuth.instance.signOut().then((_) {
+                await authService.signout().then((_) {
                   exit(0);
                 });
               }, () {});
@@ -157,9 +182,11 @@ class ProfilePage extends StatelessWidget {
                   'This action can not be undone, your data will deleted permanently',
                   context,
                   "Yes, I'm sure",
-                  "No, I'm not",
-                  () {},
-                  () {});
+                  "No, I'm not", () {
+                Get.to(Reauthentication(
+                  userId: userId,
+                ));
+              }, () {});
             }),
             const SizedBox(
               height: 100,
@@ -207,9 +234,4 @@ class ProfilePage extends StatelessWidget {
       ),
     );
   }
-}
-
-Future dologOut() async {
-  await FirebaseAuth.instance.signOut();
-  // Restart.restartApp();
 }

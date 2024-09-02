@@ -42,4 +42,11 @@ class PointsController {
         .doc(userId)
         .update(addedPoints);
   }
+
+  Future<void> deleteUserPoints(String userId) async {
+    return await FirebaseFirestore.instance
+        .collection('points')
+        .doc(userId)
+        .delete();
+  }
 }

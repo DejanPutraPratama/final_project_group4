@@ -1,10 +1,18 @@
 import 'dart:developer';
 import 'package:final_project_group4/controller/loading_controller.dart';
+import 'package:final_project_group4/controller/points_controller.dart';
+import 'package:final_project_group4/controller/user_controller.dart';
+import 'package:final_project_group4/controller/waste_controller.dart';
+import 'package:final_project_group4/services/redeem_service.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
 class AuthService {
   LoadingController loadingController = LoadingController();
-  final _auth = FirebaseAuth.instance;
+  WasteController wasteController = WasteController();
+  UserController userController = UserController();
+  PointsController pointsController = PointsController();
+  RedeemService redeemService = RedeemService();
+  final FirebaseAuth _auth = FirebaseAuth.instance;
 
   Future<User?> createUserWithEmailAndPassword(
       String email, String password) async {
@@ -54,6 +62,42 @@ class AuthService {
     } catch (e) {
       log("Error dengan user ID: $e");
       return null;
+    }
+  }
+
+  Future<bool> deleteUserAccount(
+      String userId, String email, String password) async {
+    try {
+      User? user = _auth.currentUser;
+      AuthCredential credential =
+          EmailAuthProvider.credential(email: email, password: password);
+      UserCredential authResult =
+          await user!.reauthenticateWithCredential(credential);
+      var result = await deleteAllUserData(userId);
+      if (result == true) {
+        await authResult.user!.delete();
+        return true;
+      } else {
+        log('Kesalahan dalam menghapus data pengguna');
+        return false;
+      }
+    } catch (e) {
+      log('Error on Auth Service : $e');
+      return false;
+    }
+  }
+
+  Future<bool> deleteAllUserData(String userId) async {
+    try {
+      await pointsController.deleteUserPoints(userId);
+      await redeemService.deleteAllData(userId);
+      await wasteController.deleteAllData(userId);
+      await userController.deleteUser(userId);
+      return true;
+    } on Exception catch (e) {
+      // TODO
+      log('Error on AuthService: $e');
+      return false;
     }
   }
 }

@@ -3,7 +3,6 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:firebase_storage/firebase_storage.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
 
 class UploadPhoto extends StatefulWidget {
   final Function(File) onFileChanged;
@@ -51,15 +50,13 @@ class _UploadPhotoState extends State<UploadPhoto> {
           'photo/${DateTime.now().millisecondsSinceEpoch.toString()}.png';
       Reference storageReference =
           FirebaseStorage.instance.ref().child(fileName);
-      UploadTask uploadTask = storageReference.putFile(_imageFile!);
-      TaskSnapshot snapshot = await uploadTask;
-      String downloadUrl = await snapshot.ref.getDownloadURL();
+      storageReference.putFile(_imageFile!);
 
       // Save image link to Firestore
-      await FirebaseFirestore.instance.collection('users').add({
-        'photoUrl': downloadUrl,
-        'uploadedAt': Timestamp.now(),
-      });
+      // await FirebaseFirestore.instance.collection('users').add({
+      //   'photoUrl': downloadUrl,
+      //   'uploadedAt': Timestamp.now(),
+      // });
 
       log('File uploaded and URL saved to Firestore');
     } catch (e) {

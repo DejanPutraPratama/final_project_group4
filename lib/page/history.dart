@@ -56,58 +56,65 @@ class _HistoryScreenState extends State<HistoryScreen> {
             ],
           ),
           Expanded(
-            child: showWaste ? const WasteList() : const RedeemList(),
+            child: showWaste ? WasteList() : RedeemList(),
           ),
         ],
       ),
-      backgroundColor: Colors.white,
     );
   }
 }
 
 class WasteList extends StatelessWidget {
-  const WasteList({super.key});
+  WasteList({super.key});
+  final HistoryController historyController = Get.find<HistoryController>();
 
   @override
   Widget build(BuildContext context) {
-    final HistoryController historyController = Get.find<HistoryController>();
-    return Obx(() => ListView.builder(
-        itemCount: historyController.wasteHistoryList.length,
-        itemBuilder: (context, index) {
-          String dateUploaded = DateFormat('yyyy-MMMM-dd')
-              .format(historyController.wasteHistoryList[index].uploadedAt);
-          return ListTile(
-            leading: const Icon(Icons.delete, color: Colors.green),
-            title: Text(
-                '${historyController.wasteHistoryList[index].wasteType} - ${historyController.wasteHistoryList[index].wasteWeight.toStringAsFixed(0)} kg'),
-            subtitle: Text(
-                '$dateUploaded\n${historyController.wasteHistoryList[index].destinationLandfill}'),
-            trailing:
-                const Text('Accepted', style: TextStyle(color: Colors.green)),
+    return historyController.wasteHistoryList.isNotEmpty
+        ? Obx(() => ListView.builder(
+            itemCount: historyController.wasteHistoryList.length,
+            itemBuilder: (context, index) {
+              String dateUploaded = DateFormat('yyyy-MMMM-dd')
+                  .format(historyController.wasteHistoryList[index].uploadedAt);
+              return ListTile(
+                leading: const Icon(Icons.delete, color: Colors.green),
+                title: Text(
+                    '${historyController.wasteHistoryList[index].wasteType} - ${historyController.wasteHistoryList[index].wasteWeight.toStringAsFixed(0)} kg'),
+                subtitle: Text(
+                    '$dateUploaded\n${historyController.wasteHistoryList[index].destinationLandfill}'),
+                trailing: const Text('Accepted',
+                    style: TextStyle(color: Colors.green)),
+              );
+            }))
+        : const Center(
+            child: Text('Data masih kosong'),
           );
-        }));
   }
 }
 
 class RedeemList extends StatelessWidget {
-  const RedeemList({super.key});
+  RedeemList({super.key});
+  final HistoryController historyController = Get.find<HistoryController>();
 
   @override
   Widget build(BuildContext context) {
-    HistoryController historyController = Get.find<HistoryController>();
-    return Obx(() => ListView.builder(
-        itemCount: historyController.redeemHistoryList.length,
-        itemBuilder: (context, index) {
-          String dateUploaded = DateFormat('yyyy-MMMM-dd')
-              .format(historyController.redeemHistoryList[index].timestamp);
-          return ListTile(
-            leading: const Icon(Icons.delete, color: Colors.green),
-            title: Text(
-                '${historyController.redeemHistoryList[index].payment} - ${historyController.redeemHistoryList[index].amount} points'),
-            subtitle: Text(dateUploaded),
-            trailing:
-                const Text('Completed', style: TextStyle(color: Colors.green)),
+    return (historyController.redeemHistoryList.isNotEmpty)
+        ? Obx(() => ListView.builder(
+            itemCount: historyController.redeemHistoryList.length,
+            itemBuilder: (context, index) {
+              String dateUploaded = DateFormat('yyyy-MMMM-dd')
+                  .format(historyController.redeemHistoryList[index].timestamp);
+              return ListTile(
+                leading: const Icon(Icons.delete, color: Colors.green),
+                title: Text(
+                    '${historyController.redeemHistoryList[index].payment} - ${historyController.redeemHistoryList[index].amount} points'),
+                subtitle: Text(dateUploaded),
+                trailing: const Text('Completed',
+                    style: TextStyle(color: Colors.green)),
+              );
+            }))
+        : const Center(
+            child: Text('Data masih kosong'),
           );
-        }));
   }
 }

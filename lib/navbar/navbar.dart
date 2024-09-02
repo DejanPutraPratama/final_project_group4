@@ -1,5 +1,7 @@
+import 'package:final_project_group4/controller/theme_controller.dart';
 import 'package:final_project_group4/utils/custom_colors.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 
 class Navbar extends StatelessWidget {
   final int pageIndex;
@@ -8,6 +10,7 @@ class Navbar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    ThemeController themeController = Get.find<ThemeController>();
     CustomColors customColors = CustomColors();
     return BottomAppBar(
       height: 70,
@@ -15,44 +18,47 @@ class Navbar extends StatelessWidget {
       padding: EdgeInsets.zero,
       elevation: 0,
       child: ClipRRect(
-        borderRadius: const BorderRadius.only(
-            topLeft: Radius.circular(40), topRight: Radius.circular(40)),
-        child: Container(
-          height: 60,
-          color: customColors.greyGreen,
-          child: Row(
-            children: [
-              navItem(
-                Icons.home_outlined,
-                'Home',
-                pageIndex == 0,
-                onTap: () => onTap(0),
+          borderRadius: const BorderRadius.only(
+              topLeft: Radius.circular(40), topRight: Radius.circular(40)),
+          child: Obx(
+            () => Container(
+              height: 60,
+              color: themeController.themeMode.value == ThemeMode.light
+                  ? customColors.greyGreen
+                  : Colors.grey[850],
+              child: Row(
+                children: [
+                  navItem(
+                    Icons.home_outlined,
+                    'Home',
+                    pageIndex == 0,
+                    onTap: () => onTap(0),
+                  ),
+                  navItem(
+                    Icons.card_giftcard,
+                    'Redeem',
+                    pageIndex == 1,
+                    onTap: () => onTap(1),
+                  ),
+                  const SizedBox(
+                    width: 50,
+                  ),
+                  navItem(
+                    Icons.history,
+                    'History',
+                    pageIndex == 2,
+                    onTap: () => onTap(2),
+                  ),
+                  navItem(
+                    Icons.person,
+                    'Profile',
+                    pageIndex == 3,
+                    onTap: () => onTap(3),
+                  ),
+                ],
               ),
-              navItem(
-                Icons.card_giftcard,
-                'Redeem',
-                pageIndex == 1,
-                onTap: () => onTap(1),
-              ),
-              const SizedBox(
-                width: 50,
-              ),
-              navItem(
-                Icons.history,
-                'History',
-                pageIndex == 2,
-                onTap: () => onTap(2),
-              ),
-              navItem(
-                Icons.person,
-                'Profile',
-                pageIndex == 3,
-                onTap: () => onTap(3),
-              ),
-            ],
-          ),
-        ),
-      ),
+            ),
+          )),
     );
   }
 

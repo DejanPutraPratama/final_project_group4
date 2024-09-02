@@ -1,4 +1,5 @@
 import 'package:final_project_group4/controller/show_screen.dart';
+import 'package:final_project_group4/controller/theme_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:final_project_group4/firebase_options.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -17,13 +18,22 @@ class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    return GetMaterialApp(
+    ThemeController themeController = Get.put(ThemeController());
+    return Obx(() => GetMaterialApp(
         debugShowCheckedModeBanner: false,
         title: 'Storbage',
         theme: ThemeData(
             colorScheme: ColorScheme.fromSeed(seedColor: Colors.green),
             useMaterial3: true,
             fontFamily: GoogleFonts.poppins().fontFamily),
-        home: const ShowScreen());
+        darkTheme: ThemeData(
+            colorScheme: ColorScheme.fromSeed(
+                seedColor: Colors.green,
+                brightness: Brightness.dark,
+                surface: Colors.grey.shade700),
+            useMaterial3: true,
+            fontFamily: GoogleFonts.poppins().fontFamily),
+        themeMode: themeController.themeMode.value,
+        home: const ShowScreen()));
   }
 }

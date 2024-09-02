@@ -45,7 +45,7 @@ class ShowScreen extends StatelessWidget {
 
   Future<String> autoLogin() async {
     final SharedPreferences prefs = await SharedPreferences.getInstance();
-    final NavbarController navbarController = Get.put(NavbarController());
+    Get.put(NavbarController());
     final UserController userController = Get.put(UserController());
     final PointsController pointsController = Get.put(PointsController());
     final WasteController wasteController = Get.put(WasteController());

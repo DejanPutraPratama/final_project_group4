@@ -103,6 +103,7 @@ class _DonateScreenState extends State<DonateScreen> {
           backgroundColor: Colors.green.withOpacity(0.1),
           colorText: Colors.green,
         );
+        if (!mounted) return;
         Navigator.pushReplacement(
           context,
           MaterialPageRoute(

@@ -23,7 +23,7 @@ class RedeemService {
           .get();
 
       if (querySnapshot.docs.isEmpty) {
-        throw Exception('Eror poin ga ketemu');
+        throw Exception('Error poin ga ketemu');
       }
 
       DocumentSnapshot snapshot = querySnapshot.docs.first;
@@ -53,6 +53,24 @@ class RedeemService {
     } catch (e) {
       log('Error redeeming points: $e');
       throw Exception('Failed to redeem points. Please try again later.');
+    }
+  }
+
+  Future<void> deleteAllData(String id) async {
+    try {
+      QuerySnapshot snapshot = await FirebaseFirestore.instance
+          .collection('redeems')
+          .where('userId', isEqualTo: id)
+          .get();
+
+      if (snapshot.docs.isNotEmpty) {
+        for (var i = 0; i < snapshot.docs.length; i++) {
+          DocumentReference documentReference = snapshot.docs[i].reference;
+          await documentReference.delete();
+        }
+      }
+    } on Exception catch (e) {
+      log('Error $e');
     }
   }
 }

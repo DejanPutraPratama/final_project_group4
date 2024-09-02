@@ -1,3 +1,4 @@
+import 'package:final_project_group4/controller/theme_controller.dart';
 import 'package:final_project_group4/utils/custom_colors.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -5,6 +6,7 @@ import 'package:google_fonts/google_fonts.dart';
 
 class LoadingController {
   CustomColors customColors = CustomColors();
+  ThemeController themeController = Get.find<ThemeController>();
   void showLoadingDialog() {
     Get.dialog(
         Center(
@@ -13,7 +15,9 @@ class LoadingController {
           child: Container(
             width: 150,
             height: 150,
-            color: Colors.white,
+            color: themeController.themeMode.value == ThemeMode.light
+                ? Colors.white
+                : Colors.grey,
             child: Padding(
               padding: const EdgeInsets.all(20.0),
               child: Column(

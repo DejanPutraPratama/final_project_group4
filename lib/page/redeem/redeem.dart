@@ -1,4 +1,5 @@
 import 'package:final_project_group4/controller/points_controller.dart';
+import 'package:final_project_group4/controller/theme_controller.dart';
 import 'package:final_project_group4/navbar/navbar_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -13,6 +14,7 @@ class RedeemPage extends StatelessWidget {
 
   final NavbarController navbarController = Get.find<NavbarController>();
   final PointsController pointsController = Get.find<PointsController>();
+  final ThemeController themeController = Get.find<ThemeController>();
 
   @override
   Widget build(BuildContext context) {
@@ -37,7 +39,8 @@ class RedeemPage extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
             Center(
-              child: greyBox(
+                child: Obx(
+              () => greyBox(
                 deviceWidth * 0.9,
                 75,
                 Row(
@@ -51,20 +54,18 @@ class RedeemPage extends StatelessWidget {
                         ),
                       ),
                     ),
-                    Obx(
-                      () => Text(
-                        pointsController.userPoints.value.toString(),
-                        style: GoogleFonts.poppins(
-                          textStyle: const TextStyle(
-                            fontWeight: FontWeight.bold,
-                          ),
+                    Text(
+                      pointsController.userPoints.value.toString(),
+                      style: GoogleFonts.poppins(
+                        textStyle: const TextStyle(
+                          fontWeight: FontWeight.bold,
                         ),
                       ),
-                    )
+                    ),
                   ],
                 ),
               ),
-            ),
+            )),
             const SizedBox(height: 20),
             Container(
               width: deviceWidth * 0.9,
@@ -171,7 +172,9 @@ class RedeemPage extends StatelessWidget {
       width: width,
       height: height,
       decoration: BoxDecoration(
-        color: Colors.grey[300],
+        color: themeController.themeMode.value == ThemeMode.light
+            ? Colors.grey[300]
+            : Colors.grey[850],
         borderRadius: BorderRadius.circular(10),
       ),
       padding: const EdgeInsets.all(10),

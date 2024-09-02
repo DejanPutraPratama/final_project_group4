@@ -194,7 +194,7 @@ class _LoginScreenState extends State<LoginScreen> {
                         CustomButton(
                             label: "Next",
                             onPressed: () async {
-                              if (await EmailOTP.verifyOTP(
+                              if (EmailOTP.verifyOTP(
                                       otp: otp1controller.text +
                                           otp2controller.text +
                                           otp3controller.text +

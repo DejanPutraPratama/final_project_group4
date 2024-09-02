@@ -55,7 +55,7 @@ class DonateSuccessPage extends StatelessWidget {
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 20.0),
                 child: Text(
-                  'Tap anywhere to continue',
+                  'Tap here to continue',
                   textAlign: TextAlign.center,
                   style: TextStyle(
                     fontSize: 16,
