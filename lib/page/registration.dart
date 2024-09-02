@@ -600,31 +600,10 @@ class _NextRegistrationState extends State<NextRegistration> {
       log("User created Succesfully");
       loadingController.closeLoadingDialog();
       if (!mounted) return;
-      Navigator.push(
+      Navigator.pushReplacement(
         context,
         MaterialPageRoute(builder: (context) => const LoginScreen()),
       );
     }
   }
-}
-
-class ConfirmationPage extends StatelessWidget {
-  const ConfirmationPage({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text('Registration Successful'),
-      ),
-      body: const Center(
-        child: Text('Thank you for registering!'),
-      ),
-    );
-  }
-
-  goToLogin(BuildContext context) => Navigator.push(
-        context,
-        MaterialPageRoute(builder: (context) => const LoginScreen()),
-      );
 }

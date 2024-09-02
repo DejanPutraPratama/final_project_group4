@@ -494,10 +494,8 @@ class _LoginScreenState extends State<LoginScreen> {
       navbarController.showBottomNav();
       if (!mounted) return;
       loadingController.closeLoadingDialog();
-      Navigator.pushReplacement(
-        context,
-        MaterialPageRoute(builder: (context) => const NavbarNavigation()),
-      );
+      Navigator.pushReplacement(context,
+          MaterialPageRoute(builder: (context) => const NavbarNavigation()));
     }
   }
 }

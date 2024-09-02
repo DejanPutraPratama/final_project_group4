@@ -1,8 +1,6 @@
-import 'dart:developer';
 import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:firebase_storage/firebase_storage.dart';
 
 class UploadPhoto extends StatefulWidget {
   final Function(File) onFileChanged;
@@ -27,7 +25,6 @@ class _UploadPhotoState extends State<UploadPhoto> {
         _imageFile = File(pickedFile.path);
       });
       widget.onFileChanged(_imageFile!);
-      await _uploadImageToFirebase();
     }
   }
 
@@ -38,29 +35,6 @@ class _UploadPhotoState extends State<UploadPhoto> {
         _imageFile = File(pickedFile.path);
       });
       widget.onFileChanged(_imageFile!);
-      await _uploadImageToFirebase();
-    }
-  }
-
-  Future<void> _uploadImageToFirebase() async {
-    if (_imageFile == null) return;
-
-    try {
-      String fileName =
-          'photo/${DateTime.now().millisecondsSinceEpoch.toString()}.png';
-      Reference storageReference =
-          FirebaseStorage.instance.ref().child(fileName);
-      storageReference.putFile(_imageFile!);
-
-      // Save image link to Firestore
-      // await FirebaseFirestore.instance.collection('users').add({
-      //   'photoUrl': downloadUrl,
-      //   'uploadedAt': Timestamp.now(),
-      // });
-
-      log('File uploaded and URL saved to Firestore');
-    } catch (e) {
-      log('Error uploading image: $e ');
     }
   }
 

@@ -19,7 +19,7 @@ class DonateSuccessPage extends StatelessWidget {
       appBar: null,
       body: GestureDetector(
         onTap: () {
-          Navigator.popUntil(context, (Route<dynamic> route) => route.isFirst);
+          Navigator.pop(context);
           navbarController.showBottomNav();
         },
         child: Center(

@@ -38,9 +38,11 @@ class UserController extends GetxController {
     try {
       var userData =
           await FirebaseFirestore.instance.collection('users').doc(id).get();
-      var storageReference = FirebaseStorage.instance
-          .refFromURL(userData.data()!['profilePhotoUrl']);
-      await storageReference.delete();
+      String ppUrl = userData.data()!['profilePhotoUrl'];
+      if (ppUrl.isNotEmpty) {
+        var storageReference = FirebaseStorage.instance.refFromURL(ppUrl);
+        await storageReference.delete();
+      }
       await FirebaseFirestore.instance.collection('users').doc(id).delete();
     } on Exception catch (e) {
       log('Error on User Controller: $e');

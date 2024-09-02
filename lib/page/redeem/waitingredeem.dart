@@ -17,7 +17,7 @@ class WaitingRedeem extends StatelessWidget {
           await historyController.getUserRedeemHistory(userId);
       historyController.updateRedeemList(newList);
       if (context.mounted) {
-        Navigator.push(
+        Navigator.pushReplacement(
           context,
           MaterialPageRoute(builder: (context) => const RedeemSuccessPage()),
         );
